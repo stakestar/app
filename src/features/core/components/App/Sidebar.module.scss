@@ -1,0 +1,106 @@
+.Sidebar {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  min-height: 100%;
+  padding: 0.5rem;
+  color: var(--textColor);
+  background-color: var(--sidebarBackgroundColor);
+  z-index: 1;
+
+  .Logo {
+    display: flex;
+    margin: 1.25rem 1.5rem 0;
+    cursor: pointer;
+
+    .Logo1 {
+      z-index: 1;
+    }
+
+    .Logo2 {
+      left: -7px;
+      bottom: -2px;
+    }
+  }
+
+  .Menu {
+    margin: 75px 0;
+
+    .MenuItem {
+      display: flex;
+      align-items: center;
+      min-height: 56px;
+      margin-bottom: 6px;
+      padding: 0 1.5rem;
+      border-radius: 1rem;
+      font-family: 'Finlandica', sans-serif;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 1.5rem;
+      color: var(--textColor);
+      cursor: pointer;
+      user-select: none;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &:global(._active) {
+        color: white;
+      }
+
+      &.soon {
+        cursor: not-allowed;
+        color: var(--inputTextColor);
+      }
+
+      .Badge {
+        position: relative;
+        margin-bottom: 0.5rem;
+        margin-left: 0.5rem;
+        padding: 1px 2px;
+        border-radius: 4px;
+        font-size: 10px;
+        line-height: 12px;
+        color: white;
+        background: var(--primaryAccentColor);
+      }
+    }
+  }
+
+  .Footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto 1rem 1rem;
+
+    .Links {
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--dividerColor);
+      transition: border-bottom-color 0.2s ease;
+
+      .LinksRow {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;
+
+        > * {
+          margin-right: 1rem;
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+:global(._theme._dark) {
+  .Sidebar {
+    background-color: var(--surfaceDarkColor);
+  }
+}

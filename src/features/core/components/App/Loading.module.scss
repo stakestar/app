@@ -1,0 +1,15 @@
+.Loading {
+  margin: auto;
+
+  .LongLoading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 3rem;
+
+    .Button {
+      min-width: 200px;
+      margin-top: 1.5rem;
+    }
+  }
+}

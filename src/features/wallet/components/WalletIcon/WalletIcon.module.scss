@@ -1,0 +1,13 @@
+.WalletIcon {
+  width: 2rem;
+  height: 2rem;
+  margin-right: 0.75rem;
+  border-radius: 50%;
+  background-position: center;
+  background-size: contain;
+  z-index: 1;
+
+  &.withBackground {
+    background-color: white;
+  }
+}

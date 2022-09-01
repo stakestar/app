@@ -1,0 +1,12 @@
+.SelectWalletPopup {
+  display: flex;
+  flex-direction: column;
+
+  .Button {
+    margin-bottom: 1rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

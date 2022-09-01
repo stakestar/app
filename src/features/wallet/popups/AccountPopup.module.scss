@@ -1,0 +1,52 @@
+.AccountPopup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .Wallet {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+
+    .Account {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      margin-left: 0.75rem;
+
+      .Address {
+        color: var(--inputTextColor);
+      }
+    }
+  }
+
+  .AccountControls {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding-top: 22px;
+    justify-content: space-between;
+  }
+
+  .Footer {
+    position: relative;
+    display: flex;
+    width: 100%;
+    margin: 1.5rem -2rem 0;
+    padding-top: 2rem;
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: -2rem;
+      left: -2rem;
+      border-top: 1px solid var(--dividerColor);
+    }
+
+    .Disconnect {
+      flex: 1;
+    }
+  }
+}

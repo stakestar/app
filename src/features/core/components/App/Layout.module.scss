@@ -1,0 +1,20 @@
+.Layout {
+  display: flex;
+  flex: 1;
+  color: var(--textColor);
+  background-color: var(--primaryBackgroundColor);
+
+  .Header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem 3rem 0 0;
+  }
+
+  .Content {
+    display: flex;
+    flex: 1;
+  }
+}

@@ -1,10 +1,10 @@
-import { Providers as UiKitProviders } from '@onestaree/ui-kit'
+import { UiKitProvider } from '@onestaree/ui-kit'
 import { PropsWithChildren, StrictMode } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 
-import { WalletExtensionProvider } from '~/features/wallet'
+import { ConnectorProvider } from '~/features/wallet'
 
-import { ReduxProvider, ThemeProvider, ThemeProviderProps } from '../../providers'
+import { ContractsProvider, ReduxProvider, ThemeProvider, ThemeProviderProps } from '../../providers'
 
 type ProvidersProps = PropsWithChildren & ThemeProviderProps
 
@@ -12,13 +12,15 @@ export function Providers({ forcedThemeName, children }: ProvidersProps): JSX.El
   return (
     <StrictMode>
       <ReduxProvider>
-        <WalletExtensionProvider>
-          <UiKitProviders forcedThemeName={forcedThemeName}>
-            <ThemeProvider forcedThemeName={forcedThemeName}>
-              <BrowserRouter>{children}</BrowserRouter>
-            </ThemeProvider>
-          </UiKitProviders>
-        </WalletExtensionProvider>
+        <ConnectorProvider>
+          <ContractsProvider>
+            <UiKitProvider forcedThemeName={forcedThemeName}>
+              <ThemeProvider forcedThemeName={forcedThemeName}>
+                <BrowserRouter>{children}</BrowserRouter>
+              </ThemeProvider>
+            </UiKitProvider>
+          </ContractsProvider>
+        </ConnectorProvider>
       </ReduxProvider>
     </StrictMode>
   )

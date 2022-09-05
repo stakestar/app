@@ -2004,10 +2004,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@onestaree/ui-kit@^0.2.0":
-  version "0.2.0"
-  resolved "https://npm.pkg.github.com/download/@onestaree/ui-kit/0.2.0/2542f1f0beab35cafe4740ae3d456b0c23f80ca1#2542f1f0beab35cafe4740ae3d456b0c23f80ca1"
-  integrity sha512-wHBdQ09xE5HX/fwXyTrRip4BAa0r6vWkeCUU1maFPcZ9OXbyOVsdCP6v6ARpF5plF6VcXR6giAbQebZtjyXdew==
+"@onestaree/ui-kit@^0.3.1":
+  version "0.3.1"
+  resolved "https://npm.pkg.github.com/download/@onestaree/ui-kit/0.3.1/dc30e3825e7a3d10159aa94f102a576df5c00c8a#dc30e3825e7a3d10159aa94f102a576df5c00c8a"
+  integrity sha512-sKEM62x8OsmiJIr1zmRFB72XoNEgFUmw0Ybuui858WYzcIxphjh0CkINmADx2ysuh0BY1B8X91JRFMbPeDNtcQ==
   dependencies:
     react-modal "^3.15.1"
     react-switch "^7.0.0"
@@ -2134,6 +2134,11 @@
     secp256k1 "^4.0.2"
     superstruct "^0.14.2"
     tweetnacl "^1.0.3"
+
+"@stakestar/contracts@^0.1.4":
+  version "0.1.4"
+  resolved "https://npm.pkg.github.com/download/@stakestar/contracts/0.1.4/4f3a1d26633f6e19d77446dc1f1a3e15d9f2cdd4#4f3a1d26633f6e19d77446dc1f1a3e15d9f2cdd4"
+  integrity sha512-x9hey7hACPMAikQGF925dUgE7sL3MsCDSysCLvW9Yj0GoC1JnJs7sMwB6kiBstUhoLpFBy1SdPADUvXqZY6jiw==
 
 "@surma/rollup-plugin-off-main-thread@^2.2.3":
   version "2.2.3"
@@ -2950,6 +2955,14 @@
   integrity sha512-IXuVyj6vhRAhfGQ/sN4qgET8EEdqX844pB4kCDG9kjPD3LLm5kq47ykBosgTr9YCUtdHAXN0UaUimD0TbLMRFg==
   dependencies:
     "@metamask/detect-provider" "^1.2.0"
+    "@web3-react/types" "^8.0.20-beta.0"
+
+"@web3-react/network@8.0.27-beta.0":
+  version "8.0.27-beta.0"
+  resolved "https://registry.yarnpkg.com/@web3-react/network/-/network-8.0.27-beta.0.tgz#7cb522b02efc9d0f877ac285f350810fbf322292"
+  integrity sha512-kLHilUpLkDejx0C5Rr57puQSEVA+BQmT58xN6D/elphcZpVHAIkbh/MCYm0XrnLmqq0uOjw+jDhEYBBn80ncHQ==
+  dependencies:
+    "@ethersproject/providers" "^5"
     "@web3-react/types" "^8.0.20-beta.0"
 
 "@web3-react/store@^8.0.25-beta.0":

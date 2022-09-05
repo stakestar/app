@@ -1,0 +1,11 @@
+.Container {
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+  min-width: 33rem;
+  margin: 1.5rem 0 2rem;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background-color: var(--surfaceLightColor);
+  box-shadow: 0 5px 12px rgba(16, 16, 16, 0.25);
+}

@@ -38,6 +38,16 @@
         linear-gradient(90deg, transparent -30%, var(--surfaceLightColor) 75%) border-box;
     }
 
+    .Balance {
+      display: flex;
+      align-items: center;
+      margin-right: 1rem;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      z-index: 1;
+    }
+
     .AccountName {
       display: flex;
       align-items: center;

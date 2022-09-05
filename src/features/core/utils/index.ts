@@ -1,5 +1,6 @@
 export * from './copyToClipboard'
 export * from './emitEvent'
 export * from './formatNumber'
+export * from '../hooks/useExplorerUrl'
 export * from './handleError'
 export * from './math'

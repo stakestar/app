@@ -1,7 +1,7 @@
 import { Button, Spinner, Typography } from '@onestaree/ui-kit'
 import { useEffect, useState } from 'react'
 
-import { appLoadingTimeout } from '../../config'
+import { appLoadingTimeout, appName } from '../../config'
 import styles from './Loading.module.scss'
 
 export function Loading(): JSX.Element {
@@ -25,7 +25,12 @@ export function Loading(): JSX.Element {
       {isLoadingTimedOut && (
         <div className={styles.LongLoading}>
           <Typography variant="text0">Looks like we can’t connect to the network...</Typography>
-          <Button className={styles.Button} title="Restart SSV App" onClick={onClick} loading={isRestartInProgress} />
+          <Button
+            className={styles.Button}
+            title={`Restart ${appName}`}
+            onClick={onClick}
+            loading={isRestartInProgress}
+          />
         </div>
       )}
     </div>

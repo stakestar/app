@@ -1,14 +1,14 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import { ChainId, RootState, TokenKey } from '~/features/core'
+import { ChainId, RootState, TokenAmount, TokenAmountEncoded, TokenId, tokens } from '~/features/core'
 
-import { TokenBalance } from './types'
+type AccountBalances = Record<TokenId, TokenAmountEncoded>
 
 export type WalletState = {
   chainId: ChainId
   account: {
     address: string
-    balances: TokenBalance[]
+    balances: AccountBalances
   }
 }
 
@@ -16,7 +16,11 @@ const initialState: WalletState = {
   chainId: 0,
   account: {
     address: '',
-    balances: []
+    balances: Object.keys(tokens).reduce((result, tokenId) => {
+      result[tokenId as TokenId] = TokenAmount.fromWei(tokenId as TokenId, '0').toEncoded()
+
+      return result
+    }, {} as AccountBalances)
   }
 }
 
@@ -35,14 +39,17 @@ export const store = createSlice({
 
     updateAccountBalances: (
       state,
-      { payload: accountBalances }: PayloadAction<WalletState['account']['balances']>
+      {
+        payload: accountBalances
+      }: PayloadAction<
+        {
+          balance: string
+          tokenId: TokenId
+        }[]
+      >
     ): void => {
-      accountBalances.forEach((item) => {
-        const balanceToUpdate = state.account.balances.find(({ tokenKey }) => tokenKey === item.tokenKey)
-
-        if (balanceToUpdate) {
-          balanceToUpdate.balance = item.balance
-        }
+      accountBalances.forEach(({ tokenId, balance }) => {
+        state.account.balances[tokenId] = TokenAmount.fromWei(tokenId as TokenId, balance).toEncoded()
       })
     },
 
@@ -54,5 +61,5 @@ export const { setChainId, setAccountAddress, updateAccountBalances, resetState 
 
 export const selectWallet = (state: RootState): WalletState => state.wallet
 export const selectAccaunt = (state: RootState): WalletState['account'] => state.wallet.account
-export const selectAccauntBalance = (state: RootState, tokenKey: TokenKey): TokenBalance | undefined =>
-  state.wallet.account.balances.find((balance) => balance.tokenKey === tokenKey)
+export const selectAccauntBalance = (state: RootState, tokenId: TokenId): TokenAmount =>
+  TokenAmount.fromEncoded(state.wallet.account.balances[tokenId])

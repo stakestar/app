@@ -1,8 +1,7 @@
-import { TokenKey, useSelector } from '~/features/core'
+import { TokenAmount, TokenId, useSelector } from '~/features/core'
 
 import { selectAccauntBalance } from '../store'
-import { TokenBalance } from '../types'
 
-export function useAccountBalance(tokenKey: TokenKey): TokenBalance | undefined {
-  return useSelector((state) => selectAccauntBalance(state, tokenKey))
+export function useAccountBalance(tokenId: TokenId): TokenAmount {
+  return useSelector((state) => selectAccauntBalance(state, tokenId))
 }

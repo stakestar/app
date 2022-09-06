@@ -11,7 +11,9 @@ export function Staking(): JSX.Element {
   const { stakeStarContract } = useContracts()
   const [value, setValue] = useState('')
 
-  const onClick = () => stakeStarContract.stake({ from: address, value: TokenAmount.fromDecimal('ETH', value).toWei() })
+  const onClick = (): void => {
+    void stakeStarContract.stake({ from: address, value: TokenAmount.fromDecimal('ETH', value).toWei() })
+  }
 
   return (
     <div className={styles.Container}>

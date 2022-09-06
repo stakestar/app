@@ -3,10 +3,9 @@ import { useCallback, useEffect } from 'react'
 
 import { ChainId, handleError, useDispatch, usePrevious } from '~/features/core'
 
-import { useConnector, useAccount as useWalletAccount } from '../../hooks'
+import { useConnector, useFetchAccountBalances, useAccount as useWalletAccount } from '../../hooks'
 import { resetState, setAccountAddress, setChainId } from '../../store'
 import { ConnectorId } from './types'
-import { useFetchAccountBalances } from './useFetchAccountBalances'
 import { getConnector } from './utils'
 
 interface UseSyncAccountProps {

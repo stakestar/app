@@ -1,7 +1,7 @@
 import Davatar from '@davatar/react'
 import { Button, Link, Typography, usePopup } from '@onestaree/ui-kit'
 
-import { copyToClipboard, useExplorerUrl } from '~/features/core'
+import { copyToClipboard, getExplorerUrl } from '~/features/core'
 
 import { WalletIcon } from '../components/WalletIcon'
 import { useAccount, useConnector } from '../hooks'
@@ -35,8 +35,8 @@ export function AccountPopup(): JSX.Element {
         <Link icon="copy" onClick={(): void => copyToClipboard(address)}>
           Copy address
         </Link>
-        <Link icon="external" href={`${useExplorerUrl('address', address)}`}>
-          View on explorer
+        <Link icon="external" href={`${getExplorerUrl('address', address)}`}>
+          View on Etherscan
         </Link>
       </div>
       <div className={styles.Footer}>

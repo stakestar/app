@@ -13,11 +13,11 @@ jobs:
         with:
           registry-url: 'https://npm.pkg.github.com'
           node-version: 18
-          cache: 'npm'
-      - run: npm ci
+          cache: 'yarn'
+      - run: yarn
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GPR_TOKEN }}
-      - run: npm run build
+      - run: yarn build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'

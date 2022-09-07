@@ -16,7 +16,7 @@ export function Sidebar(): JSX.Element {
   return (
     <div className={classNames(styles.Sidebar, '_backgroundColorTransition')}>
       <div className={styles.Logo} onClick={(): void => navigate('/')}>
-        <Typography variant="h2">SSV App</Typography>
+        <Typography variant="h2">StakeStar</Typography>
       </div>
       <ul className={styles.Menu}>
         {menu.map(({ title, path, soon }) => (

@@ -1,18 +1,22 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
-import { useDispatch } from '../../hooks'
+import { APP_EVENT_CONTRACTS_READY } from '~/features/core/constants'
+
+import { useDispatch, useEventListener } from '../../hooks'
 import { setIsAppReady } from '../../store'
 
 export function useIsAppReady(): void {
   const dispatch = useDispatch()
-  // const [isWalletReady, setIsWalletReady] = useState(false)
+  const [isContractsReady, setIsContractsReady] = useState(false)
 
-  // useEventListener(EVENT_WALLET_IS_READY, () => setIsWalletReady(true))
+  useEventListener(APP_EVENT_CONTRACTS_READY, () => {
+    // Use setTimeout because of warning: "Cannot update a component while rendering a different component"
+    setTimeout(() => setIsContractsReady(true))
+  })
 
   useEffect(() => {
-    // if (isWalletReady) {
-    dispatch(setIsAppReady(true))
-
-    // }
-  }, [dispatch])
+    if (isContractsReady) {
+      dispatch(setIsAppReady(true))
+    }
+  }, [dispatch, isContractsReady])
 }

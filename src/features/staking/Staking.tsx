@@ -1,5 +1,5 @@
 import { Button, Input, Link, toast } from '@onestaree/ui-kit'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { TokenAmount, getExplorerUrl, handleError, useContracts } from '~/features/core'
 import { useAccount, useAccountBalance, useFetchAccountBalances } from '~/features/wallet'
@@ -11,7 +11,7 @@ const minValue = 0.001
 export function Staking(): JSX.Element {
   const { address } = useAccount()
   const balance = useAccountBalance('ETH')
-  const { stakeStarContract } = useContracts()
+  const { stakeStarContract, stakeStarReceiptContract } = useContracts()
   const [value, setValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const fetchAccountBalances = useFetchAccountBalances()
@@ -54,7 +54,6 @@ export function Staking(): JSX.Element {
 
       const valuePlusGas = TokenAmount.fromBigNumber('ETH', valueBigNumber.add(gasRequired)).toWei()
       const valueMinusGas = TokenAmount.fromBigNumber('ETH', valueBigNumber.sub(gasRequired)).toWei()
-      // const valueToStake = balance.toBigNumber().gte(valuePlusGas) ? valuePlusGas : valueMinusGas
       const valueToStake = balance.toBigNumber().lt(valuePlusGas) ? valueMinusGas : valuePlusGas
 
       if (Number(valueToStake) > 0) {
@@ -90,6 +89,16 @@ export function Staking(): JSX.Element {
     setIsLoading(false)
   }
 
+  useEffect(() => {
+    stakeStarReceiptContract
+      .rate()
+      .then((rate) => {
+        // TODO: Use rate
+        console.log('rate', TokenAmount.fromWei('ETH', rate).toNumber())
+      })
+      .catch(handleError)
+  }, [stakeStarReceiptContract])
+
   return (
     <div className={styles.Container}>
       <Input
@@ -103,9 +112,14 @@ export function Staking(): JSX.Element {
         onClickMaxButton={onClickMaxButton}
         disabled={isLoading}
         error={isMinMaxError}
-        errorMessage={`Min value is ${minValue} and max is ${balance.toString()}`}
+        errorMessage={`Min value is ${minValue} and your max is ${balance.toString()}`}
       />
-      <Button title="Stake" onClick={onClickStake} disabled={isMinMaxError || isLoading} loading={isLoading} />
+      <Button
+        title="Stake"
+        onClick={onClickStake}
+        disabled={!value || isMinMaxError || isLoading}
+        loading={isLoading}
+      />
     </div>
   )
 }

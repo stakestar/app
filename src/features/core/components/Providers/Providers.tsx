@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 
 import { ConnectorProvider } from '~/features/wallet'
 
-import { ContractsProvider, ReduxProvider, ThemeProvider, ThemeProviderProps } from '../../providers'
+import { ContractsProvider, GraphQLProvider, ReduxProvider, ThemeProvider, ThemeProviderProps } from '../../providers'
 
 type ProvidersProps = PropsWithChildren & ThemeProviderProps
 
@@ -16,7 +16,9 @@ export function Providers({ forcedThemeName, children }: ProvidersProps): JSX.El
           <ContractsProvider>
             <UiKitProvider forcedThemeName={forcedThemeName}>
               <ThemeProvider forcedThemeName={forcedThemeName}>
-                <BrowserRouter>{children}</BrowserRouter>
+                <GraphQLProvider>
+                  <BrowserRouter>{children}</BrowserRouter>
+                </GraphQLProvider>
               </ThemeProvider>
             </UiKitProvider>
           </ContractsProvider>

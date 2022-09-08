@@ -5,6 +5,7 @@ import { TokenAmount, getExplorerUrl, handleError, useContracts } from '~/featur
 import { useAccount, useAccountBalance, useFetchAccountBalances } from '~/features/wallet'
 
 import styles from './Staking.module.scss'
+import { useStakeStarTvlsQuery } from './useStakeStarTvlsQuery'
 
 const minValue = 0.001
 
@@ -15,6 +16,18 @@ export function Staking(): JSX.Element {
   const [value, setValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const fetchAccountBalances = useFetchAccountBalances()
+  // TODO: Continue here (https://www.the-guild.dev/graphql/codegen)
+  const {
+    loading,
+    // error: queryError,
+    data
+  } = useStakeStarTvlsQuery()
+
+  if (!loading) {
+    // eslint-disable-next-line no-console
+    console.log('data', data)
+  }
+
   const isMinMaxError =
     !!value.length &&
     (Number(value) < minValue || balance.toBigNumber().lt(TokenAmount.fromDecimal('ETH', value).toWei()))
@@ -94,6 +107,7 @@ export function Staking(): JSX.Element {
       .rate()
       .then((rate) => {
         // TODO: Use rate
+        // eslint-disable-next-line no-console
         console.log('rate', TokenAmount.fromWei('ETH', rate).toNumber())
       })
       .catch(handleError)

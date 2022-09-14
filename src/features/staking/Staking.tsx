@@ -1,13 +1,14 @@
 import { Button, Input, Link, toast } from '@onestaree/ui-kit'
+import { getBuiltGraphSDK } from '@stakestar/subgraph-client'
 import { useEffect, useState } from 'react'
 
 import { TokenAmount, getExplorerUrl, handleError, useContracts } from '~/features/core'
 import { useAccount, useAccountBalance, useFetchAccountBalances } from '~/features/wallet'
 
 import styles from './Staking.module.scss'
-import { useStakeStarTvlsQuery } from './useStakeStarTvlsQuery'
 
 const minValue = 0.001
+const sdk = getBuiltGraphSDK() // TODO: move it to provider?
 
 export function Staking(): JSX.Element {
   const { address } = useAccount()
@@ -16,17 +17,15 @@ export function Staking(): JSX.Element {
   const [value, setValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const fetchAccountBalances = useFetchAccountBalances()
-  // TODO: Continue here (https://www.the-guild.dev/graphql/codegen)
-  const {
-    loading,
-    // error: queryError,
-    data
-  } = useStakeStarTvlsQuery()
 
-  if (!loading) {
-    // eslint-disable-next-line no-console
-    console.log('data', data)
-  }
+  useEffect(() => {
+    sdk
+      .getStakeStarTvls()
+      // TODO: move it to RTK Query?
+      // eslint-disable-next-line no-console
+      .then(({ stakeStarTvls }) => console.log('StakeStarTvls', stakeStarTvls))
+      .catch(handleError)
+  }, [])
 
   const isMinMaxError =
     !!value.length &&

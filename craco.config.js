@@ -43,6 +43,14 @@ module.exports = {
         stream: false
       }
 
+      // https://stackoverflow.com/a/69519812
+      webpackConfig.module.rules.push({
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false,
+        },
+      })
+
       whenDev(() => {
         webpackConfig.devtool = 'eval-source-map'
       })

@@ -1,5 +1,5 @@
-import { StakeStar, StakeStar__factory } from '@stakestar/contracts'
-import { PropsWithChildren, createContext, useMemo } from 'react'
+import { StakeStar, StakeStarETH, StakeStarETH__factory, StakeStar__factory } from '@stakestar/contracts'
+import { PropsWithChildren, createContext, useMemo, useState } from 'react'
 
 import { useChainConfig, useConnector } from '~/features/wallet'
 
@@ -8,7 +8,7 @@ import { emitEvent, handleError } from '../utils'
 
 export type ContractsProviderValue = {
   stakeStarContract: StakeStar
-  // stakeStarETHContract: StakeStarETH
+  stakeStarEthContract: StakeStarETH
 }
 
 export const ContractsProviderContext = createContext({} as ContractsProviderValue)
@@ -17,7 +17,7 @@ export function ContractsProvider({ children }: PropsWithChildren): JSX.Element 
   const { contractsAddresses } = useChainConfig()
   const { connector } = useConnector()
   const provider = connector.hooks.useProvider()
-  // const [stakeStarReceiptAddress, setStakeStarReceiptAddress] = useState('')
+  const [stakeStarEthAddress, setStakeStarEthAddress] = useState('')
 
   const value = useMemo((): ContractsProviderValue => {
     const initialValue = {} as ContractsProviderValue
@@ -31,29 +31,24 @@ export function ContractsProvider({ children }: PropsWithChildren): JSX.Element 
     try {
       const stakeStarContract = StakeStar__factory.connect(contractsAddresses.stakeStar, signerOrProvider)
 
-      return {
-        stakeStarContract
-        // stakeStarETHContract: StakeStarETH__factory.connect(stakeStarReceiptAddress, signerOrProvider)
-      }
+      Promise.all([stakeStarContract.stakeStarETH()])
+        .then(([stakeStarReceipt]) => {
+          setStakeStarEthAddress(stakeStarReceipt)
+        })
+        .catch((error) => handleError(error, { displayGenericMessage: true }))
 
-      // Promise.all([stakeStarContract.stakeStarEthContract()])
-      //   .then(([stakeStarReceipt]) => {
-      //     setStakeStarReceiptAddress(stakeStarReceipt)
-      //   })
-      //   .catch((error) => handleError(error, { displayGenericMessage: true }))
-      //
-      // return stakeStarReceiptAddress
-      //   ? {
-      //       stakeStarContract,
-      //       stakeStarETHContract: StakeStarETH__factory.connect(stakeStarReceiptAddress, signerOrProvider)
-      //     }
-      //   : initialValue
+      return stakeStarEthAddress
+        ? {
+            stakeStarContract,
+            stakeStarEthContract: StakeStarETH__factory.connect(stakeStarEthAddress, signerOrProvider)
+          }
+        : initialValue
     } catch (error) {
       handleError(error, { displayGenericMessage: true })
 
       return initialValue
     }
-  }, [contractsAddresses, provider])
+  }, [contractsAddresses, provider, stakeStarEthAddress])
 
   if (Object.keys(value).length) {
     emitEvent(APP_EVENT_CONTRACTS_READY)

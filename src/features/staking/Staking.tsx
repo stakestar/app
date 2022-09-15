@@ -1,14 +1,13 @@
 import { Button, Input, Link, toast } from '@onestaree/ui-kit'
-import { getBuiltGraphSDK } from '@stakestar/subgraph-client'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { TokenAmount, getExplorerUrl, handleError, useContracts } from '~/features/core'
 import { useAccount, useAccountBalance, useFetchAccountBalances } from '~/features/wallet'
 
+import { DebugData } from './DebugData'
 import styles from './Staking.module.scss'
 
 const minValue = 0.001
-const sdk = getBuiltGraphSDK() // TODO: move it to provider?
 
 export function Staking(): JSX.Element {
   const { address } = useAccount()
@@ -17,15 +16,6 @@ export function Staking(): JSX.Element {
   const [value, setValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const fetchAccountBalances = useFetchAccountBalances()
-
-  useEffect(() => {
-    sdk
-      .getStakeStarTvls()
-      // TODO: move it to RTK Query?
-      // eslint-disable-next-line no-console
-      .then(({ stakeStarTvls }) => console.log('StakeStarTvls', stakeStarTvls))
-      .catch(handleError)
-  }, [])
 
   const isMinMaxError =
     !!value.length &&
@@ -101,38 +91,30 @@ export function Staking(): JSX.Element {
     setIsLoading(false)
   }
 
-  // useEffect(() => {
-  //   stakeStarReceiptContract
-  //     .rate()
-  //     .then((rate) => {
-  //       // TODO: Use rate
-  //       // eslint-disable-next-line no-console
-  //       console.log('rate', TokenAmount.fromWei('ETH', rate).toNumber())
-  //     })
-  //     .catch(handleError)
-  // }, [stakeStarReceiptContract])
-
   return (
-    <div className={styles.Container}>
-      <Input
-        icon1="tokenEthereum"
-        iconLabel="ETH"
-        placeholder="0.00"
-        label={`Balance: ${balance.toDecimal(2)}`}
-        value={value}
-        onChange={setValue}
-        useMaxButton
-        onClickMaxButton={onClickMaxButton}
-        disabled={isLoading}
-        error={isMinMaxError}
-        errorMessage={`Min value is ${minValue} and your max is ${balance.toString()}`}
-      />
-      <Button
-        title="Stake"
-        onClick={onClickStake}
-        disabled={!value || isMinMaxError || isLoading}
-        loading={isLoading}
-      />
-    </div>
+    <>
+      <div className={styles.Container}>
+        <Input
+          icon1="tokenEthereum"
+          iconLabel="ETH"
+          placeholder="0.00"
+          label={`Balance: ${balance.toDecimal(2)}`}
+          value={value}
+          onChange={setValue}
+          useMaxButton
+          onClickMaxButton={onClickMaxButton}
+          disabled={isLoading}
+          error={isMinMaxError}
+          errorMessage={`Min value is ${minValue} and your max is ${balance.toString()}`}
+        />
+        <Button
+          title="Stake"
+          onClick={onClickStake}
+          disabled={!value || isMinMaxError || isLoading}
+          loading={isLoading}
+        />
+      </div>
+      <DebugData />
+    </>
   )
 }

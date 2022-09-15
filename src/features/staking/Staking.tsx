@@ -13,7 +13,7 @@ const sdk = getBuiltGraphSDK() // TODO: move it to provider?
 export function Staking(): JSX.Element {
   const { address } = useAccount()
   const balance = useAccountBalance('ETH')
-  const { stakeStarContract, stakeStarReceiptContract } = useContracts()
+  const { stakeStarContract } = useContracts()
   const [value, setValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const fetchAccountBalances = useFetchAccountBalances()
@@ -101,16 +101,16 @@ export function Staking(): JSX.Element {
     setIsLoading(false)
   }
 
-  useEffect(() => {
-    stakeStarReceiptContract
-      .rate()
-      .then((rate) => {
-        // TODO: Use rate
-        // eslint-disable-next-line no-console
-        console.log('rate', TokenAmount.fromWei('ETH', rate).toNumber())
-      })
-      .catch(handleError)
-  }, [stakeStarReceiptContract])
+  // useEffect(() => {
+  //   stakeStarReceiptContract
+  //     .rate()
+  //     .then((rate) => {
+  //       // TODO: Use rate
+  //       // eslint-disable-next-line no-console
+  //       console.log('rate', TokenAmount.fromWei('ETH', rate).toNumber())
+  //     })
+  //     .catch(handleError)
+  // }, [stakeStarReceiptContract])
 
   return (
     <div className={styles.Container}>

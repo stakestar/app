@@ -47,7 +47,7 @@ export const chainConfigs: Record<ChainId, ChainConfig> = {
     explorer: 'https://goerli.etherscan.io',
     urls: [`https://goerli.infura.io/v3/${process.env.INFURA_KEY}`],
     contractsAddresses: {
-      stakeStar: '0xD1eaf74dcB06ce47cD61FAAb1B41cd3ccB235F7A'
+      stakeStar: '0xb30417Ce2054fA4C4FD715e6373A0B761776316e'
     },
     tokens
   }

@@ -2659,15 +2659,15 @@
     superstruct "^0.14.2"
     tweetnacl "^1.0.3"
 
-"@stakestar/contracts@^0.1.4":
-  version "0.1.4"
-  resolved "https://npm.pkg.github.com/download/@stakestar/contracts/0.1.4/4f3a1d26633f6e19d77446dc1f1a3e15d9f2cdd4#4f3a1d26633f6e19d77446dc1f1a3e15d9f2cdd4"
-  integrity sha512-x9hey7hACPMAikQGF925dUgE7sL3MsCDSysCLvW9Yj0GoC1JnJs7sMwB6kiBstUhoLpFBy1SdPADUvXqZY6jiw==
+"@stakestar/contracts@^0.1.7":
+  version "0.1.7"
+  resolved "https://npm.pkg.github.com/download/@stakestar/contracts/0.1.7/2af52929435b3b2404cf2ecf68e082cb26467e2f#2af52929435b3b2404cf2ecf68e082cb26467e2f"
+  integrity sha512-FLnvwXislP3dz0qS4uW4QM886UoHea6ZN9yI+SPQUSfEI9qKxxz9Ztv4Zzda4IKO3oZbxvr6cwmt9sndcKeS0A==
 
-"@stakestar/subgraph-client@^0.3.1":
-  version "0.3.1"
-  resolved "https://npm.pkg.github.com/download/@stakestar/subgraph-client/0.3.1/1550631f3caccb81e3cc5158864e9b1f2af0176a#1550631f3caccb81e3cc5158864e9b1f2af0176a"
-  integrity sha512-hap9iCzcGwxGybBY9BXaIzw/nqbdmJN+t/wzJxSS/DfxC7bD4ie9qxcdg/ieJ3B8/iN8jXdNA8KQaVY2VspkJA==
+"@stakestar/subgraph-client@0.3.2":
+  version "0.3.2"
+  resolved "https://npm.pkg.github.com/download/@stakestar/subgraph-client/0.3.2/7d6af92e9b2fd4bf6de106bdb35454c3f7a15606#7d6af92e9b2fd4bf6de106bdb35454c3f7a15606"
+  integrity sha512-B5U0sonxPZonKXkf4XQfWiy6+tPN1x91TmboFcLZsKuzHBo56YGl+uFdpQ6/xxeLMDuzS+Egi8J1o5gC2OUP3A==
   dependencies:
     "@graphql-mesh/cache-localforage" "^0.6.40"
     "@graphql-mesh/cross-helpers" "^0.2.6"

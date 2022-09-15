@@ -1,4 +1,4 @@
-import { StakeStar, StakeStarReceipt, StakeStarReceipt__factory, StakeStar__factory } from '@stakestar/contracts'
+import { StakeStar, StakeStarETH, StakeStarETH__factory, StakeStar__factory } from '@stakestar/contracts'
 import { PropsWithChildren, createContext, useMemo, useState } from 'react'
 
 import { useChainConfig, useConnector } from '~/features/wallet'
@@ -8,7 +8,7 @@ import { emitEvent, handleError } from '../utils'
 
 export type ContractsProviderValue = {
   stakeStarContract: StakeStar
-  stakeStarReceiptContract: StakeStarReceipt
+  // stakeStarETHContract: StakeStarETH
 }
 
 export const ContractsProviderContext = createContext({} as ContractsProviderValue)
@@ -31,18 +31,23 @@ export function ContractsProvider({ children }: PropsWithChildren): JSX.Element 
     try {
       const stakeStarContract = StakeStar__factory.connect(contractsAddresses.stakeStar, signerOrProvider)
 
-      Promise.all([stakeStarContract.stakeStarReceipt()])
-        .then(([stakeStarReceipt]) => {
-          setStakeStarReceiptAddress(stakeStarReceipt)
-        })
-        .catch((error) => handleError(error, { displayGenericMessage: true }))
+      return {
+        stakeStarContract
+        // stakeStarETHContract: StakeStarETH__factory.connect(stakeStarReceiptAddress, signerOrProvider)
+      }
 
-      return stakeStarReceiptAddress
-        ? {
-            stakeStarContract,
-            stakeStarReceiptContract: StakeStarReceipt__factory.connect(stakeStarReceiptAddress, signerOrProvider)
-          }
-        : initialValue
+      // Promise.all([stakeStarContract.stakeStarEthContract()])
+      //   .then(([stakeStarReceipt]) => {
+      //     setStakeStarReceiptAddress(stakeStarReceipt)
+      //   })
+      //   .catch((error) => handleError(error, { displayGenericMessage: true }))
+      //
+      // return stakeStarReceiptAddress
+      //   ? {
+      //       stakeStarContract,
+      //       stakeStarETHContract: StakeStarETH__factory.connect(stakeStarReceiptAddress, signerOrProvider)
+      //     }
+      //   : initialValue
     } catch (error) {
       handleError(error, { displayGenericMessage: true })
 

@@ -1,5 +1,5 @@
-import { StakeStar, StakeStarETH, StakeStarETH__factory, StakeStar__factory } from '@stakestar/contracts'
-import { PropsWithChildren, createContext, useMemo, useState } from 'react'
+import { StakeStar, StakeStar__factory } from '@stakestar/contracts'
+import { PropsWithChildren, createContext, useMemo } from 'react'
 
 import { useChainConfig, useConnector } from '~/features/wallet'
 
@@ -17,7 +17,7 @@ export function ContractsProvider({ children }: PropsWithChildren): JSX.Element 
   const { contractsAddresses } = useChainConfig()
   const { connector } = useConnector()
   const provider = connector.hooks.useProvider()
-  const [stakeStarReceiptAddress, setStakeStarReceiptAddress] = useState('')
+  // const [stakeStarReceiptAddress, setStakeStarReceiptAddress] = useState('')
 
   const value = useMemo((): ContractsProviderValue => {
     const initialValue = {} as ContractsProviderValue
@@ -53,7 +53,7 @@ export function ContractsProvider({ children }: PropsWithChildren): JSX.Element 
 
       return initialValue
     }
-  }, [contractsAddresses, provider, stakeStarReceiptAddress])
+  }, [contractsAddresses, provider])
 
   if (Object.keys(value).length) {
     emitEvent(APP_EVENT_CONTRACTS_READY)

@@ -26,7 +26,7 @@ export function ContractsProvider({ children }: PropsWithChildren): JSX.Element 
       return initialValue
     }
 
-    const signerOrProvider = provider?.getSigner?.() || provider
+    const signerOrProvider = provider?.provider ? provider.getSigner() : provider
 
     try {
       const stakeStarContract = StakeStar__factory.connect(contractsAddresses.stakeStar, signerOrProvider)

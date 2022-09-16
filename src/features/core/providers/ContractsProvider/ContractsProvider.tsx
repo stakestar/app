@@ -1,10 +1,11 @@
 import { StakeStar, StakeStarETH, StakeStarETH__factory, StakeStar__factory } from '@stakestar/contracts'
 import { PropsWithChildren, createContext, useMemo, useState } from 'react'
 
-import { useChainConfig, useConnector } from '~/features/wallet'
+import { useChainConfig } from '~/features/wallet'
 
-import { APP_EVENT_CONTRACTS_READY } from '../constants'
-import { emitEvent, handleError } from '../utils'
+import { APP_EVENT_CONTRACTS_READY } from '../../constants'
+import { emitEvent, handleError } from '../../utils'
+import { useSignerOrProvider } from './useSignerOrProvider'
 
 export type ContractsProviderValue = {
   stakeStarContract: StakeStar
@@ -14,19 +15,16 @@ export type ContractsProviderValue = {
 export const ContractsProviderContext = createContext({} as ContractsProviderValue)
 
 export function ContractsProvider({ children }: PropsWithChildren): JSX.Element {
-  const { contractsAddresses } = useChainConfig()
-  const { connector } = useConnector()
-  const provider = connector.hooks.useProvider()
   const [stakeStarEthAddress, setStakeStarEthAddress] = useState('')
+  const { contractsAddresses } = useChainConfig()
+  const signerOrProvider = useSignerOrProvider()
 
   const value = useMemo((): ContractsProviderValue => {
     const initialValue = {} as ContractsProviderValue
 
-    if (!provider) {
+    if (!signerOrProvider) {
       return initialValue
     }
-
-    const signerOrProvider = provider?.provider ? provider.getSigner() : provider
 
     try {
       const stakeStarContract = StakeStar__factory.connect(contractsAddresses.stakeStar, signerOrProvider)
@@ -48,7 +46,7 @@ export function ContractsProvider({ children }: PropsWithChildren): JSX.Element 
 
       return initialValue
     }
-  }, [contractsAddresses, provider, stakeStarEthAddress])
+  }, [contractsAddresses, signerOrProvider, stakeStarEthAddress])
 
   if (Object.keys(value).length) {
     emitEvent(APP_EVENT_CONTRACTS_READY)

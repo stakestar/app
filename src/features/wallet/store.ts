@@ -17,7 +17,7 @@ const initialState: WalletState = {
   account: {
     address: '',
     balances: Object.keys(tokens).reduce((result, tokenId) => {
-      result[tokenId as TokenId] = TokenAmount.fromWei(tokenId as TokenId, '0').toEncoded()
+      result[tokenId as TokenId] = TokenAmount.fromDecimal(tokenId as TokenId, 0).toEncoded()
 
       return result
     }, {} as AccountBalances)

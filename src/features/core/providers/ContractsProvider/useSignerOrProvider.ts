@@ -7,15 +7,15 @@ import { useConnector } from '~/features/wallet'
 export function useSignerOrProvider(): Signer | Provider | undefined {
   const { connector } = useConnector()
   const provider = connector.hooks.useProvider()
-  const providerCache = useRef(provider)
+  const providerCached = useRef(provider)
 
   return useMemo(() => {
     if (provider) {
-      providerCache.current = provider
+      providerCached.current = provider
     }
 
-    const providerCached = providerCache.current
+    const { current } = providerCached
 
-    return providerCached?.provider ? (providerCached.getSigner() as Signer) : (providerCached as unknown as Provider)
+    return current?.provider ? (current.getSigner() as Signer) : (current as unknown as Provider)
   }, [provider])
 }

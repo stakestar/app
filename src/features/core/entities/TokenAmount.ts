@@ -121,24 +121,12 @@ export class TokenAmount {
   public getTokenId(): TokenId {
     return this.token.id
   }
-
-  // BigNumber.add( otherValue ) ⇒ BigNumber
-  // BigNumber.sub( otherValue )
-  // BigNumber.mul( otherValue ) ⇒ BigNumbersource
-  // BigNumber.div( divisor ) ⇒ BigNumber
-
-  // BigNumber.eq( otherValue ) ⇒ booleansource
-  // BigNumber.lt( otherValue ) ⇒ booleansource
-  // BigNumber.lte( otherValue ) ⇒ booleansource
-  // BigNumber.gt( otherValue ) ⇒ booleansource
-  // BigNumber.gte( otherValue ) ⇒ booleansource
-  // BigNumber.isZero( ) ⇒ boolean
 }
 
-// TODO: Check out FixedNumber from @ethersproject/bignumber
 // TODO: Take a look at circular dependencies
 // Can't import these functions from '../utils' because of circular dependency
 
+// TODO: Rewrite it using bignumber.js
 function formatNumberDecimals(value: number | string, decimals: number): string {
   return (
     Math.floor((typeof value === 'number' ? value : parseFloat(value)) * 10 ** decimals) /

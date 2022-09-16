@@ -1,9 +1,9 @@
 import { Page } from '~/features/core'
 import { Staking } from '~/features/staking'
 
-export function StakePage(): JSX.Element {
+export function StakingPage(): JSX.Element {
   return (
-    <Page title="Stake">
+    <Page title="Staking">
       <Staking />
     </Page>
   )

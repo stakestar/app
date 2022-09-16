@@ -1,11 +1,13 @@
 import { Action, ThunkAction, combineReducers, configureStore } from '@reduxjs/toolkit'
 
+import { store as stakingStore } from '~/features/staking/store'
 import { store as walletStore } from '~/features/wallet/store'
 
 import { store as coreStore } from './store'
 
 const rootReducer = combineReducers({
   core: coreStore.reducer,
+  staking: stakingStore.reducer,
   wallet: walletStore.reducer
 })
 

@@ -1,11 +1,10 @@
 import './Sidebar.css'
 
-import { Icon, Link, Switch, Typography } from '@onestaree/ui-kit'
+import { Icon, Link, Switch, Typography, useTheme } from '@onestaree/ui-kit'
 import classNames from 'classnames'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { menu } from '../../config'
-import { useTheme } from '../../hooks'
 import styles from './Sidebar.module.scss'
 
 export function Sidebar(): JSX.Element {
@@ -49,9 +48,9 @@ export function Sidebar(): JSX.Element {
             </Link>
           </li>
           <li className={styles.LinksRow}>
-            <Icon icon="telegram" withHover />
-            <Icon icon="twitter" withHover />
-            <Icon icon="medium" withHover />
+            <Icon icon="telegram" fillColor={theme.text} withHover />
+            <Icon icon="twitter" fillColor={theme.text} withHover />
+            <Icon icon="medium" fillColor={theme.text} withHover />
           </li>
         </ul>
         <Switch

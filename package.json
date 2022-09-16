@@ -18,10 +18,10 @@
   "dependencies": {
     "@coinbase/wallet-sdk": "^3.5.1",
     "@davatar/react": "^1.11.0",
-    "@onestaree/ui-kit": "^0.3.2",
+    "@onestaree/ui-kit": "0.3.4",
     "@reduxjs/toolkit": "^1.8.5",
     "@stakestar/contracts": "^0.1.7",
-    "@stakestar/subgraph-client": "0.3.2",
+    "@stakestar/subgraph-client": "0.3.3",
     "@walletconnect/ethereum-provider": "^1.8.0",
     "@web3-react/coinbase-wallet": "8.0.34-beta.0",
     "@web3-react/core": "8.0.35-beta.0",

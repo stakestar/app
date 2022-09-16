@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react'
 import { TokenAmount, handleError, useContracts } from '~/features/core'
 import { useAccount } from '~/features/wallet'
 
+import { useEthPriceUsd } from '../../useEthPriceUsd'
 import styles from './Staking.module.scss'
-import { useEthPriceUsd } from './useEthPriceUsd'
 
 const sdk = getBuiltGraphSDK() // TODO: move it to provider?
 
@@ -31,6 +31,12 @@ export function DebugData(): JSX.Element {
         .balanceOf(address)
         .then((ssEthBalanceBigNumber) => {
           setSsEthBalance(ssEthBalanceBigNumber.toString())
+
+          stakeStarEthContract
+            .ssETH_to_ETH(TokenAmount.fromDecimal('ssETH', 1).toWei())
+            // eslint-disable-next-line no-console
+            .then((ssEthToEthRate) => console.log('ssEthToEthRate', ssEthToEthRate.toString()))
+            .catch(handleError)
 
           stakeStarEthContract
             .ssETH_to_ETH(ssEthBalanceBigNumber.toString())

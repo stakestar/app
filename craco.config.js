@@ -68,7 +68,7 @@ module.exports = {
           'process.env.GIT_LAST_COMMIT_HASH': JSON.stringify(gitLastCommitHash),
           'process.env.IS_STORYBOOK': false
         }),
-        new Dotenv({ ignoreStub: true }),
+        new Dotenv({ ignoreStub: true, systemvars: true }),
         ...whenDev(() => [
           // TODO: Analyze this before production
           // new CircularDependencyPlugin({

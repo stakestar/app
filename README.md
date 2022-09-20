@@ -1,5 +1,10 @@
 # app
 
+MVP app for SSV network
+
+![package status](https://github.com/stakestar/app/actions/workflows/firebase-hosting-merge.yml/badge.svg)
+![package status](https://github.com/stakestar/app/actions/workflows/firebase-hosting-pull-request.yml/badge.svg)
+
 ## Setup
 
 - `yarn` - install dependencies

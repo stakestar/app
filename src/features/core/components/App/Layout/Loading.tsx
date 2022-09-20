@@ -1,7 +1,7 @@
 import { Button, Spinner, Typography } from '@onestaree/ui-kit'
 import { useEffect, useState } from 'react'
 
-import { appLoadingTimeout, appName } from '../../config'
+import { appLoadingTimeout, appName } from '../../../config'
 import styles from './Loading.module.scss'
 
 export function Loading(): JSX.Element {

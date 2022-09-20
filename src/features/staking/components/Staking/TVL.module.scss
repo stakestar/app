@@ -1,0 +1,12 @@
+.TVL {
+  display: flex;
+  flex-direction: column;
+
+  .Title {
+    margin-bottom: 1rem;
+  }
+}
+
+:global(.recharts-tooltip-label) {
+  color: black;
+}

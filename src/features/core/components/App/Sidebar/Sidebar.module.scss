@@ -7,21 +7,22 @@
   min-height: 100%;
   padding: 0.5rem;
   color: var(--textColor);
-  background-color: var(--sidebarBackgroundColor);
+  background-color: var(--textInvertedColor);
   z-index: 1;
 
-  .Logo {
+  .LogoContainer {
     display: flex;
-    margin: 1.25rem 1.5rem 0;
+    align-items: center;
+    margin: 1rem 1.5rem -0.25rem;
     cursor: pointer;
+    user-select: none;
 
-    .Logo1 {
+    .Logo {
+      width: 2.5rem;
+      height: 2.5rem;
+      margin-right: 0.5rem;
+      background: url(./logo.svg) no-repeat center/cover;
       z-index: 1;
-    }
-
-    .Logo2 {
-      left: -7px;
-      bottom: -2px;
     }
   }
 
@@ -96,11 +97,5 @@
         }
       }
     }
-  }
-}
-
-:global(._theme._dark) {
-  .Sidebar {
-    background-color: var(--surfaceDarkColor);
   }
 }

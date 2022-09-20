@@ -4,7 +4,7 @@ import { Icon, Link, Switch, Typography, useTheme } from '@onestaree/ui-kit'
 import classNames from 'classnames'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { menu } from '../../config'
+import { menu } from '../../../config'
 import styles from './Sidebar.module.scss'
 
 export function Sidebar(): JSX.Element {
@@ -14,7 +14,8 @@ export function Sidebar(): JSX.Element {
 
   return (
     <div className={classNames(styles.Sidebar, '_backgroundColorTransition')}>
-      <div className={styles.Logo} onClick={(): void => navigate('/')}>
+      <div className={styles.LogoContainer} onClick={(): void => navigate('/')}>
+        <div className={styles.Logo} />
         <Typography variant="h2">StakeStar</Typography>
       </div>
       <ul className={styles.Menu}>
@@ -40,10 +41,10 @@ export function Sidebar(): JSX.Element {
       <div className={styles.Footer}>
         <ul className={styles.Links}>
           <li className={styles.LinksRow}>
-            <Link href="#" target="_self">
+            <Link href="~/features/core/components/App/Sidebar/Sidebar#" target="_self">
               <Typography variant="text2">T&Cs</Typography>
             </Link>
-            <Link href="#" target="_self">
+            <Link href="~/features/core/components/App/Sidebar/Sidebar#" target="_self">
               <Typography variant="text2">Privacy Policy</Typography>
             </Link>
           </li>

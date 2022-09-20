@@ -1,10 +1,8 @@
 import { formatFixed } from '@ethersproject/bignumber'
 import { BigNumber, utils } from 'ethers'
 
-import { chainIdLocalSorageKey, defaultChainId } from '~/features/core'
-import { getLocalStorageItem } from '~/features/core/hooks/useLocalStorage'
-
-import { chainConfigs } from '../config'
+import { chainConfigs, chainIdLocalSorageKey, defaultChainId } from '../config'
+import { getLocalStorageItem } from '../hooks'
 import type { Token, TokenId } from '../types'
 
 const _constructorGuard = Symbol()
@@ -54,7 +52,7 @@ export class TokenAmount {
    */
   public static fromDecimal(tokenOrTokenId: Token | TokenId, value: number | string): TokenAmount {
     const tokenId = typeof tokenOrTokenId === 'string' ? tokenOrTokenId : tokenOrTokenId.id
-    const wei = utils.parseUnits(value.toString(), getTokenById(tokenId).decimals).toString()
+    const wei = utils.parseUnits(value.toString().substring(0, getTokenById(tokenId).decimals)).toString()
 
     return new TokenAmount(_constructorGuard, tokenId, wei)
   }

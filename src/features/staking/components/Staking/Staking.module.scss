@@ -1,11 +1,53 @@
-.Container {
-  display: flex;
-  flex-direction: column;
-  align-self: start;
-  min-width: 33rem;
-  margin: 1.5rem 0 2rem;
-  padding: 1.5rem;
-  border-radius: 1rem;
-  background-color: var(--surfaceLightColor);
-  box-shadow: 0 5px 12px rgba(16, 16, 16, 0.25);
+.Staking {
+  margin-top: 2rem;
+
+  .Info {
+    display: flex;
+    column-gap: 1rem;
+
+    .InfoCard {
+      width: 20%;
+    }
+
+    .InfoCard1 {
+      width: 33%;
+    }
+  }
+
+  .Tabs {
+    position: relative;
+    display: flex;
+    margin: 5rem 0 1.5rem;
+
+    &:before {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 1px;
+      background-color: var(--dividerColor);
+    }
+  }
+
+  .StakingContainer {
+    display: flex;
+
+    .StakingColumn {
+      width: 50%;
+    }
+
+    .TabsContent {
+      min-width: 27rem;
+      margin-right: 1.5rem;
+
+      .TabContent {
+        display: none;
+
+        &.active {
+          display: block;
+        }
+      }
+    }
+  }
 }

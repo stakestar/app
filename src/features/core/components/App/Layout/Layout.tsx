@@ -2,12 +2,12 @@ import classNames from 'classnames'
 
 import { WalletControl } from '~/features/wallet'
 
-import { useSelector } from '../../hooks'
-import { selectIsAppReady } from '../../store'
+import { useSelector } from '../../../hooks'
+import { selectIsAppReady } from '../../../store'
+import { Sidebar } from '../Sidebar'
 import styles from './Layout.module.scss'
 import { Loading } from './Loading'
 import { Router } from './Router'
-import { Sidebar } from './Sidebar'
 
 export function Layout(): JSX.Element {
   const isAppReady = useSelector(selectIsAppReady)

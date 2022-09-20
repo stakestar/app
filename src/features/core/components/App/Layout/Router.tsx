@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 
 import { Page404 } from '~/pages'
 
-import { routes } from '../../config'
+import { routes } from '../../../config'
 
 export function Router(): JSX.Element {
   return (

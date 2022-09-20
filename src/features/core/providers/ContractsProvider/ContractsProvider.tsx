@@ -1,22 +1,30 @@
-import { StakeStar, StakeStarETH, StakeStarETH__factory, StakeStar__factory } from '@stakestar/contracts'
-import { PropsWithChildren, createContext, useMemo, useState } from 'react'
-
-import { useChainConfig } from '~/features/wallet'
+import {
+  StakeStar,
+  StakeStarETH,
+  StakeStarETH__factory,
+  StakeStarRegistry,
+  StakeStarRegistry__factory,
+  StakeStar__factory
+} from '@stakestar/contracts'
+import { addressesFor } from '@stakestar/contracts/dist/scripts/utils/constants'
+import { PropsWithChildren, createContext, useMemo } from 'react'
 
 import { APP_EVENT_CONTRACTS_READY } from '../../constants'
 import { emitEvent, handleError } from '../../utils'
 import { useSignerOrProvider } from './useSignerOrProvider'
 
+// TODO: Uncomment this after @stakestar/contracts update
+// const { ChainId, addressesFor } = utils
+
 export type ContractsProviderValue = {
   stakeStarContract: StakeStar
   stakeStarEthContract: StakeStarETH
+  stakeStarRegistryContract: StakeStarRegistry
 }
 
 export const ContractsProviderContext = createContext({} as ContractsProviderValue)
 
 export function ContractsProvider({ children }: PropsWithChildren): JSX.Element {
-  const [stakeStarEthAddress, setStakeStarEthAddress] = useState('')
-  const { contractsAddresses } = useChainConfig()
   const signerOrProvider = useSignerOrProvider()
 
   const value = useMemo((): ContractsProviderValue => {
@@ -27,26 +35,21 @@ export function ContractsProvider({ children }: PropsWithChildren): JSX.Element 
     }
 
     try {
-      const stakeStarContract = StakeStar__factory.connect(contractsAddresses.stakeStar, signerOrProvider)
+      // TODO: Uncomment this after @stakestar/contracts update
+      // const { stakeStar, stakeStarETH, stakeStarRegistry } = addressesFor(ChainId.Goerli)
+      const { stakeStar, stakeStarETH, stakeStarRegistry } = addressesFor(5)
 
-      Promise.all([stakeStarContract.stakeStarETH()])
-        .then(([stakeStarReceipt]) => {
-          setStakeStarEthAddress(stakeStarReceipt)
-        })
-        .catch((error) => handleError(error, { displayGenericMessage: true }))
-
-      return stakeStarEthAddress
-        ? {
-            stakeStarContract,
-            stakeStarEthContract: StakeStarETH__factory.connect(stakeStarEthAddress, signerOrProvider)
-          }
-        : initialValue
+      return {
+        stakeStarContract: StakeStar__factory.connect(stakeStar, signerOrProvider),
+        stakeStarEthContract: StakeStarETH__factory.connect(stakeStarETH, signerOrProvider),
+        stakeStarRegistryContract: StakeStarRegistry__factory.connect(stakeStarRegistry, signerOrProvider)
+      }
     } catch (error) {
       handleError(error, { displayGenericMessage: true })
 
       return initialValue
     }
-  }, [contractsAddresses, signerOrProvider, stakeStarEthAddress])
+  }, [signerOrProvider])
 
   if (Object.keys(value).length) {
     emitEvent(APP_EVENT_CONTRACTS_READY)

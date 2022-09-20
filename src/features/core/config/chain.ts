@@ -26,9 +26,6 @@ export type ChainConfig = {
   name: string
   explorer: string
   urls: string[]
-  contractsAddresses: {
-    stakeStar: string
-  }
   tokens: Tokens
 }
 
@@ -37,18 +34,12 @@ export const chainConfigs: Record<ChainId, ChainConfig> = {
     name: 'Mainnet',
     explorer: 'https://etherscan.io',
     urls: [`https://mainnet.infura.io/v3/${process.env.INFURA_KEY}`],
-    contractsAddresses: {
-      stakeStar: ''
-    },
     tokens
   },
   [ChainId.Goerli]: {
     name: 'Görli',
     explorer: 'https://goerli.etherscan.io',
     urls: [`https://goerli.infura.io/v3/${process.env.INFURA_KEY}`],
-    contractsAddresses: {
-      stakeStar: '0xb30417Ce2054fA4C4FD715e6373A0B761776316e'
-    },
     tokens
   }
 }

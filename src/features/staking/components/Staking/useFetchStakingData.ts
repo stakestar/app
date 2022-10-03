@@ -10,16 +10,19 @@ import { useAccount } from '~/features/wallet'
 import {
   selectAccauntSsEthBalance,
   selectActiveValidatorsCount,
+  selectDailyApr,
   selectEthPriceUSD,
   selectSsEthPriceUSD,
   selectTotalSsEthBalance,
   setAccountSsEthBalance,
   setActiveValidatorsCount,
+  setDailyApr,
   setEthPriceUSD,
   setSsEthPriceUSD,
   setSsEthToEthRate,
   setTotalSsEthBalance
 } from '../../store'
+import { calculateDailyApr } from '../../utils'
 import { loadEthPriceUsd } from './loadEthPriceUsd'
 
 const sdk = getBuiltGraphSDK() // TODO: move it to provider?
@@ -30,6 +33,7 @@ export function useFetchStakingData(): {
   totalSsEthBalance: TokenAmount
   ethPriceUSD: string
   ssEthPriceUSD: string
+  dailyApr: number
 } {
   const dispatch = useDispatch()
   const { stakeStarContract, stakeStarEthContract, stakeStarRegistryContract } = useContracts()
@@ -37,6 +41,7 @@ export function useFetchStakingData(): {
   const activeValidatorsCount = useSelector(selectActiveValidatorsCount)
   const accountSsEthBalance = useSelector(selectAccauntSsEthBalance)
   const totalSsEthBalance = useSelector(selectTotalSsEthBalance)
+  const dailyApr = useSelector(selectDailyApr)
   const ethPriceUSD = useSelector(selectEthPriceUSD)
   const ssEthPriceUSD = useSelector(selectSsEthPriceUSD)
 
@@ -52,9 +57,7 @@ export function useFetchStakingData(): {
       stakeStarRegistryContract.countValidatorPublicKeys(ValidatorStatus.CREATED)
     ])
       .then(([ethPriceUsd, stakeStarTvl, tokenRateDailies, ssEthToEth, countValidatorPublicKeys]) => {
-        // TODO:
-        // eslint-disable-next-line no-console
-        console.log('tokenRateDailies', tokenRateDailies)
+        dispatch(setDailyApr(calculateDailyApr(tokenRateDailies)))
         dispatch(setEthPriceUSD(ethPriceUsd))
         dispatch(
           setSsEthPriceUSD(
@@ -90,6 +93,7 @@ export function useFetchStakingData(): {
     accountSsEthBalance,
     totalSsEthBalance,
     ethPriceUSD,
-    ssEthPriceUSD
+    ssEthPriceUSD,
+    dailyApr
   }
 }

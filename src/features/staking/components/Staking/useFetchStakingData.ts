@@ -1,5 +1,5 @@
 // TODO: Uncomment this after @stakestar/contracts update
-import { ValidatorStatus } from '@stakestar/contracts/dist/scripts/utils'
+import { ValidatorStatus } from '@stakestar/contracts'
 import { getBuiltGraphSDK } from '@stakestar/subgraph-client'
 import BigNumberJs from 'bignumber.js'
 import { useEffect } from 'react'

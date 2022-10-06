@@ -20,7 +20,7 @@
     "@davatar/react": "^1.11.0",
     "@onestaree/ui-kit": "0.4.1",
     "@reduxjs/toolkit": "^1.8.5",
-    "@stakestar/contracts": "0.5.0",
+    "@stakestar/contracts": "0.6.0",
     "@stakestar/subgraph-client": "0.4.2",
     "@walletconnect/ethereum-provider": "^1.8.0",
     "@web3-react/coinbase-wallet": "8.0.34-beta.0",

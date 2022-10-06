@@ -1,6 +1,6 @@
 # app
 
-MVP app for SSV network
+[MVP] Staking Pool app (Ethereum/SSV)
 
 ![package status](https://github.com/stakestar/app/actions/workflows/firebase-hosting-merge.yml/badge.svg)
 ![package status](https://github.com/stakestar/app/actions/workflows/firebase-hosting-pull-request.yml/badge.svg)

@@ -1,4 +1,6 @@
 import {
+  ADDRESSES,
+  Network,
   StakeStar,
   StakeStarETH,
   StakeStarETH__factory,
@@ -6,7 +8,6 @@ import {
   StakeStarRegistry__factory,
   StakeStar__factory
 } from '@stakestar/contracts'
-import { ADDRESSES, Network } from '@stakestar/contracts/dist/scripts/utils'
 import { PropsWithChildren, createContext, useMemo } from 'react'
 
 import { APP_EVENT_CONTRACTS_READY } from '../../constants'

@@ -6,7 +6,7 @@ import {
   StakeStarRegistry__factory,
   StakeStar__factory
 } from '@stakestar/contracts'
-import { addressesFor } from '@stakestar/contracts/dist/scripts/utils/constants'
+import { ADDRESSES, Network } from '@stakestar/contracts/dist/scripts/utils'
 import { PropsWithChildren, createContext, useMemo } from 'react'
 
 import { APP_EVENT_CONTRACTS_READY } from '../../constants'
@@ -37,7 +37,7 @@ export function ContractsProvider({ children }: PropsWithChildren): JSX.Element 
     try {
       // TODO: Uncomment this after @stakestar/contracts update
       // const { stakeStar, stakeStarETH, stakeStarRegistry } = addressesFor(ChainId.Goerli)
-      const { stakeStar, stakeStarETH, stakeStarRegistry } = addressesFor(5)
+      const { stakeStar, stakeStarETH, stakeStarRegistry } = ADDRESSES[Network.TENDERLY]
 
       return {
         stakeStarContract: StakeStar__factory.connect(stakeStar, signerOrProvider),

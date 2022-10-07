@@ -14,9 +14,6 @@ import { APP_EVENT_CONTRACTS_READY } from '../../constants'
 import { emitEvent, handleError } from '../../utils'
 import { useSignerOrProvider } from './useSignerOrProvider'
 
-// TODO: Uncomment this after @stakestar/contracts update
-// const { ChainId, addressesFor } = utils
-
 export type ContractsProviderValue = {
   stakeStarContract: StakeStar
   stakeStarEthContract: StakeStarETH
@@ -36,9 +33,7 @@ export function ContractsProvider({ children }: PropsWithChildren): JSX.Element 
     }
 
     try {
-      // TODO: Uncomment this after @stakestar/contracts update
-      // const { stakeStar, stakeStarETH, stakeStarRegistry } = addressesFor(ChainId.Goerli)
-      const { stakeStar, stakeStarETH, stakeStarRegistry } = ADDRESSES[Network.TENDERLY]
+      const { stakeStar, stakeStarETH, stakeStarRegistry } = ADDRESSES[Network.GOERLI]
 
       return {
         stakeStarContract: StakeStar__factory.connect(stakeStar, signerOrProvider),

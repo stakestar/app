@@ -76,7 +76,7 @@ export function Stake(): JSX.Element {
       <Input
         title="Stake ETH"
         label={`Balance: ${balance.toDecimal(2)}`}
-        icon1="tokenEthereum"
+        icon1="tokenEth"
         iconLabel="ETH"
         placeholder="0.00"
         value={value}

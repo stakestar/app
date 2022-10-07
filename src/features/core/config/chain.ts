@@ -11,14 +11,14 @@ export const tokens: Tokens = {
     id: 'ETH',
     decimals: 18,
     address: '',
-    icon1: 'tokenEthereum'
+    icon1: 'tokenEth'
   },
   ssETH: {
     title: 'ssETH',
     id: 'ssETH',
     decimals: 18,
     address: '',
-    icon1: 'tokenEthereum'
+    icon1: 'tokenEth'
   }
 }
 

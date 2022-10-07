@@ -51,12 +51,13 @@ export function useFetchStakingData(): {
 
     Promise.all([
       loadEthPriceUsd(),
-      sdk.getStakeStarTvls().then(({ stakeStarTvls }) => String(stakeStarTvls?.[0]?.totalETH || 0)),
+      stakeStarEthContract.totalSupply(),
       sdk.getTokenRateDailies().then(({ tokenRateDailies }) => tokenRateDailies),
       stakeStarEthContract.ssETH_to_ETH(TokenAmount.fromDecimal('ssETH', 1).toWei()),
       stakeStarRegistryContract.countValidatorPublicKeys(ValidatorStatus.CREATED)
     ])
       .then(([ethPriceUsd, stakeStarTvl, tokenRateDailies, ssEthToEth, countValidatorPublicKeys]) => {
+        console.log(countValidatorPublicKeys)
         dispatch(setDailyApr(calculateDailyApr(tokenRateDailies)))
         dispatch(setEthPriceUSD(ethPriceUsd))
         dispatch(
@@ -64,7 +65,7 @@ export function useFetchStakingData(): {
             new BigNumberJs(ssEthToEth.toString()).shiftedBy(-18).multipliedBy(new BigNumberJs(ethPriceUsd)).toString()
           )
         )
-        dispatch(setTotalSsEthBalance(stakeStarTvl))
+        dispatch(setTotalSsEthBalance(stakeStarTvl.toString()))
         dispatch(setSsEthToEthRate(ssEthToEth.toString()))
         dispatch(setActiveValidatorsCount(countValidatorPublicKeys))
       })

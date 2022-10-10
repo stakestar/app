@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { TokenAmount, handleError, useContracts } from '~/features/core'
 import { useAccount } from '~/features/wallet'
 
-import { useConvertEthToUsd } from '../../hooks'
+import { useConvertEthToUsd } from '../hooks'
 import styles from './Footer.module.scss'
 import { getGasRequired } from './utils'
 

@@ -2,11 +2,11 @@ import { Button, Container, Input, Link, toast } from '@onestaree/ui-kit'
 import { useState } from 'react'
 
 import { TokenAmount, getExplorerUrl, handleError, useContracts, useDispatch } from '~/features/core'
-import { Footer } from '~/features/staking/components/Staking/Footer'
 import { setAccountSsEthBalance } from '~/features/staking/store'
 import { useAccount, useAccountBalance, useFetchAccountBalances } from '~/features/wallet'
 
 import { minStakeEthValue } from './constants'
+import { Footer } from './Footer'
 import { getGasRequired, getIsValueMinMaxError, getSetValueByMultiplier } from './utils'
 
 export function Stake(): JSX.Element {

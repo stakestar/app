@@ -2,10 +2,10 @@ import { Button, Container, Input } from '@onestaree/ui-kit'
 import { useState } from 'react'
 
 import { useSelector } from '~/features/core'
-import { Footer } from '~/features/staking/components/Staking/Footer'
 
-import { selectAccauntSsEthBalance } from '../../store'
+import { selectAccauntSsEthBalance } from '../store'
 import { minStakeEthValue } from './constants'
+import { Footer } from './Footer'
 import { getIsValueMinMaxError, getSetValueByMultiplier } from './utils'
 
 export function Unstake(): JSX.Element {

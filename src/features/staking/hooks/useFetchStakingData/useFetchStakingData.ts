@@ -5,7 +5,6 @@ import BigNumberJs from 'bignumber.js'
 import { useEffect } from 'react'
 
 import { TokenAmount, handleError, useContracts, useDispatch, useSelector } from '~/features/core'
-import { useAccountSsEthBalance } from '~/features/staking'
 import { useAccount } from '~/features/wallet'
 
 import {
@@ -23,6 +22,7 @@ import {
   setTotalSsEthBalance
 } from '../../store'
 import { calculateDailyApr } from '../../utils'
+import { useAccountSsEthBalance } from '../useAccountSsEthBalance'
 import { loadEthPriceUsd } from './loadEthPriceUsd'
 
 const sdk = getBuiltGraphSDK() // TODO: move it to provider?
@@ -57,6 +57,7 @@ export function useFetchStakingData(): {
       stakeStarRegistryContract.countValidatorPublicKeys(ValidatorStatus.CREATED)
     ])
       .then(([ethPriceUsd, stakeStarTvl, tokenRateDailies, ssEthToEth, countValidatorPublicKeys]) => {
+        // eslint-disable-next-line no-console
         console.log(countValidatorPublicKeys)
         dispatch(setDailyApr(calculateDailyApr(tokenRateDailies)))
         dispatch(setEthPriceUSD(ethPriceUsd))

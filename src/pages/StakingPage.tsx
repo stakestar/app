@@ -9,6 +9,7 @@ import {
   TVL,
   Unstake,
   useAccountSsEthBalance,
+  useConvertEthToUsd,
   useConvertSsEthToUsd,
   useFetchStakingData
 } from '~/features/staking'
@@ -17,9 +18,10 @@ import styles from './StakingPage.module.scss'
 
 export function StakingPage(): JSX.Element {
   const [activeIndex, setActiveIndex] = useState(0)
-  const accauntSsEthBalance = useAccountSsEthBalance()
+  const convertEthToUsd = useConvertEthToUsd()
   const convertSsEthToUsd = useConvertSsEthToUsd()
-  const accauntSsEthBalanceInUsd = convertSsEthToUsd(accauntSsEthBalance.toWei()).toFormat(2)
+  const accauntSsEthBalance = useAccountSsEthBalance()
+  const accauntSsEthBalanceInUsd = convertEthToUsd(accauntSsEthBalance.toWei()).toFormat(2)
   const { activeValidatorsCount, totalSsEthBalance } = useFetchStakingData()
   const totalTvl = convertSsEthToUsd(totalSsEthBalance.toWei()).toFormat(2)
 

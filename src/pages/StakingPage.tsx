@@ -3,13 +3,23 @@ import classNames from 'classnames'
 import { useState } from 'react'
 
 import { Page } from '~/features/core'
-import { Faq, Stake, TVL, Unstake, useConvertSsEthToUsd, useFetchStakingData } from '~/features/staking'
+import {
+  Faq,
+  Stake,
+  TVL,
+  Unstake,
+  useAccountSsEthBalance,
+  useConvertSsEthToUsd,
+  useFetchStakingData
+} from '~/features/staking'
 
 import styles from './StakingPage.module.scss'
 
 export function StakingPage(): JSX.Element {
   const [activeIndex, setActiveIndex] = useState(0)
+  const accauntSsEthBalance = useAccountSsEthBalance()
   const convertSsEthToUsd = useConvertSsEthToUsd()
+  const accauntSsEthBalanceInUsd = convertSsEthToUsd(accauntSsEthBalance.toWei()).toFormat(2)
   const { activeValidatorsCount, totalSsEthBalance } = useFetchStakingData()
   const totalTvl = convertSsEthToUsd(totalSsEthBalance.toWei()).toFormat(2)
 
@@ -17,6 +27,12 @@ export function StakingPage(): JSX.Element {
     <Page className={styles.StakingPage} title="Staking">
       <div>
         <div className={styles.Info}>
+          <InfoCard
+            className={styles.InfoCard}
+            title="Staked"
+            info={`${accauntSsEthBalance.toDecimal(2)} ETH / $${accauntSsEthBalanceInUsd}`}
+            variant="large"
+          />
           <InfoCard className={styles.InfoCard} title="APR" info="0.00%" variant="large" />
           <InfoCard className={styles.InfoCard} title="APY" info="0.00%" variant="large" />
           <InfoCard className={styles.InfoCard} title="Reward" info="$0.00" variant="large" />

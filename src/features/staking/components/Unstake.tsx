@@ -1,25 +1,23 @@
 import { Button, Container, Input } from '@onestaree/ui-kit'
 import { useState } from 'react'
 
-import { useSelector } from '~/features/core'
-
-import { selectAccauntSsEthBalance } from '../store'
+import { useAccountSsEthBalance } from '../hooks'
 import { minStakeEthValue } from './constants'
 import { Footer } from './Footer'
 import { getIsValueMinMaxError, getSetValueByMultiplier } from './utils'
 
 export function Unstake(): JSX.Element {
-  const balance = useSelector(selectAccauntSsEthBalance)
   const [value, setValue] = useState('')
-  const setValueByMultiplier = getSetValueByMultiplier(setValue, balance)
-  const isValueMinMaxError = getIsValueMinMaxError(value, balance)
+  const accountSsEthBalance = useAccountSsEthBalance()
+  const setValueByMultiplier = getSetValueByMultiplier(setValue, accountSsEthBalance)
+  const isValueMinMaxError = getIsValueMinMaxError(value, accountSsEthBalance)
   const [isLoading] = useState(false)
 
   return (
     <Container size="large">
       <Input
         title="Unstake ssETH"
-        label={`Balance: ${balance.toDecimal(2)}`}
+        label={`Balance: ${accountSsEthBalance.toDecimal(2)}`}
         icon1="tokenEth"
         iconLabel="ssETH"
         placeholder="0.00"
@@ -29,7 +27,7 @@ export function Unstake(): JSX.Element {
         onClickMaxButton={setValueByMultiplier}
         disabled={isLoading}
         error={isValueMinMaxError}
-        errorMessage={`Min value is ${minStakeEthValue} and your max is ${balance.toString()}`}
+        errorMessage={`Min value is ${minStakeEthValue} and your max is ${accountSsEthBalance.toString()}`}
       />
       <Button title="Untake" onClick={(): null => null} disabled={true} loading={isLoading} />
       <Footer transactionType="unstake" ethAmount={value} />

@@ -5,10 +5,10 @@ import BigNumberJs from 'bignumber.js'
 import { useEffect } from 'react'
 
 import { TokenAmount, handleError, useContracts, useDispatch, useSelector } from '~/features/core'
+import { useAccountSsEthBalance } from '~/features/staking'
 import { useAccount } from '~/features/wallet'
 
 import {
-  selectAccauntSsEthBalance,
   selectActiveValidatorsCount,
   selectDailyApr,
   selectEthPriceUSD,
@@ -38,8 +38,8 @@ export function useFetchStakingData(): {
   const dispatch = useDispatch()
   const { stakeStarContract, stakeStarEthContract, stakeStarRegistryContract } = useContracts()
   const { address } = useAccount()
+  const accountSsEthBalance = useAccountSsEthBalance()
   const activeValidatorsCount = useSelector(selectActiveValidatorsCount)
-  const accountSsEthBalance = useSelector(selectAccauntSsEthBalance)
   const totalSsEthBalance = useSelector(selectTotalSsEthBalance)
   const dailyApr = useSelector(selectDailyApr)
   const ethPriceUSD = useSelector(selectEthPriceUSD)

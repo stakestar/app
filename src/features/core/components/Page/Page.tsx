@@ -13,7 +13,11 @@ interface PageProps extends PropsWithChildren {
 export function Page({ title, isVerticalCenter = false, className, children }: PageProps): JSX.Element {
   return (
     <div className={classNames(styles.Page, className, { [styles.isVerticalCenter]: isVerticalCenter })}>
-      {title && <Typography variant="h1">{title}</Typography>}
+      {title && (
+        <Typography className={styles.Title} variant="h1">
+          {title}
+        </Typography>
+      )}
       {children}
     </div>
   )

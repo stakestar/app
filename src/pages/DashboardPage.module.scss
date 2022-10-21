@@ -1,0 +1,18 @@
+.DashboardPage {
+  .Info {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 1rem;
+    row-gap: 1rem;
+    margin-right: -1rem;
+
+    .InfoCard {
+      box-sizing: border-box;
+      width: calc(100% / 3 - 1rem);
+    }
+  }
+
+  .Table {
+    margin-block: 3rem;
+  }
+}

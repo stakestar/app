@@ -59,7 +59,7 @@ export function DashboardPage(): JSX.Element {
         setRows(updatedRows)
       })
       .catch(handleError)
-  }, [])
+  }, [operatorsIds, activeValidatorsCount])
 
   return (
     <Page className={styles.DashboardPage} title="Dashboard">

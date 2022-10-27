@@ -21,7 +21,7 @@
     "@onestaree/ui-kit": "0.9.0",
     "@reduxjs/toolkit": "^1.8.5",
     "@stakestar/contracts": "0.7.0",
-    "@stakestar/subgraph-client": "0.4.2",
+    "@stakestar/subgraph-client": "0.6.0",
     "@walletconnect/ethereum-provider": "^1.8.0",
     "@web3-react/coinbase-wallet": "8.0.34-beta.0",
     "@web3-react/core": "8.0.35-beta.0",

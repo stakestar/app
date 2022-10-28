@@ -3,7 +3,7 @@ import { BigNumber, ethers } from 'ethers'
 export function toDecimal(value: BigNumber | number | string, decimals: number): BigNumber {
   const multiplier = Math.pow(10, Number(decimals || 0))
 
-  return BigNumber.from(String(value)).div(multiplier)
+  return BigNumber.from(String(value)).div(BigNumber.from(10).pow(decimals))
 }
 
 export function fromDecimal(value: BigNumber | number | string, decimals: number): BigNumber {

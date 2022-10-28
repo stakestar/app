@@ -1,4 +1,5 @@
 import { IconName } from '@onestaree/ui-kit'
+import { StakeStarTvl } from '@stakestar/subgraph-client/dist/types.d.ts'
 
 export enum ChainId {
   Mainnet = 1,
@@ -15,3 +16,5 @@ export type Token = {
   icon1: IconName
   icon2?: IconName
 }
+
+export type DailyTvls = Array<Pick<StakeStarTvl, 'id' | 'totalETH'>>

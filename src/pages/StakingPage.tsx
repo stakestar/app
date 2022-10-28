@@ -22,7 +22,7 @@ export function StakingPage(): JSX.Element {
   const convertSsEthToUsd = useConvertSsEthToUsd()
   const accauntSsEthBalance = useAccountSsEthBalance()
   const accauntSsEthBalanceInUsd = convertEthToUsd(accauntSsEthBalance.toWei()).toFormat(2)
-  const { activeValidatorsCount, totalSsEthBalance } = useFetchStakingData()
+  const { activeValidatorsCount, totalSsEthBalance, dailyTvls } = useFetchStakingData()
   const totalTvl = convertSsEthToUsd(totalSsEthBalance.toWei()).toFormat(2)
 
   return (
@@ -61,7 +61,7 @@ export function StakingPage(): JSX.Element {
             <Faq />
           </div>
           <div className={styles.StakingColumn}>
-            <TVL />
+            <TVL dailyTvls={dailyTvls} />
           </div>
         </div>
       </div>

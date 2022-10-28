@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import { RootState } from '~/features/core'
+import { DailyTvls, RootState } from '~/features/core'
 import { TokenAmount, TokenAmountEncoded } from '~/features/core/entities/TokenAmount' // Because of circular dependency
 
 export type StakingState = {
@@ -9,6 +9,7 @@ export type StakingState = {
   ssEthPriceUSD: string
   ssEthToEthRate: string
   dailyApr: number
+  dailyTvls: DailyTvls
   account: {
     ssEthBalance: TokenAmountEncoded
   }
@@ -25,6 +26,7 @@ const initialState: StakingState = {
   ssEthPriceUSD: '',
   ssEthToEthRate: '',
   dailyApr: 0,
+  dailyTvls: [],
   account: {
     ssEthBalance: emptySsEth
   },
@@ -61,6 +63,10 @@ export const store = createSlice({
       state.dailyApr = dailyApr
     },
 
+    setDailyTvls: (state, { payload: dailyTvls }: PayloadAction<StakingState['dailyTvls']>): void => {
+      state.dailyTvls = dailyTvls
+    },
+
     setAccountSsEthBalance: (
       state,
       { payload: ssEthBalance }: PayloadAction<StakingState['account']['ssEthBalance']>
@@ -82,6 +88,7 @@ export const {
   setSsEthPriceUSD,
   setSsEthToEthRate,
   setDailyApr,
+  setDailyTvls,
   setAccountSsEthBalance,
   setTotalSsEthBalance,
   resetState
@@ -94,6 +101,7 @@ export const selectEthPriceUSD = (state: RootState): StakingState['ethPriceUSD']
 export const selectSsEthPriceUSD = (state: RootState): StakingState['ssEthPriceUSD'] => state.staking.ssEthPriceUSD
 export const selectSsEthToEthRate = (state: RootState): StakingState['ssEthToEthRate'] => state.staking.ssEthToEthRate
 export const selectDailyApr = (state: RootState): StakingState['dailyApr'] => state.staking.dailyApr
+export const selectDailyTvls = (state: RootState): StakingState['dailyTvls'] => state.staking.dailyTvls
 export const selectAccauntSsEthBalance = (state: RootState): TokenAmount =>
   TokenAmount.fromEncoded(state.staking.account.ssEthBalance)
 export const selectTotalSsEthBalance = (state: RootState): TokenAmount =>

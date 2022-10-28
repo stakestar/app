@@ -1,3 +1,5 @@
+import BigNumber from 'bignumber.js'
+
 export function formatNumber(value: number | string, minimumFractionDigits = 2): string {
   return new Intl.NumberFormat(window.navigator.language, { minimumFractionDigits }).format(
     typeof value === 'string' ? parseFloat(value) : value

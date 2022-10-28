@@ -4,18 +4,20 @@ import { getBuiltGraphSDK } from '@stakestar/subgraph-client'
 import BigNumberJs from 'bignumber.js'
 import { useEffect } from 'react'
 
-import { TokenAmount, handleError, useContracts, useDispatch, useSelector } from '~/features/core'
+import { DailyTvls, TokenAmount, handleError, useContracts, useDispatch, useSelector } from '~/features/core'
 import { useAccount } from '~/features/wallet'
 
 import {
   selectActiveValidatorsCount,
   selectDailyApr,
+  selectDailyTvls,
   selectEthPriceUSD,
   selectSsEthPriceUSD,
   selectTotalSsEthBalance,
   setAccountSsEthBalance,
   setActiveValidatorsCount,
   setDailyApr,
+  setDailyTvls,
   setEthPriceUSD,
   setSsEthPriceUSD,
   setSsEthToEthRate,
@@ -34,6 +36,7 @@ export function useFetchStakingData(): {
   ethPriceUSD: string
   ssEthPriceUSD: string
   dailyApr: number
+  dailyTvls: DailyTvls
 } {
   const dispatch = useDispatch()
   const { stakeStarContract, stakeStarEthContract, stakeStarRegistryContract } = useContracts()
@@ -44,6 +47,7 @@ export function useFetchStakingData(): {
   const dailyApr = useSelector(selectDailyApr)
   const ethPriceUSD = useSelector(selectEthPriceUSD)
   const ssEthPriceUSD = useSelector(selectSsEthPriceUSD)
+  const dailyTvls = useSelector(selectDailyTvls)
 
   useEffect(() => {
     // eslint-disable-next-line no-console
@@ -54,9 +58,10 @@ export function useFetchStakingData(): {
       stakeStarEthContract.totalSupply(),
       sdk.getTokenRateDailies().then(({ tokenRateDailies }) => tokenRateDailies),
       stakeStarEthContract.ssETH_to_ETH(TokenAmount.fromDecimal('ssETH', 1).toWei()),
-      stakeStarRegistryContract.countValidatorPublicKeys(ValidatorStatus.CREATED)
+      stakeStarRegistryContract.countValidatorPublicKeys(ValidatorStatus.CREATED),
+      sdk.getStakeStarTvls({ first: 10 }).then(({ stakeStarTvls }) => stakeStarTvls)
     ])
-      .then(([ethPriceUsd, stakeStarTvl, tokenRateDailies, ssEthToEth, countValidatorPublicKeys]) => {
+      .then(([ethPriceUsd, stakeStarTvl, tokenRateDailies, ssEthToEth, countValidatorPublicKeys, dailyTvls]) => {
         // eslint-disable-next-line no-console
         console.log(countValidatorPublicKeys)
         dispatch(setDailyApr(calculateDailyApr(tokenRateDailies)))
@@ -69,6 +74,7 @@ export function useFetchStakingData(): {
         dispatch(setTotalSsEthBalance(stakeStarTvl.toString()))
         dispatch(setSsEthToEthRate(ssEthToEth.toString()))
         dispatch(setActiveValidatorsCount(countValidatorPublicKeys))
+        dispatch(setDailyTvls(dailyTvls))
       })
       .catch(handleError)
   }, [dispatch, stakeStarContract, stakeStarEthContract, stakeStarRegistryContract])
@@ -96,6 +102,7 @@ export function useFetchStakingData(): {
     totalSsEthBalance,
     ethPriceUSD,
     ssEthPriceUSD,
-    dailyApr
+    dailyApr,
+    dailyTvls
   }
 }

@@ -7,18 +7,6 @@ import { toDecimal } from '~/features/core/utils/math'
 
 import styles from './TVL.module.scss'
 
-const data = [
-  { title: '12.09', value: 1000 },
-  { title: '13.09', value: 5000 },
-  { title: '14.09', value: 10000 },
-  { title: '15.09', value: 15000 },
-  { title: '16.09', value: 12000 },
-  { title: '17.09', value: 20000 },
-  { title: '18.09', value: 45000 },
-  { title: '19.09', value: 30000 },
-  { title: '20.09', value: 55000 }
-]
-
 interface TvlProps {
   dailyTvls: DailyTvls
 }

@@ -61,7 +61,7 @@ export function useFetchStakingData(): {
       stakeStarRegistryContract.countValidatorPublicKeys(ValidatorStatus.CREATED),
       sdk.getStakeStarTvls({ first: 10 }).then(({ stakeStarTvls }) => stakeStarTvls)
     ])
-      .then(([ethPriceUsd, stakeStarTvl, tokenRateDailies, ssEthToEth, countValidatorPublicKeys, dailyTvls]) => {
+      .then(([ethPriceUsd, stakeStarTvl, tokenRateDailies, ssEthToEth, countValidatorPublicKeys, dailyTvlsData]) => {
         // eslint-disable-next-line no-console
         console.log(countValidatorPublicKeys)
         dispatch(setDailyApr(calculateDailyApr(tokenRateDailies)))
@@ -74,7 +74,7 @@ export function useFetchStakingData(): {
         dispatch(setTotalSsEthBalance(stakeStarTvl.toString()))
         dispatch(setSsEthToEthRate(ssEthToEth.toString()))
         dispatch(setActiveValidatorsCount(countValidatorPublicKeys))
-        dispatch(setDailyTvls(dailyTvls))
+        dispatch(setDailyTvls(dailyTvlsData))
       })
       .catch(handleError)
   }, [dispatch, stakeStarContract, stakeStarEthContract, stakeStarRegistryContract])

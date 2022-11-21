@@ -22,7 +22,7 @@ export function StakingPage(): JSX.Element {
   const convertSsEthToUsd = useConvertSsEthToUsd()
   const accauntSsEthBalance = useAccountSsEthBalance()
   const accauntSsEthBalanceInUsd = convertEthToUsd(accauntSsEthBalance.toWei()).toFormat(2)
-  const { activeValidatorsCount, totalSsEthBalance, dailyTvls } = useFetchStakingData()
+  const { activeValidatorsCount, totalSsEthBalance, dailyApr, dailyTvls } = useFetchStakingData()
   const totalTvl = convertSsEthToUsd(totalSsEthBalance.toWei()).toFormat(2)
 
   return (
@@ -35,8 +35,8 @@ export function StakingPage(): JSX.Element {
             info={`${accauntSsEthBalance.toDecimal(2)} ETH / $${accauntSsEthBalanceInUsd}`}
             variant="large"
           />
-          <InfoCard className={styles.InfoCard} title="APR" info="0.00%" variant="large" />
-          <InfoCard className={styles.InfoCard} title="APY" info="0.00%" variant="large" />
+          <InfoCard className={styles.InfoCard} title="APR" info={`${dailyApr}%`} variant="large" />
+          <InfoCard className={styles.InfoCard} title="APY" info={`${dailyApr * 365}%`} variant="large" />
           <InfoCard className={styles.InfoCard} title="Reward" info="$0.00" variant="large" />
           <InfoCard className={styles.InfoCard} title="Total TVL" info={`$${totalTvl}`} variant="large" />
           <InfoCard

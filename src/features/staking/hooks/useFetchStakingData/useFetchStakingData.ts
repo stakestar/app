@@ -21,6 +21,7 @@ import {
   setEthPriceUSD,
   setSsEthPriceUSD,
   setSsEthToEthRate,
+  setStakerRateDiff,
   setTotalSsEthBalance
 } from '../../store'
 import { calculateDailyApr } from '../../utils'
@@ -83,14 +84,17 @@ export function useFetchStakingData(): {
     if (address) {
       Promise.all([
         sdk.getStakerAtMomentRate({ stakerId: address }).then(({ stakerAtMomentRate }) => stakerAtMomentRate),
+        stakeStarEthContract.rate(),
         // TODO: Refactor stakeStarEthContract.balanceOf to useFetchAccountSsEthBalance
         stakeStarEthContract.balanceOf(address)
       ])
-        .then(([stakerAtMomentRate, ssEthBalance]) => {
-          // TODO:
-          // eslint-disable-next-line no-console
-          console.log('stakerAtMomentRate', stakerAtMomentRate)
-          dispatch(setAccountSsEthBalance(TokenAmount.fromWei('ssETH', ssEthBalance.toString()).toEncoded()))
+        .then(([stakerAtMomentRate, currentRate, ssEthBalance]) => {
+          if (stakerAtMomentRate?.atMomentRate) {
+            const rateDiff = currentRate.sub(stakerAtMomentRate?.atMomentRate)
+            // TODO:
+            // eslint-disable-next-line no-console
+            dispatch(setAccountSsEthBalance(TokenAmount.fromWei('ssETH', ssEthBalance.toString()).toEncoded()))
+          }
         })
         .catch(handleError)
     }

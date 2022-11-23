@@ -10,3 +10,11 @@ export function convertEthToUsd(ethWei: string, priceUsd: string | null): BigNum
 
   return ethBigNumber.multipliedBy(priceUsdBigNumber)
 }
+
+export function convertSsETHToETH(ssEthAmount: string, rate: string | null): BigNumberJs {
+  if (ssEthAmount === '0' || !rate) {
+    return new BigNumberJs(0)
+  }
+
+  return new BigNumberJs(ssEthAmount).multipliedBy(rate).shiftedBy(18)
+}

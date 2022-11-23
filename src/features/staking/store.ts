@@ -8,6 +8,7 @@ export type StakingState = {
   ethPriceUSD: string
   ssEthPriceUSD: string
   ssEthToEthRate: string
+  stakerRateDiff: string
   dailyApr: number
   dailyTvls: DailyTvls
   account: {
@@ -25,6 +26,7 @@ const initialState: StakingState = {
   ethPriceUSD: '',
   ssEthPriceUSD: '',
   ssEthToEthRate: '',
+  stakerRateDiff: '',
   dailyApr: 0,
   dailyTvls: [],
   account: {
@@ -59,6 +61,10 @@ export const store = createSlice({
       state.ssEthToEthRate = ssEthToEthRate
     },
 
+    setStakerRateDiff: (state, { payload: stakerRateDiff }: PayloadAction<StakingState['stakerRateDiff']>): void => {
+      state.stakerRateDiff = stakerRateDiff
+    },
+
     setDailyApr: (state, { payload: dailyApr }: PayloadAction<StakingState['dailyApr']>): void => {
       state.dailyApr = dailyApr
     },
@@ -87,6 +93,7 @@ export const {
   setEthPriceUSD,
   setSsEthPriceUSD,
   setSsEthToEthRate,
+  setStakerRateDiff,
   setDailyApr,
   setDailyTvls,
   setAccountSsEthBalance,
@@ -101,6 +108,7 @@ export const selectEthPriceUSD = (state: RootState): StakingState['ethPriceUSD']
 export const selectSsEthPriceUSD = (state: RootState): StakingState['ssEthPriceUSD'] => state.staking.ssEthPriceUSD
 export const selectSsEthToEthRate = (state: RootState): StakingState['ssEthToEthRate'] => state.staking.ssEthToEthRate
 export const selectDailyApr = (state: RootState): StakingState['dailyApr'] => state.staking.dailyApr
+export const selectStakerRateDiff = (state: RootState): StakingState['stakerRateDiff'] => state.staking.stakerRateDiff
 export const selectDailyTvls = (state: RootState): StakingState['dailyTvls'] => state.staking.dailyTvls
 export const selectAccauntSsEthBalance = (state: RootState): TokenAmount =>
   TokenAmount.fromEncoded(state.staking.account.ssEthBalance)

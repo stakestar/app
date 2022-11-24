@@ -76,7 +76,7 @@ export function useSyncAccount({ connectorId, chainId }: UseSyncAccountProps): v
   }, [connect, connectorId, prevConnectorId])
 
   useEffect(() => {
-    if (account && isActive && !address) {
+    if (account && isActive && address !== account) {
       login({
         address: account,
         chainId

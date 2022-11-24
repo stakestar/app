@@ -91,6 +91,7 @@ export function useFetchStakingData(): {
         .then(([stakerAtMomentRate, currentRate, ssEthBalance]) => {
           if (stakerAtMomentRate?.atMomentRate) {
             const rateDiff = currentRate.sub(stakerAtMomentRate?.atMomentRate)
+            dispatch(setStakerRateDiff(rateDiff.toString()))
             // TODO:
             // eslint-disable-next-line no-console
             dispatch(setAccountSsEthBalance(TokenAmount.fromWei('ssETH', ssEthBalance.toString()).toEncoded()))

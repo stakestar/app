@@ -26,10 +26,12 @@ export function StakingPage(): JSX.Element {
   const accauntSsEthBalanceInUsd = convertEthToUsd(accauntSsEthBalance.toWei()).toFormat(2)
   const { activeValidatorsCount, totalSsEthBalance, dailyApr, dailyTvls } = useFetchStakingData()
   const totalTvl = convertSsEthToUsd(totalSsEthBalance.toWei()).toFormat(2)
-
   const stakerRateDiff = useSelector(selectStakerRateDiff)
 
-  const reward = useMemo(() => convertSsETHToETH(accauntSsEthBalance.toString(), stakerRateDiff), [stakerRateDiff])
+  const reward = useMemo(
+    () => convertSsETHToETH(accauntSsEthBalance.toString(), stakerRateDiff),
+    [accauntSsEthBalance, stakerRateDiff]
+  )
 
   return (
     <Page className={styles.StakingPage} title="Staking">

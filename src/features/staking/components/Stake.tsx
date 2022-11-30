@@ -7,6 +7,7 @@ import { useAccount, useAccountBalance, useFetchAccountBalances } from '~/featur
 
 import { minStakeEthValue } from './constants'
 import { Footer } from './Footer'
+import styles from './Stake.module.scss'
 import { getGasRequired, getIsValueMinMaxError, getSetValueByMultiplier } from './utils'
 
 export function Stake(): JSX.Element {
@@ -52,7 +53,7 @@ export function Stake(): JSX.Element {
         toast.show(
           <>
             {TokenAmount.fromWei('ETH', valueToStake).toDecimal(2)} ETH was successfully staked.
-            <Link icon="external" href={`${getExplorerUrl('tx', transactionHash)}`}>
+            <Link className={styles.Link} icon="external" href={`${getExplorerUrl('tx', transactionHash)}`}>
               See more details on Etherscan
             </Link>
           </>,

@@ -1,26 +1,29 @@
+import { usePopup } from '@onestaree/ui-kit'
 import { Network } from '@web3-react/network'
 import { useCallback, useEffect } from 'react'
 
 import { ChainId, handleError, useDispatch, usePrevious } from '~/features/core'
 
 import { useConnector, useFetchAccountBalances, useAccount as useWalletAccount } from '../../hooks'
+import { popups } from '../../popups'
 import { resetState, setAccountAddress, setChainId } from '../../store'
 import { ConnectorId } from './types'
 import { getConnector } from './utils'
 
 interface UseSyncAccountProps {
   connectorId: ConnectorId
-  chainId: ChainId
 }
 
-export function useSyncAccount({ connectorId, chainId }: UseSyncAccountProps): void {
+export function useSyncAccount({ connectorId }: UseSyncAccountProps): void {
   const {
     connector: { hooks },
     connectors
   } = useConnector()
 
   const [account, isActive] = [hooks.useAccount(), hooks.useIsActive()]
+  const chainId = hooks.useChainId()
   const dispatch = useDispatch()
+  const popup = usePopup()
   const { address } = useWalletAccount()
   const prevConnectorId = usePrevious(connectorId)
   const fetchAccountBalances = useFetchAccountBalances()
@@ -76,7 +79,7 @@ export function useSyncAccount({ connectorId, chainId }: UseSyncAccountProps): v
   }, [connect, connectorId, prevConnectorId])
 
   useEffect(() => {
-    if (account && isActive && address !== account) {
+    if (account && isActive && address !== account && chainId) {
       login({
         address: account,
         chainId
@@ -89,4 +92,14 @@ export function useSyncAccount({ connectorId, chainId }: UseSyncAccountProps): v
       void logout()
     }
   }, [account, address, logout])
+
+  useEffect(() => {
+    if (chainId) {
+      if (Object.values(ChainId).includes(chainId)) {
+        popup.close()
+      } else {
+        popup.open(popups.unsupportedNetworkPopup)
+      }
+    }
+  }, [chainId])
 }

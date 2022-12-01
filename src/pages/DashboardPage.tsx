@@ -8,7 +8,7 @@ import { useConvertSsEthToUsd, useFetchStakingData } from '~/features/staking'
 
 import styles from './DashboardPage.module.scss'
 
-type MyRowItem = {
+type Operator = {
   id: number
   name: string
   validators: number
@@ -16,13 +16,16 @@ type MyRowItem = {
   performance: string
 }
 
-const tableProps: TableProps<MyRowItem> = {
+const tableProps: TableProps<Operator> = {
   columns: [
     { title: 'ID', render: ({ id }) => <Typography>{id}</Typography> },
     { title: 'NAME', render: ({ name }) => <Typography>{name}</Typography> },
     { title: 'VALIDATORS', render: ({ validators }) => <Typography>{validators}</Typography> },
     { title: 'HOSTING', render: ({ hosting }) => <Typography>{hosting}</Typography> },
-    { title: 'PERFORMANCE', render: ({ performance }) => <Typography>{performance}</Typography> }
+    {
+      title: 'PERFORMANCE',
+      render: ({ performance }) => <Typography>{parseFloat(performance).toFixed(2)}%</Typography>
+    }
   ],
   rows: [],
   // eslint-disable-next-line no-console
@@ -36,7 +39,7 @@ export function DashboardPage(): JSX.Element {
   const { activeValidatorsCount, totalSsEthBalance } = useFetchStakingData()
   const totalTvl = convertSsEthToUsd(totalSsEthBalance.toWei()).toFormat(2)
 
-  const [rows, setRows] = useState<MyRowItem[]>([])
+  const [rows, setRows] = useState<Operator[]>([])
 
   useEffect(() => {
     const promises = []
@@ -46,17 +49,17 @@ export function DashboardPage(): JSX.Element {
 
     Promise.all(promises)
       .then((responses) => {
-        const updatedRows: MyRowItem[] = []
-        responses.forEach((response) => {
-          updatedRows.push({
-            id: response.data.id,
-            name: response.data.name,
-            validators: activeValidatorsCount,
-            hosting: 'N/A',
-            performance: response.data.performance['24h']
-          })
-        })
-        setRows(updatedRows)
+        setRows(
+          responses.map(
+            (response): Operator => ({
+              id: response.data.id,
+              name: response.data.name,
+              validators: activeValidatorsCount,
+              hosting: 'N/A',
+              performance: response.data.performance['24h']
+            })
+          )
+        )
       })
       .catch(handleError)
   }, [operatorsIds, activeValidatorsCount])

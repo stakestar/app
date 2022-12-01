@@ -64,7 +64,7 @@ export function useFetchStakingData(): {
     ])
       .then(([ethPriceUsd, stakeStarTvl, tokenRateDailies, ssEthToEth, countValidatorPublicKeys, dailyTvlsData]) => {
         // eslint-disable-next-line no-console
-        console.log(countValidatorPublicKeys)
+        console.log('countValidatorPublicKeys', countValidatorPublicKeys)
         dispatch(setDailyApr(calculateDailyApr(tokenRateDailies)))
         dispatch(setEthPriceUSD(ethPriceUsd))
         dispatch(

@@ -12,13 +12,13 @@ export function Providers({ forcedThemeName, children }: ProvidersProps): JSX.El
   return (
     <StrictMode>
       <ReduxProvider>
-        <ConnectorProvider>
-          <ContractsProvider>
-            <UiKitProvider forcedThemeName={forcedThemeName}>
+        <UiKitProvider forcedThemeName={forcedThemeName}>
+          <ConnectorProvider>
+            <ContractsProvider>
               <BrowserRouter>{children}</BrowserRouter>
-            </UiKitProvider>
-          </ContractsProvider>
-        </ConnectorProvider>
+            </ContractsProvider>
+          </ConnectorProvider>
+        </UiKitProvider>
       </ReduxProvider>
     </StrictMode>
   )

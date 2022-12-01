@@ -24,7 +24,7 @@ export function ConnectorProvider({ children }: PropsWithChildren): JSX.Element 
   const [chainId, setChainId] = useLocalStorage<ChainId>(chainIdLocalSorageKey, defaultChainId)
   const connectors = useConnectors(chainId)
   const connector = getConnector(connectors, connectorId)
-
+  console.log('chainId', chainId)
   const value = useMemo(
     (): ConnectorProviderValue => ({
       connector,
@@ -38,20 +38,17 @@ export function ConnectorProvider({ children }: PropsWithChildren): JSX.Element 
 
   return (
     <ConnectorProviderContext.Provider value={value}>
-      <Listener connectorId={connectorId} chainId={chainId}>
-        {children}
-      </Listener>
+      <Listener connectorId={connectorId}>{children}</Listener>
     </ConnectorProviderContext.Provider>
   )
 }
 
 interface ListenerProps extends PropsWithChildren {
   connectorId: ConnectorId
-  chainId: ChainId
 }
 
-function Listener({ connectorId, chainId, children }: ListenerProps): JSX.Element {
-  useSyncAccount({ connectorId, chainId })
+function Listener({ connectorId, children }: ListenerProps): JSX.Element {
+  useSyncAccount({ connectorId })
 
   return <>{children}</>
 }

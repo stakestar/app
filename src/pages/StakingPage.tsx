@@ -48,7 +48,9 @@ export function StakingPage(): JSX.Element {
           <InfoCard
             className={styles.InfoCard}
             title="Reward"
-            info={TokenAmount.fromWei('ETH', reward.toString()).toDecimal(2)}
+            info={`${TokenAmount.fromWei('ETH', reward.toString()).toDecimal(2)} ETH / $${convertEthToUsd(
+              reward.toString()
+            ).toFixed(2)}`}
             variant="large"
           />
           <InfoCard className={styles.InfoCard} title="Total TVL" info={`$${totalTvl}`} variant="large" />

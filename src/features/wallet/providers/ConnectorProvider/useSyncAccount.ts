@@ -101,5 +101,5 @@ export function useSyncAccount({ connectorId }: UseSyncAccountProps): void {
         popup.open(popups.unsupportedNetworkPopup)
       }
     }
-  }, [chainId])
+  }, [chainId, popup])
 }

@@ -24,7 +24,7 @@ export function ConnectorProvider({ children }: PropsWithChildren): JSX.Element 
   const [chainId, setChainId] = useLocalStorage<ChainId>(chainIdLocalSorageKey, defaultChainId)
   const connectors = useConnectors(chainId)
   const connector = getConnector(connectors, connectorId)
-  console.log('chainId', chainId)
+
   const value = useMemo(
     (): ConnectorProviderValue => ({
       connector,

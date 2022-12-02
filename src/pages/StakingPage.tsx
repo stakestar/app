@@ -13,7 +13,7 @@ import {
   useConvertSsEthToUsd,
   useFetchStakingData
 } from '~/features/staking'
-import { selectStakerRateDiff } from '~/features/staking/store'
+import { selectSsEthToEthRate, selectStakerRateDiff } from '~/features/staking/store'
 import { convertSsETHToETH } from '~/features/staking/utils'
 
 import styles from './StakingPage.module.scss'
@@ -23,10 +23,12 @@ export function StakingPage(): JSX.Element {
   const convertEthToUsd = useConvertEthToUsd()
   const convertSsEthToUsd = useConvertSsEthToUsd()
   const accauntSsEthBalance = useAccountSsEthBalance()
+  const ssEthToEthRate = useSelector(selectSsEthToEthRate)
+  const stakerRateDiff = useSelector(selectStakerRateDiff)
   const accauntSsEthBalanceInUsd = convertEthToUsd(accauntSsEthBalance.toWei()).toFormat(2)
   const { activeValidatorsCount, totalSsEthBalance, dailyApr, dailyTvls } = useFetchStakingData()
-  const totalTvl = convertSsEthToUsd(totalSsEthBalance.toWei()).toFormat(2)
-  const stakerRateDiff = useSelector(selectStakerRateDiff)
+  const totalTvlInUsd = convertSsEthToUsd(totalSsEthBalance.toWei()).toFormat(2)
+  const totalTvlInEth = convertSsETHToETH(accauntSsEthBalance.toString(), ssEthToEthRate)
 
   const reward = useMemo(
     () => convertSsETHToETH(accauntSsEthBalance.toString(), stakerRateDiff),
@@ -53,7 +55,12 @@ export function StakingPage(): JSX.Element {
             ).toFixed(2)}`}
             variant="large"
           />
-          <InfoCard className={styles.InfoCard} title="Total TVL" info={`$${totalTvl}`} variant="large" />
+          <InfoCard
+            className={styles.InfoCard}
+            title="Total TVL"
+            info={`${totalTvlInEth} ETH / $${totalTvlInUsd}`}
+            variant="large"
+          />
           <InfoCard
             className={styles.InfoCard}
             title="Active validators"

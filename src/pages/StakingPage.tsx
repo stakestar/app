@@ -1,4 +1,5 @@
 import { InfoCard, Tab } from '@onestaree/ui-kit'
+import BigNumberJs from 'bignumber.js'
 import classNames from 'classnames'
 import { useMemo, useState } from 'react'
 
@@ -28,7 +29,16 @@ export function StakingPage(): JSX.Element {
   const accauntSsEthBalanceInUsd = convertEthToUsd(accauntSsEthBalance.toWei()).toFormat(2)
   const { activeValidatorsCount, totalSsEthBalance, dailyApr, dailyTvls } = useFetchStakingData()
   const totalTvlInUsd = convertSsEthToUsd(totalSsEthBalance.toWei()).toFormat(2)
-  const totalTvlInEth = convertSsETHToETH(accauntSsEthBalance.toString(), ssEthToEthRate)
+
+  const totalTvlInEth = useMemo(
+    () =>
+      ssEthToEthRate
+        ? new BigNumberJs(totalSsEthBalance.toString())
+            .multipliedBy(TokenAmount.fromWei('ETH', ssEthToEthRate).toString())
+            .toFormat(2)
+        : 0,
+    [ssEthToEthRate, totalSsEthBalance]
+  )
 
   const reward = useMemo(
     () => convertSsETHToETH(accauntSsEthBalance.toString(), stakerRateDiff),

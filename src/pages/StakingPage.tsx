@@ -80,7 +80,7 @@ export function StakingPage(): JSX.Element {
         </div>
         <div className={styles.Tabs}>
           <Tab title="Stake" index={0} activeIndex={activeIndex} onClick={setActiveIndex} />
-          <Tab title="Unstake" disabled={true} index={1} activeIndex={activeIndex} onClick={setActiveIndex} />
+          <Tab title="Unstake" disabled={true} index={1} activeIndex={activeIndex} />
         </div>
         <div className={styles.StakingContainer}>
           <div className={classNames(styles.TabsContent, styles.StakingColumn, { [styles.active]: activeIndex === 0 })}>

@@ -2710,10 +2710,10 @@
     superstruct "^0.14.2"
     tweetnacl "^1.0.3"
 
-"@stakestar/contracts@0.9.2":
-  version "0.9.2"
-  resolved "https://npm.pkg.github.com/download/@stakestar/contracts/0.9.2/bff60330c54e781e437b08e7c9fb602d8d70ccf3#bff60330c54e781e437b08e7c9fb602d8d70ccf3"
-  integrity sha512-8gskpEEY5+viS0LKLXxL0C87K/YGaZDmxsgeAot8A3srB+agkcCBt+1sNnihtjB17ZcnMRUHKxuWcuwrQdFi1w==
+"@stakestar/contracts@0.9.6":
+  version "0.9.6"
+  resolved "https://npm.pkg.github.com/download/@stakestar/contracts/0.9.6/12cac5cd0c44f21087733462e22f9fac713cf502#12cac5cd0c44f21087733462e22f9fac713cf502"
+  integrity sha512-UgOV5zAZwFpeuPOxm+ZXtTFGS8nZ8KRJjXnT38NgAn+SqZSdD7gtH1XQ/1ofu5X9tZVJGYas4pZ39GdakOxZcA==
   dependencies:
     ethers "^5.7.2"
 

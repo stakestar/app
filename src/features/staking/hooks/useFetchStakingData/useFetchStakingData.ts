@@ -59,7 +59,7 @@ export function useFetchStakingData(): {
       stakeStarEthContract.totalSupply(),
       sdk.getTokenRateDailies().then(({ tokenRateDailies }) => tokenRateDailies),
       stakeStarEthContract.ssETH_to_ETH(TokenAmount.fromDecimal('ssETH', 1).toWei()),
-      stakeStarRegistryContract.countValidatorPublicKeys(ValidatorStatus.CREATED),
+      stakeStarRegistryContract.countValidatorPublicKeys(ValidatorStatus.ACTIVE),
       sdk.getStakeStarTvls({ first: 10 }).then(({ stakeStarTvls }) => stakeStarTvls)
     ])
       .then(([ethPriceUsd, stakeStarTvl, tokenRateDailies, ssEthToEth, countValidatorPublicKeys, dailyTvlsData]) => {

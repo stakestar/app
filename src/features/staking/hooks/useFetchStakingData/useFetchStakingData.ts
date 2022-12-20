@@ -74,7 +74,7 @@ export function useFetchStakingData(): {
         )
         dispatch(setTotalSsEthBalance(stakeStarTvl.toString()))
         dispatch(setSsEthToEthRate(ssEthToEth.toString()))
-        dispatch(setActiveValidatorsCount(countValidatorPublicKeys))
+        dispatch(setActiveValidatorsCount(countValidatorPublicKeys.toNumber()))
         dispatch(setDailyTvls(dailyTvlsData))
       })
       .catch(handleError)

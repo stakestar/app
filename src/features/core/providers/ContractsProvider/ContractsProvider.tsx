@@ -10,7 +10,7 @@ import {
 } from '@stakestar/contracts'
 import { PropsWithChildren, createContext, useMemo } from 'react'
 
-import { APP_EVENT_CONTRACTS_READY } from '../../constants'
+import { CORE_EVENT_CONTRACTS_READY } from '../../constants'
 import { emitEvent, handleError } from '../../utils'
 import { useSignerOrProvider } from './useSignerOrProvider'
 
@@ -48,7 +48,7 @@ export function ContractsProvider({ children }: PropsWithChildren): JSX.Element 
   }, [signerOrProvider])
 
   if (Object.keys(value).length) {
-    emitEvent(APP_EVENT_CONTRACTS_READY)
+    emitEvent(CORE_EVENT_CONTRACTS_READY)
   }
 
   return <ContractsProviderContext.Provider value={value}>{children}</ContractsProviderContext.Provider>

@@ -1,5 +1,5 @@
 import { Layout } from './Layout'
-import { useIsAppReady } from './useIsAppReady'
+import { useListenEvents } from './useListenEvents'
 
 console.info(
   '%c App version hash ',
@@ -8,7 +8,7 @@ console.info(
 )
 
 export function App(): JSX.Element {
-  useIsAppReady()
+  useListenEvents()
 
   return <Layout />
 }

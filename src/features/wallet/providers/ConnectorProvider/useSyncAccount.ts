@@ -2,10 +2,13 @@ import { usePopup } from '@onestaree/ui-kit'
 import { Network } from '@web3-react/network'
 import { useCallback, useEffect } from 'react'
 
-import { ChainId, handleError, useDispatch, usePrevious } from '~/features/core'
+import { ChainId, emitEvent, handleError, useDispatch, usePrevious } from '~/features/core'
 
+import {
+  WALLET_EVENT_UNSUPPORTED_NETWORK_POPUP_CLOSE,
+  WALLET_EVENT_UNSUPPORTED_NETWORK_POPUP_OPEN
+} from '../../constants'
 import { useConnector, useFetchAccountBalances, useAccount as useWalletAccount } from '../../hooks'
-import { popups } from '../../popups'
 import { resetState, setAccountAddress, setChainId } from '../../store'
 import { ConnectorId } from './types'
 import { getConnector } from './utils'
@@ -96,9 +99,9 @@ export function useSyncAccount({ connectorId }: UseSyncAccountProps): void {
   useEffect(() => {
     if (chainId) {
       if (Object.values(ChainId).includes(chainId)) {
-        popup.close()
+        emitEvent(WALLET_EVENT_UNSUPPORTED_NETWORK_POPUP_CLOSE)
       } else {
-        popup.open(popups.unsupportedNetworkPopup)
+        emitEvent(WALLET_EVENT_UNSUPPORTED_NETWORK_POPUP_OPEN)
       }
     }
   }, [chainId, popup])

@@ -9,13 +9,14 @@ import {
   Stake,
   TVL,
   Unstake,
+  convertSsETHToETH,
   useAccountSsEthBalance,
   useConvertEthToUsd,
   useConvertSsEthToUsd,
-  useFetchStakingData
+  useFetchStakingData,
+  useSsEthToEthRate
 } from '~/features/staking'
-import { selectSsEthToEthRate, selectStakerRateDiff } from '~/features/staking/store'
-import { convertSsETHToETH } from '~/features/staking/utils'
+import { selectStakerRateDiff } from '~/features/staking/store'
 
 import styles from './StakingPage.module.scss'
 
@@ -24,7 +25,7 @@ export function StakingPage(): JSX.Element {
   const convertEthToUsd = useConvertEthToUsd()
   const convertSsEthToUsd = useConvertSsEthToUsd()
   const accauntSsEthBalance = useAccountSsEthBalance()
-  const ssEthToEthRate = useSelector(selectSsEthToEthRate)
+  const ssEthToEthRate = useSsEthToEthRate()
   const stakerRateDiff = useSelector(selectStakerRateDiff)
   const accauntSsEthBalanceInUsd = convertEthToUsd(accauntSsEthBalance.toWei()).toFormat(2)
   const { activeValidatorsCount, totalSsEthBalance, dailyApr, dailyTvls } = useFetchStakingData()

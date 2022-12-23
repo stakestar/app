@@ -52,13 +52,13 @@ export function useFetchStakingData(): {
 
   useEffect(() => {
     // eslint-disable-next-line no-console
-    console.log('stakeStar address:', stakeStarContract.address)
+    console.log('StakeStar address', stakeStarContract.address)
 
     Promise.all([
       loadEthPriceUsd(),
       stakeStarEthContract.totalSupply(),
       sdk.getTokenRateDailies().then(({ tokenRateDailies }) => tokenRateDailies),
-      stakeStarEthContract.ssETH_to_ETH(TokenAmount.fromDecimal('ssETH', 1).toWei()),
+      stakeStarContract.ssETH_to_ETH_approximate(TokenAmount.fromDecimal('ssETH', 1).toWei()),
       stakeStarRegistryContract.countValidatorPublicKeys(ValidatorStatus.ACTIVE),
       sdk.getStakeStarTvls({ first: 10 }).then(({ stakeStarTvls }) => stakeStarTvls)
     ])
@@ -84,7 +84,7 @@ export function useFetchStakingData(): {
     if (address) {
       Promise.all([
         sdk.getStakerAtMomentRate({ stakerId: address }).then(({ stakerAtMomentRate }) => stakerAtMomentRate),
-        stakeStarEthContract.rate(),
+        stakeStarContract.currentApproximateRate(),
         // TODO: Refactor stakeStarEthContract.balanceOf to useFetchAccountSsEthBalance
         stakeStarEthContract.balanceOf(address)
       ])
@@ -99,7 +99,7 @@ export function useFetchStakingData(): {
         })
         .catch(handleError)
     }
-  }, [address, dispatch, stakeStarEthContract])
+  }, [address, dispatch, stakeStarContract, stakeStarEthContract])
 
   return {
     activeValidatorsCount,

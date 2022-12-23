@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { TokenAmount, handleError, useContracts } from '~/features/core'
 import { useAccount } from '~/features/wallet'
 
-import { useConvertEthToUsd } from '../hooks'
+import { useConvertEthToUsd, useSsEthToEthRate } from '../hooks'
 import styles from './Footer.module.scss'
 import { getGasRequired } from './utils'
 
@@ -20,18 +20,25 @@ export function Footer({ transactionType, ethAmount }: FooterProps): JSX.Element
   const { address } = useAccount()
   const [transactionCost, setTransactionCost] = useState('0.00')
   const convertEthToUsd = useConvertEthToUsd()
+  const ssEthToEthRate = useSsEthToEthRate()
 
   const items = useMemo<{ title: string; value: string }[]>(() => {
     return [
       { title: 'You will receive', value: `${ssEthAmount} ${transactionType === 'stake' ? 'ssETH' : 'ETH'}` },
-      // TODO
       {
         title: 'Exchange rate',
-        value: `1 ${transactionType === 'stake' ? 'ETH' : 'ssETH'} = 1 ${transactionType === 'stake' ? 'ssETH' : 'ETH'}`
+        value:
+          ssEthToEthRate &&
+          (transactionType === 'stake'
+            ? `1.00 ETH = ${TokenAmount.fromWei('ssETH', ssEthToEthRate).toDecimal(2)} ssETH`
+            : `1.00 ssETH = ${TokenAmount.fromBigNumber(
+                'ETH',
+                TokenAmount.fromDecimal('ETH', 1).toBigNumber().div(ssEthToEthRate)
+              ).toDecimal(2)} ETH`)
       },
       { title: 'Transaction cost', value: `$${transactionCost}` }
     ]
-  }, [ssEthAmount, transactionCost, transactionType])
+  }, [ssEthAmount, ssEthToEthRate, transactionCost, transactionType])
 
   useEffect(() => {
     if (address) {

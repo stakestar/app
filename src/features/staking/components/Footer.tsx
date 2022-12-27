@@ -6,6 +6,7 @@ import { TokenAmount, handleError, useContracts } from '~/features/core'
 import { useAccount } from '~/features/wallet'
 
 import { useConvertEthToUsd, useSsEthToEthRate } from '../hooks'
+import { convertETHToSsETH } from '../utils'
 import styles from './Footer.module.scss'
 import { getGasRequired } from './utils'
 
@@ -15,16 +16,21 @@ interface FooterProps {
 }
 
 export function Footer({ transactionType, ethAmount }: FooterProps): JSX.Element {
-  const ssEthAmount = TokenAmount.fromDecimal('ETH', ethAmount || 0).toDecimal(2)
   const { stakeStarContract } = useContracts()
   const { address } = useAccount()
   const [transactionCost, setTransactionCost] = useState('0.00')
   const convertEthToUsd = useConvertEthToUsd()
   const ssEthToEthRate = useSsEthToEthRate()
+  const ssEthAmount = ethAmount && ssEthToEthRate ? convertETHToSsETH(ethAmount, ssEthToEthRate) : 0
 
   const items = useMemo<{ title: string; value: string }[]>(() => {
     return [
-      { title: 'You will receive', value: `${ssEthAmount} ${transactionType === 'stake' ? 'ssETH' : 'ETH'}` },
+      {
+        title: 'You will receive',
+        value: `${TokenAmount.fromDecimal('ssETH', ssEthAmount.toString() || 0).toDecimal(2)} ${
+          transactionType === 'stake' ? 'ssETH' : 'ETH'
+        }`
+      },
       {
         title: 'Exchange rate',
         value:

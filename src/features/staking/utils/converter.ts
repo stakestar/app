@@ -21,3 +21,11 @@ export function convertSsETHToETH(ssEthAmount: string, rate: string | null): Big
     .div(10 ** 18)
     .integerValue(BigNumberJs.ROUND_FLOOR)
 }
+
+export function convertETHToSsETH(ethAmount: string, rate: string | null): BigNumberJs {
+  if (ethAmount === '0' || !rate) {
+    return new BigNumberJs(0)
+  }
+
+  return new BigNumberJs(ethAmount).multipliedBy(10 ** 18).multipliedBy(rate)
+}

@@ -29,7 +29,7 @@ export function Stake(): JSX.Element {
       const gasRequired = await getGasRequired({ address, stakeStarContract, value: valueBigNumber })
       const valuePlusGas = TokenAmount.fromBigNumber('ETH', valueBigNumber.add(gasRequired)).toWei()
       const valueMinusGas = TokenAmount.fromBigNumber('ETH', valueBigNumber.sub(gasRequired)).toWei()
-      const valueToStake = balance.toBigNumber().lt(valuePlusGas) ? valueMinusGas : valuePlusGas
+      const valueToStake = balance.toBigNumber().lt(valuePlusGas) ? valueMinusGas : valueBigNumber.toString()
 
       if (Number(valueToStake) > 0) {
         const { transactionHash } = await stakeStarContract

@@ -57,26 +57,33 @@ export function useFetchStakingData(): {
     Promise.all([
       loadEthPriceUsd(),
       stakeStarEthContract.totalSupply(),
+      stakeStarEthContract.rate(),
       sdk.getTokenRateDailies({ first: 7 }).then(({ tokenRateDailies }) => tokenRateDailies),
       stakeStarContract.ssETH_to_ETH_approximate(TokenAmount.fromDecimal('ssETH', 1).toWei()),
       stakeStarRegistryContract.countValidatorPublicKeys(ValidatorStatus.ACTIVE),
       sdk.getStakeStarTvls({ first: 10 }).then(({ stakeStarTvls }) => stakeStarTvls)
     ])
-      .then(([ethPriceUsd, stakeStarTvl, tokenRateDailies, ssEthToEth, countValidatorPublicKeys, dailyTvlsData]) => {
-        // eslint-disable-next-line no-console
-        console.log('countValidatorPublicKeys', countValidatorPublicKeys)
-        dispatch(setApr(calculateApr(tokenRateDailies)))
-        dispatch(setEthPriceUSD(ethPriceUsd))
-        dispatch(
-          setSsEthPriceUSD(
-            new BigNumberJs(ssEthToEth.toString()).shiftedBy(-18).multipliedBy(new BigNumberJs(ethPriceUsd)).toString()
+      .then(
+        ([ethPriceUsd, stakeStarTvl, rate, tokenRateDailies, ssEthToEth, countValidatorPublicKeys, dailyTvlsData]) => {
+          dispatch(setApr(calculateApr(tokenRateDailies)))
+          dispatch(setEthPriceUSD(ethPriceUsd))
+          dispatch(
+            setSsEthPriceUSD(
+              new BigNumberJs(ssEthToEth.toString())
+                .shiftedBy(-18)
+                .multipliedBy(new BigNumberJs(ethPriceUsd))
+                .toString()
+            )
           )
-        )
-        dispatch(setTotalSsEthBalance(stakeStarTvl.toString()))
-        dispatch(setSsEthToEthRate(ssEthToEth.toString()))
-        dispatch(setActiveValidatorsCount(countValidatorPublicKeys.toNumber()))
-        dispatch(setDailyTvls(dailyTvlsData))
-      })
+          dispatch(setTotalSsEthBalance(stakeStarTvl.toString()))
+          dispatch(setSsEthToEthRate(ssEthToEth.toString()))
+          dispatch(setActiveValidatorsCount(countValidatorPublicKeys.toNumber()))
+          dispatch(setDailyTvls(dailyTvlsData))
+
+          console.log(`[DEBUG] Rate = ${rate.toString()}`)
+          console.log(`[DEBUG] Current Approximate Rate = ${ssEthToEth.toString()}`)
+        }
+      )
       .catch(handleError)
   }, [dispatch, stakeStarContract, stakeStarEthContract, stakeStarRegistryContract])
 

@@ -16,5 +16,8 @@ export function convertSsETHToETH(ssEthAmount: string, rate: string | null): Big
     return new BigNumberJs(0)
   }
 
-  return new BigNumberJs(ssEthAmount).multipliedBy(rate).shiftedBy(18)
+  return new BigNumberJs(ssEthAmount)
+    .multipliedBy(rate)
+    .div(10 ** 18)
+    .integerValue(BigNumberJs.ROUND_FLOOR)
 }

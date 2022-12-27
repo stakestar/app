@@ -57,14 +57,24 @@ export function useFetchStakingData(): {
     Promise.all([
       loadEthPriceUsd(),
       stakeStarEthContract.totalSupply(),
+      stakeStarContract.currentApproximateRate(),
       stakeStarEthContract.rate(),
       sdk.getTokenRateDailies({ first: 7 }).then(({ tokenRateDailies }) => tokenRateDailies),
-      stakeStarContract.ssETH_to_ETH_approximate(TokenAmount.fromDecimal('ssETH', 1).toWei()),
+      stakeStarContract.ETH_to_ssETH_approximate(TokenAmount.fromDecimal('ETH', 1).toWei()),
       stakeStarRegistryContract.countValidatorPublicKeys(ValidatorStatus.ACTIVE),
       sdk.getStakeStarTvls({ first: 10 }).then(({ stakeStarTvls }) => stakeStarTvls)
     ])
       .then(
-        ([ethPriceUsd, stakeStarTvl, rate, tokenRateDailies, ssEthToEth, countValidatorPublicKeys, dailyTvlsData]) => {
+        ([
+          ethPriceUsd,
+          stakeStarTvl,
+          currentApproximateRate,
+          rate,
+          tokenRateDailies,
+          ssEthToEth,
+          countValidatorPublicKeys,
+          dailyTvlsData
+        ]) => {
           dispatch(setApr(calculateApr(tokenRateDailies)))
           dispatch(setEthPriceUSD(ethPriceUsd))
           dispatch(
@@ -81,7 +91,7 @@ export function useFetchStakingData(): {
           dispatch(setDailyTvls(dailyTvlsData))
 
           console.log(`[DEBUG] Rate = ${rate.toString()}`)
-          console.log(`[DEBUG] Current Approximate Rate = ${ssEthToEth.toString()}`)
+          console.log(`[DEBUG] Current Approximate Rate = ${currentApproximateRate.toString()}`)
         }
       )
       .catch(handleError)
@@ -90,7 +100,9 @@ export function useFetchStakingData(): {
   useEffect(() => {
     if (address) {
       Promise.all([
-        sdk.getStakerAtMomentRate({ stakerId: address }).then(({ stakerAtMomentRate }) => stakerAtMomentRate),
+        sdk
+          .getStakerAtMomentRate({ stakerId: address.toLowerCase() })
+          .then(({ stakerAtMomentRate }) => stakerAtMomentRate),
         stakeStarContract.currentApproximateRate(),
         // TODO: Refactor stakeStarEthContract.balanceOf to useFetchAccountSsEthBalance
         stakeStarEthContract.balanceOf(address)
@@ -99,10 +111,8 @@ export function useFetchStakingData(): {
           if (stakerAtMomentRate?.atMomentRate) {
             const rateDiff = currentRate.sub(stakerAtMomentRate?.atMomentRate)
             dispatch(setStakerRateDiff(rateDiff.toString()))
-            // TODO:
-            // eslint-disable-next-line no-console
-            dispatch(setAccountSsEthBalance(TokenAmount.fromWei('ssETH', ssEthBalance.toString()).toEncoded()))
           }
+          dispatch(setAccountSsEthBalance(TokenAmount.fromWei('ssETH', ssEthBalance.toString()).toEncoded()))
         })
         .catch(handleError)
     }

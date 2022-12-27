@@ -42,7 +42,7 @@ export function StakingPage(): JSX.Element {
   )
 
   const reward = useMemo(
-    () => convertSsETHToETH(accauntSsEthBalance.toString(), stakerRateDiff),
+    () => convertSsETHToETH(accauntSsEthBalance.toWei(), stakerRateDiff),
     [accauntSsEthBalance, stakerRateDiff]
   )
 

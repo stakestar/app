@@ -1,5 +1,7 @@
 import { BigNumber as BigNumberJs } from 'bignumber.js'
 
+BigNumberJs.config({ EXPONENTIAL_AT: 1e9 })
+
 export function convertEthToUsd(ethWei: string, priceUsd: string | null): BigNumberJs {
   if (ethWei === '0' || !priceUsd) {
     return new BigNumberJs(0)
@@ -27,5 +29,9 @@ export function convertETHToSsETH(ethAmount: string, rate: string | null): BigNu
     return new BigNumberJs(0)
   }
 
-  return new BigNumberJs(ethAmount).multipliedBy(10 ** 18).multipliedBy(rate)
+  return new BigNumberJs(ethAmount)
+    .multipliedBy(10 ** 18)
+    .multipliedBy(rate)
+    .div(10 ** 18)
+    .integerValue(BigNumberJs.ROUND_FLOOR)
 }

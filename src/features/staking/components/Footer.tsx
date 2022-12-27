@@ -27,7 +27,7 @@ export function Footer({ transactionType, ethAmount }: FooterProps): JSX.Element
     return [
       {
         title: 'You will receive',
-        value: `${TokenAmount.fromDecimal('ssETH', ssEthAmount.toString() || 0).toDecimal(2)} ${
+        value: `${TokenAmount.fromWei('ssETH', ssEthAmount.toString()).toDecimal(2)} ${
           transactionType === 'stake' ? 'ssETH' : 'ETH'
         }`
       },

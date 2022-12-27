@@ -9,14 +9,14 @@ import { useAccount } from '~/features/wallet'
 
 import {
   selectActiveValidatorsCount,
-  selectDailyApr,
+  selectApr,
   selectDailyTvls,
   selectEthPriceUSD,
   selectSsEthPriceUSD,
   selectTotalSsEthBalance,
   setAccountSsEthBalance,
   setActiveValidatorsCount,
-  setDailyApr,
+  setApr,
   setDailyTvls,
   setEthPriceUSD,
   setSsEthPriceUSD,
@@ -24,7 +24,7 @@ import {
   setStakerRateDiff,
   setTotalSsEthBalance
 } from '../../store'
-import { calculateDailyApr } from '../../utils'
+import { calculateApr } from '../../utils'
 import { useAccountSsEthBalance } from '../useAccountSsEthBalance'
 import { loadEthPriceUsd } from './loadEthPriceUsd'
 
@@ -36,7 +36,7 @@ export function useFetchStakingData(): {
   totalSsEthBalance: TokenAmount
   ethPriceUSD: string
   ssEthPriceUSD: string
-  dailyApr: number
+  apr: number
   dailyTvls: DailyTvls
 } {
   const dispatch = useDispatch()
@@ -45,7 +45,7 @@ export function useFetchStakingData(): {
   const accountSsEthBalance = useAccountSsEthBalance()
   const activeValidatorsCount = useSelector(selectActiveValidatorsCount)
   const totalSsEthBalance = useSelector(selectTotalSsEthBalance)
-  const dailyApr = useSelector(selectDailyApr)
+  const apr = useSelector(selectApr)
   const ethPriceUSD = useSelector(selectEthPriceUSD)
   const ssEthPriceUSD = useSelector(selectSsEthPriceUSD)
   const dailyTvls = useSelector(selectDailyTvls)
@@ -57,7 +57,7 @@ export function useFetchStakingData(): {
     Promise.all([
       loadEthPriceUsd(),
       stakeStarEthContract.totalSupply(),
-      sdk.getTokenRateDailies().then(({ tokenRateDailies }) => tokenRateDailies),
+      sdk.getTokenRateDailies({ first: 7 }).then(({ tokenRateDailies }) => tokenRateDailies),
       stakeStarContract.ssETH_to_ETH_approximate(TokenAmount.fromDecimal('ssETH', 1).toWei()),
       stakeStarRegistryContract.countValidatorPublicKeys(ValidatorStatus.ACTIVE),
       sdk.getStakeStarTvls({ first: 10 }).then(({ stakeStarTvls }) => stakeStarTvls)
@@ -65,7 +65,7 @@ export function useFetchStakingData(): {
       .then(([ethPriceUsd, stakeStarTvl, tokenRateDailies, ssEthToEth, countValidatorPublicKeys, dailyTvlsData]) => {
         // eslint-disable-next-line no-console
         console.log('countValidatorPublicKeys', countValidatorPublicKeys)
-        dispatch(setDailyApr(calculateDailyApr(tokenRateDailies)))
+        dispatch(setApr(calculateApr(tokenRateDailies)))
         dispatch(setEthPriceUSD(ethPriceUsd))
         dispatch(
           setSsEthPriceUSD(
@@ -107,7 +107,7 @@ export function useFetchStakingData(): {
     totalSsEthBalance,
     ethPriceUSD,
     ssEthPriceUSD,
-    dailyApr,
+    apr,
     dailyTvls
   }
 }

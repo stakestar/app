@@ -30,11 +30,11 @@ export function Footer({ transactionType, ethAmount }: FooterProps): JSX.Element
         value:
           ssEthToEthRate &&
           (transactionType === 'stake'
-            ? `1.00 ETH = ${TokenAmount.fromWei('ssETH', ssEthToEthRate).toDecimal(2)} ssETH`
+            ? `1.00 ETH = ${TokenAmount.fromWei('ssETH', ssEthToEthRate).toDecimal(6)} ssETH`
             : `1.00 ssETH = ${TokenAmount.fromBigNumber(
                 'ETH',
                 TokenAmount.fromDecimal('ETH', 1).toBigNumber().div(ssEthToEthRate)
-              ).toDecimal(2)} ETH`)
+              ).toDecimal(6)} ETH`)
       },
       { title: 'Transaction cost', value: `$${transactionCost}` }
     ]

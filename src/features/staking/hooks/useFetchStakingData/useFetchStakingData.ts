@@ -89,8 +89,9 @@ export function useFetchStakingData(): {
           dispatch(setSsEthToEthRate(ssEthToEth.toString()))
           dispatch(setActiveValidatorsCount(countValidatorPublicKeys.toNumber()))
           dispatch(setDailyTvls(dailyTvlsData))
-
+          // eslint-disable-next-line no-console
           console.log(`[DEBUG] Rate = ${rate.toString()}`)
+          // eslint-disable-next-line no-console
           console.log(`[DEBUG] Current Approximate Rate = ${currentApproximateRate.toString()}`)
         }
       )

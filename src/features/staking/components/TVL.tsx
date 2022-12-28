@@ -1,4 +1,4 @@
-import { Typography, useTheme } from '@onestaree/ui-kit'
+import { useTheme } from '@onestaree/ui-kit'
 import { useEffect, useState } from 'react'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 

@@ -7,7 +7,6 @@ import { Page, TokenAmount, useSelector } from '~/features/core'
 import {
   Faq,
   Stake,
-  TVL,
   Unstake,
   convertSsETHToETH,
   useAccountSsEthBalance,
@@ -29,7 +28,7 @@ export function StakingPage(): JSX.Element {
   const accauntSsEthBalance = useAccountSsEthBalance()
   const ssEthToEthRate = useSsEthToEthRate()
   const stakerRateDiff = useSelector(selectStakerRateDiff)
-  const { activeValidatorsCount, totalSsEthBalance, apr, dailyTvls } = useFetchStakingData()
+  const { activeValidatorsCount, totalSsEthBalance, apr } = useFetchStakingData()
   const totalTvlInUsd = convertSsEthToUsd(totalSsEthBalance.toWei()).toFormat(2)
 
   const totalTvlInEth = useMemo(

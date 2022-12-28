@@ -54,7 +54,7 @@ export function Stake(): JSX.Element {
           <>
             {TokenAmount.fromWei('ETH', valueToStake).toDecimal(2)} ETH was successfully staked.
             <Link className={styles.Link} icon="external" href={`${getExplorerUrl('tx', transactionHash)}`}>
-              See more details on Etherscan
+              See on Etherscan
             </Link>
           </>,
           'success'

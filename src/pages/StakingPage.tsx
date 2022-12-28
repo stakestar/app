@@ -27,7 +27,6 @@ export function StakingPage(): JSX.Element {
   const accauntSsEthBalance = useAccountSsEthBalance()
   const ssEthToEthRate = useSsEthToEthRate()
   const stakerRateDiff = useSelector(selectStakerRateDiff)
-  const accauntSsEthBalanceInUsd = convertEthToUsd(accauntSsEthBalance.toWei()).toFormat(2)
   const { activeValidatorsCount, totalSsEthBalance, apr, dailyTvls } = useFetchStakingData()
   const totalTvlInUsd = convertSsEthToUsd(totalSsEthBalance.toWei()).toFormat(2)
 
@@ -46,6 +45,13 @@ export function StakingPage(): JSX.Element {
     [accauntSsEthBalance, stakerRateDiff]
   )
 
+  const staked = useMemo(
+    () => convertSsETHToETH(accauntSsEthBalance.toWei(), ssEthToEthRate),
+    [accauntSsEthBalance, ssEthToEthRate]
+  )
+
+  const stakedUsd = useMemo(() => convertEthToUsd(staked.toString()), [staked, ssEthToEthRate])
+
   return (
     <Page className={styles.StakingPage} title="Staking">
       <div>
@@ -53,7 +59,7 @@ export function StakingPage(): JSX.Element {
           <InfoCard
             className={styles.InfoCard}
             title="Staked"
-            info={`${accauntSsEthBalance.toDecimal(2)} ETH / $${accauntSsEthBalanceInUsd}`}
+            info={`${TokenAmount.fromWei('ETH', staked.toString()).toDecimal(2)} ETH / $${stakedUsd.toFormat(2)}`}
             variant="large"
           />
           <InfoCard className={styles.InfoCard} title="APR" info={`${apr.toFixed(2)}%`} variant="large" />

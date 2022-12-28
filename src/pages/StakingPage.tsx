@@ -17,10 +17,12 @@ import {
   useSsEthToEthRate
 } from '~/features/staking'
 import { selectStakerRateDiff } from '~/features/staking/store'
+import { useAccount } from '~/features/wallet'
 
 import styles from './StakingPage.module.scss'
 
 export function StakingPage(): JSX.Element {
+  const { address } = useAccount()
   const [activeIndex, setActiveIndex] = useState(0)
   const convertEthToUsd = useConvertEthToUsd()
   const convertSsEthToUsd = useConvertSsEthToUsd()
@@ -56,21 +58,7 @@ export function StakingPage(): JSX.Element {
     <Page className={styles.StakingPage} title="Staking">
       <div>
         <div className={styles.Info}>
-          <InfoCard
-            className={styles.InfoCard}
-            title="Staked"
-            info={`${TokenAmount.fromWei('ETH', staked.toString()).toDecimal(2)} ETH / $${stakedUsd.toFormat(2)}`}
-            variant="large"
-          />
           <InfoCard className={styles.InfoCard} title="APR" info={`${apr.toFixed(2)}%`} variant="large" />
-          <InfoCard
-            className={styles.InfoCard}
-            title="Reward"
-            info={`${TokenAmount.fromWei('ETH', reward.toString()).toDecimal(2)} ETH / $${convertEthToUsd(
-              reward.toString()
-            ).toFixed(2)}`}
-            variant="large"
-          />
           <InfoCard
             className={styles.InfoCard}
             title="Total TVL"
@@ -99,7 +87,24 @@ export function StakingPage(): JSX.Element {
             <Faq />
           </div>
           <div className={styles.StakingColumn}>
-            <TVL dailyTvls={dailyTvls} />
+            {address.length > 0 ? (
+              <div className={styles.Info}>
+                <InfoCard
+                  className={styles.InfoCard}
+                  title="Staked"
+                  info={`${TokenAmount.fromWei('ETH', staked.toString()).toDecimal(2)} ETH / $${stakedUsd.toFormat(2)}`}
+                  variant="large"
+                />
+                <InfoCard
+                  className={styles.InfoCard}
+                  title="Reward"
+                  info={`${TokenAmount.fromWei('ETH', reward.toString()).toDecimal(2)} ETH / $${convertEthToUsd(
+                    reward.toString()
+                  ).toFixed(2)}`}
+                  variant="large"
+                />
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

@@ -33,9 +33,6 @@ export function TVL({ dailyTvls }: TvlProps): JSX.Element {
 
   return (
     <div className={styles.TVL}>
-      <Typography className={styles.Title} variant="h2">
-        TVL
-      </Typography>
       <ResponsiveContainer width="100%" height={200}>
         <AreaChart data={tvls}>
           <CartesianGrid strokeDasharray="3 3" />

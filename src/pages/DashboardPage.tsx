@@ -1,10 +1,11 @@
 import { InfoCard, Table, TableProps, Typography } from '@onestaree/ui-kit'
 import { Network, OPERATOR_IDS } from '@stakestar/contracts'
-import { useEffect, useState } from 'react'
+import BigNumber from 'bignumber.js'
+import { useEffect, useMemo, useState } from 'react'
 
-import { Page } from '~/features/core'
+import { Page, TokenAmount } from '~/features/core'
 import { handleError, ssvClient } from '~/features/core'
-import { useConvertSsEthToUsd, useFetchStakingData } from '~/features/staking'
+import { TVL, useConvertSsEthToUsd, useFetchStakingData, useSsEthToEthRate } from '~/features/staking'
 
 import styles from './DashboardPage.module.scss'
 
@@ -36,9 +37,19 @@ export function DashboardPage(): JSX.Element {
   const convertSsEthToUsd = useConvertSsEthToUsd()
 
   const operatorsIds = OPERATOR_IDS[Network.GOERLI]
-  const { activeValidatorsCount, totalSsEthBalance } = useFetchStakingData()
-  const totalTvl = convertSsEthToUsd(totalSsEthBalance.toWei()).toFormat(2)
+  const { activeValidatorsCount, totalSsEthBalance, dailyTvls } = useFetchStakingData()
+  const ssEthToEthRate = useSsEthToEthRate()
+  const totalTvlInUsd = convertSsEthToUsd(totalSsEthBalance.toWei()).toFormat(2)
 
+  const totalTvlInEth = useMemo(
+    () =>
+      ssEthToEthRate
+        ? new BigNumber(totalSsEthBalance.toString())
+            .multipliedBy(TokenAmount.fromWei('ETH', ssEthToEthRate).toString())
+            .toFormat(2)
+        : 0,
+    [ssEthToEthRate, totalSsEthBalance]
+  )
   const [rows, setRows] = useState<Operator[]>([])
 
   useEffect(() => {
@@ -67,7 +78,12 @@ export function DashboardPage(): JSX.Element {
   return (
     <Page className={styles.DashboardPage} title="Dashboard">
       <div className={styles.Info}>
-        <InfoCard className={styles.InfoCard} title="TVL" info={`$${totalTvl}`} variant="large" />
+        <InfoCard
+          className={styles.InfoCard}
+          title="Total TVL"
+          info={`${totalTvlInEth} ETH / $${totalTvlInUsd}`}
+          variant="large"
+        />{' '}
         <InfoCard
           className={styles.InfoCard}
           title="Active validators"
@@ -80,6 +96,9 @@ export function DashboardPage(): JSX.Element {
           info={`${operatorsIds.length}`}
           variant="large"
         />
+      </div>
+      <div className={styles.Tvl}>
+        <TVL dailyTvls={dailyTvls} />
       </div>
       <Table className={styles.Table} columns={tableProps.columns} rows={rows} onRowClick={tableProps.onRowClick} />
     </Page>

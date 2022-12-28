@@ -42,7 +42,7 @@ export function TVL({ dailyTvls }: TvlProps): JSX.Element {
           <XAxis dataKey="title" />
           <YAxis />
           <Tooltip />
-          <Area type="natural" dataKey="value" stroke={theme.primaryAccent} fill={theme.primaryAccent} />
+          <Area type="linear" dataKey="value" stroke={theme.primaryAccent} fill={theme.primaryAccent} />
         </AreaChart>
       </ResponsiveContainer>
     </div>

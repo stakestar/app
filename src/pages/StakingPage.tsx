@@ -50,7 +50,7 @@ export function StakingPage(): JSX.Element {
     [accauntSsEthBalance, ssEthToEthRate]
   )
 
-  const stakedUsd = useMemo(() => convertEthToUsd(staked.toString()), [staked, ssEthToEthRate])
+  const stakedUsd = useMemo(() => convertEthToUsd(staked.toString()), [staked, convertEthToUsd])
 
   return (
     <Page className={styles.StakingPage} title="Staking">

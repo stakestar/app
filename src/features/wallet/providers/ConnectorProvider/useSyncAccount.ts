@@ -98,11 +98,12 @@ export function useSyncAccount({ connectorId }: UseSyncAccountProps): void {
 
   useEffect(() => {
     if (chainId) {
-      if (Object.values(ChainId).includes(chainId)) {
-        emitEvent(WALLET_EVENT_UNSUPPORTED_NETWORK_POPUP_CLOSE)
-      } else {
-        emitEvent(WALLET_EVENT_UNSUPPORTED_NETWORK_POPUP_OPEN)
-      }
+      emitEvent(
+        // Object.values(ChainId).includes(chainId)
+        chainId === ChainId.Goerli
+          ? WALLET_EVENT_UNSUPPORTED_NETWORK_POPUP_CLOSE
+          : WALLET_EVENT_UNSUPPORTED_NETWORK_POPUP_OPEN
+      )
     }
   }, [chainId, popup])
 }

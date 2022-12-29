@@ -5,7 +5,6 @@ import { useMemo, useState } from 'react'
 
 import { Page, TokenAmount, useSelector } from '~/features/core'
 import {
-  Faq,
   Stake,
   Unstake,
   convertSsETHToETH,

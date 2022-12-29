@@ -83,7 +83,6 @@ export function StakingPage(): JSX.Element {
             <div className={classNames(styles.TabContent, { [styles.active]: activeIndex === 1 })}>
               <Unstake />
             </div>
-            <Faq />
           </div>
           <div className={styles.StakingColumn}>
             {address.length > 0 ? (

@@ -5,9 +5,10 @@ import { TokenAmount } from '~/features/core'
 
 import { minStakeEthValue } from './constants'
 
-export const getIsValueMinMaxError = (value: string, balance: TokenAmount): boolean =>
-  !!value.length &&
-  (Number(value) < minStakeEthValue || balance.toBigNumber().lt(TokenAmount.fromDecimal('ETH', value).toWei()))
+export const getIsStakeEthValueLessMin = (value: string): boolean => !!value.length && Number(value) < minStakeEthValue
+
+export const getIsStakeEthValueMoreBalance = (value: string, balance: TokenAmount): boolean =>
+  !!value.length && balance.toBigNumber().lt(TokenAmount.fromDecimal('ETH', value).toWei())
 
 export const getSetValueByMultiplier =
   (setValue: (value: string) => void, balance: TokenAmount): ((multiplier: number) => void) =>

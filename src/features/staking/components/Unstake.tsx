@@ -4,13 +4,14 @@ import { useState } from 'react'
 import { useAccountSsEthBalance } from '../hooks'
 import { minStakeEthValue } from './constants'
 import { Footer } from './Footer'
-import { getIsValueMinMaxError, getSetValueByMultiplier } from './utils'
+import { getIsStakeEthValueLessMin, getIsStakeEthValueMoreBalance, getSetValueByMultiplier } from './utils'
 
 export function Unstake(): JSX.Element {
   const [value, setValue] = useState('')
   const accountSsEthBalance = useAccountSsEthBalance()
   const setValueByMultiplier = getSetValueByMultiplier(setValue, accountSsEthBalance)
-  const isValueMinMaxError = getIsValueMinMaxError(value, accountSsEthBalance)
+  const isStakeEthValueLessMin = getIsStakeEthValueLessMin(value)
+  const isStakeEthValueMoreBalance = getIsStakeEthValueMoreBalance(value, accountSsEthBalance)
   const [isLoading] = useState(false)
 
   return (
@@ -26,7 +27,7 @@ export function Unstake(): JSX.Element {
         useMaxButton
         onClickMaxButton={setValueByMultiplier}
         disabled={isLoading}
-        error={isValueMinMaxError}
+        error={isStakeEthValueLessMin || isStakeEthValueMoreBalance}
         errorMessage={`Min value is ${minStakeEthValue} and your max is ${accountSsEthBalance.toString()}`}
       />
       <Button title="Untake" onClick={(): null => null} disabled={true} loading={isLoading} />

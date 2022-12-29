@@ -8,7 +8,12 @@ import { useAccount, useAccountBalance, useFetchAccountBalances } from '~/featur
 import { minStakeEthValue } from './constants'
 import { Footer } from './Footer'
 import styles from './Stake.module.scss'
-import { getGasRequired, getIsValueMinMaxError, getSetValueByMultiplier } from './utils'
+import {
+  getGasRequired,
+  getIsStakeEthValueLessMin,
+  getIsStakeEthValueMoreBalance,
+  getSetValueByMultiplier
+} from './utils'
 
 export function Stake(): JSX.Element {
   const dispatch = useDispatch()
@@ -16,7 +21,8 @@ export function Stake(): JSX.Element {
   const balance = useAccountBalance('ETH')
   const [value, setValue] = useState('')
   const setValueByMultiplier = getSetValueByMultiplier(setValue, balance)
-  const isValueMinMaxError = getIsValueMinMaxError(value, balance)
+  const isStakeEthValueLessMin = getIsStakeEthValueLessMin(value)
+  const isStakeEthValueMoreBalance = getIsStakeEthValueMoreBalance(value, balance)
   const [isLoading, setIsLoading] = useState(false)
   const { stakeStarContract, stakeStarEthContract } = useContracts()
   const fetchAccountBalances = useFetchAccountBalances()
@@ -91,10 +97,21 @@ export function Stake(): JSX.Element {
         useMaxButton
         onClickMaxButton={setValueByMultiplier}
         disabled={isLoading || address.length === 0}
-        error={isValueMinMaxError}
-        errorMessage={`Min value is ${minStakeEthValue} and your max is ${balance.toString()}`}
+        error={isStakeEthValueLessMin || isStakeEthValueMoreBalance}
+        errorMessage={
+          isStakeEthValueLessMin
+            ? `Minimum stake amount is ${minStakeEthValue} ETH`
+            : isStakeEthValueMoreBalance
+            ? 'Insufficient funds'
+            : ''
+        }
       />
-      <Button title="Stake" onClick={stake} disabled={!value || isValueMinMaxError || isLoading} loading={isLoading} />
+      <Button
+        title="Stake"
+        onClick={stake}
+        disabled={!value || isStakeEthValueLessMin || isStakeEthValueMoreBalance || isLoading}
+        loading={isLoading}
+      />
       <Footer transactionType="stake" ethAmount={value} />
     </Container>
   )

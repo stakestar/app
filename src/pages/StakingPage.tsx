@@ -90,13 +90,13 @@ export function StakingPage(): JSX.Element {
               <div className={styles.Info}>
                 <InfoCard
                   className={styles.InfoCard}
-                  title="Staked"
+                  title="My Stake"
                   info={`${TokenAmount.fromWei('ETH', staked.toString()).toDecimal(2)} ETH / $${stakedUsd.toFormat(2)}`}
                   variant="large"
                 />
                 <InfoCard
                   className={styles.InfoCard}
-                  title="Reward"
+                  title="My Rewards"
                   info={`${TokenAmount.fromWei('ETH', reward.toString()).toDecimal(2)} ETH / $${convertEthToUsd(
                     reward.toString()
                   ).toFixed(2)}`}

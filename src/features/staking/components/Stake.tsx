@@ -1,5 +1,5 @@
 import { Button, Container, Input, Link, toast } from '@onestaree/ui-kit'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { TokenAmount, getExplorerUrl, handleError, useContracts, useDispatch } from '~/features/core'
 import { setAccountSsEthBalance } from '~/features/staking/store'
@@ -72,6 +72,12 @@ export function Stake(): JSX.Element {
     setIsLoading(false)
   }
 
+  useEffect(() => {
+    if (address.length === 0) {
+      setValue('')
+    }
+  }, [address])
+
   return (
     <Container size="large">
       <Input
@@ -84,7 +90,7 @@ export function Stake(): JSX.Element {
         onChange={setValue}
         useMaxButton
         onClickMaxButton={setValueByMultiplier}
-        disabled={isLoading}
+        disabled={isLoading || address.length === 0}
         error={isValueMinMaxError}
         errorMessage={`Min value is ${minStakeEthValue} and your max is ${balance.toString()}`}
       />

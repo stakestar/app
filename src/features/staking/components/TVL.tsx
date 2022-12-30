@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 import { DailyTvls, formatThegraphIdToDate } from '~/features/core'
-import { toDecimal } from '~/features/core/utils/math'
+import { toDecimal, toFixed } from '~/features/core/utils/math'
 
 import styles from './TVL.module.scss'
 
@@ -13,7 +13,7 @@ interface TvlProps {
 
 type TvlItem = {
   title: string
-  value: number
+  value: string
 }
 
 export function TVL({ dailyTvls }: TvlProps): JSX.Element {
@@ -25,7 +25,7 @@ export function TVL({ dailyTvls }: TvlProps): JSX.Element {
     const tvlForChart = dailyTvls.map((tvl) => {
       return {
         title: formatThegraphIdToDate(Number(tvl.id)),
-        value: toDecimal(tvl.totalETH.toString(), 18).toNumber()
+        value: toDecimal(tvl.totalETH.toString(), 18).toFormat(2)
       }
     })
     setTvls(tvlForChart)

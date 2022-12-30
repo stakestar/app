@@ -14,15 +14,15 @@ export const getSetValueByMultiplier =
   (setValue: (value: string) => void, balance: TokenAmount): ((multiplier: number) => void) =>
   (multiplier) => {
     if (balance.toBigNumber().gt(0)) {
-      setValue(
-        TokenAmount.fromBigNumber(
-          'ETH',
-          balance
-            .toBigNumber()
-            .mul(multiplier * 100)
-            .div(100)
-        ).toString()
+      const value = TokenAmount.fromBigNumber(
+        'ETH',
+        balance
+          .toBigNumber()
+          .mul(multiplier * 100)
+          .div(100)
       )
+
+      setValue(multiplier === 1 ? value.toString() : value.toDecimal(4))
     }
   }
 

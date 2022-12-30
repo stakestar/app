@@ -56,7 +56,7 @@ export function StakingPage(): JSX.Element {
     <Page className={styles.StakingPage} title="Staking">
       <div>
         <div className={styles.Info}>
-          <InfoCard className={styles.InfoCard} title="APR" info={`${apr.toFixed(2)}%`} variant="large" />
+          <InfoCard className={styles.InfoCard} title="APR" info={`${apr.toFixed(4)}%`} variant="large" />
           <InfoCard
             className={styles.InfoCard}
             title="Total TVL"
@@ -89,13 +89,13 @@ export function StakingPage(): JSX.Element {
                 <InfoCard
                   className={styles.InfoCard}
                   title="My Stake"
-                  info={`${TokenAmount.fromWei('ETH', staked.toString()).toDecimal(2)} ETH / $${stakedUsd.toFormat(2)}`}
+                  info={`${TokenAmount.fromWei('ETH', staked.toString()).toDecimal(4)} ETH / $${stakedUsd.toFormat(2)}`}
                   variant="large"
                 />
                 <InfoCard
                   className={styles.InfoCard}
                   title="My Rewards"
-                  info={`${TokenAmount.fromWei('ETH', reward.toString()).toDecimal(2)} ETH / $${convertEthToUsd(
+                  info={`${TokenAmount.fromWei('ETH', reward.toString()).toDecimal(4)} ETH / $${convertEthToUsd(
                     reward.toString()
                   ).toFixed(2)}`}
                   variant="large"

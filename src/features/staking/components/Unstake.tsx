@@ -18,7 +18,7 @@ export function Unstake(): JSX.Element {
     <Container size="large">
       <Input
         title="Unstake ssETH"
-        label={`Balance: ${accountSsEthBalance.toDecimal(2)}`}
+        label={`Balance: ${accountSsEthBalance.toDecimal(4)}`}
         icon1="tokenEth"
         iconLabel="ssETH"
         placeholder="0.00"

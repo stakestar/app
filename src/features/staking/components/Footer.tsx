@@ -27,7 +27,7 @@ export function Footer({ transactionType, ethAmount }: FooterProps): JSX.Element
     return [
       {
         title: 'You will receive',
-        value: `${TokenAmount.fromWei('ssETH', ssEthAmount.toString()).toDecimal(2)} ${
+        value: `${TokenAmount.fromWei('ssETH', ssEthAmount.toString()).toDecimal(4)} ${
           transactionType === 'stake' ? 'ssETH' : 'ETH'
         }`
       },
@@ -50,7 +50,7 @@ export function Footer({ transactionType, ethAmount }: FooterProps): JSX.Element
     if (address) {
       // TODO: Add withdraw gas estimation
       getGasRequired({ address, stakeStarContract, value: BigNumber.from(1000) })
-        .then((gasRequired) => setTransactionCost(convertEthToUsd(gasRequired).toFormat(2)))
+        .then((gasRequired) => setTransactionCost(convertEthToUsd(gasRequired).toFormat(4)))
         .catch(handleError)
     }
   }, [address, convertEthToUsd, stakeStarContract])

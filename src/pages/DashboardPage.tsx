@@ -97,9 +97,15 @@ export function DashboardPage(): JSX.Element {
           variant="large"
         />
       </div>
+      <Typography className={styles.Title} variant="h2">
+        Total Eth Staked
+      </Typography>
       <div className={styles.Tvl}>
         <TVL dailyTvls={dailyTvls} />
       </div>
+      <Typography className={styles.Title} variant="h2">
+        Node operators
+      </Typography>
       <Table className={styles.Table} columns={tableProps.columns} rows={rows} onRowClick={tableProps.onRowClick} />
     </Page>
   )

@@ -58,7 +58,7 @@ export function Stake(): JSX.Element {
 
         toast.show(
           <>
-            {TokenAmount.fromWei('ETH', valueToStake).toDecimal(2)} ETH was successfully staked.
+            {TokenAmount.fromWei('ETH', valueToStake).toDecimal(4)} ETH was successfully staked.
             <Link className={styles.Link} icon="external" href={`${getExplorerUrl('tx', transactionHash)}`}>
               See on Etherscan
             </Link>
@@ -88,10 +88,10 @@ export function Stake(): JSX.Element {
     <Container size="large">
       <Input
         title="Stake ETH"
-        label={`Balance: ${balance.toDecimal(2)}`}
+        label={`Balance: ${balance.toDecimal(4)}`}
         icon1="tokenEth"
         iconLabel="ETH"
-        placeholder="0.00"
+        placeholder="0.0000"
         value={value}
         onChange={setValue}
         useMaxButton

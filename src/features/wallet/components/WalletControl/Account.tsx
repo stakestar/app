@@ -20,7 +20,7 @@ export function Account(): JSX.Element {
   return (
     <div className={classNames(styles.Account)}>
       <div className={classNames(styles.Content, '_Account')} onClick={onClick}>
-        <div className={styles.Balance}>{ethBalance.toDecimal(2)} ETH</div>
+        <div className={styles.Balance}>{ethBalance.toDecimal(4)} ETH</div>
         {connector.id !== 'network' && <WalletIcon icon={connector.icon} />}
         <div className={styles.AccountName}>{cropWalletAddress(address.toString())}</div>
       </div>

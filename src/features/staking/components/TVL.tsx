@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 import { DailyTvls, formatThegraphIdToDate } from '~/features/core'
-import { toDecimal, toFixed } from '~/features/core/utils/math'
+import { toDecimal } from '~/features/core/utils/math'
 
 import styles from './TVL.module.scss'
 

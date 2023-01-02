@@ -60,7 +60,7 @@ export function useFetchStakingData(): {
       stakeStarContract.currentApproximateRate(),
       stakeStarEthContract.rate(),
       sdk.getTokenRateDailies({ first: 7 }).then(({ tokenRateDailies }) => tokenRateDailies),
-      stakeStarContract.ETH_to_ssETH_approximate(TokenAmount.fromDecimal('ETH', 1).toWei()),
+      stakeStarContract.currentApproximateRate(),
       stakeStarRegistryContract.countValidatorPublicKeys(ValidatorStatus.ACTIVE),
       sdk.getStakeStarTvls({ first: 10 }).then(({ stakeStarTvls }) => stakeStarTvls)
     ])
@@ -85,6 +85,7 @@ export function useFetchStakingData(): {
                 .toString()
             )
           )
+          console.log(stakeStarTvl.toString())
           dispatch(setTotalSsEthBalance(stakeStarTvl.toString()))
           dispatch(setSsEthToEthRate(ssEthToEth.toString()))
           dispatch(setActiveValidatorsCount(countValidatorPublicKeys.toNumber()))

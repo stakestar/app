@@ -1,4 +1,5 @@
 import { Typography } from '@onestaree/ui-kit'
+import { BigNumber as BigNumberJs } from 'bignumber.js'
 import { BigNumber } from 'ethers'
 import { useEffect, useMemo, useState } from 'react'
 
@@ -21,7 +22,10 @@ export function Footer({ transactionType, ethAmount }: FooterProps): JSX.Element
   const [transactionCost, setTransactionCost] = useState('0.00')
   const convertEthToUsd = useConvertEthToUsd()
   const ssEthToEthRate = useSsEthToEthRate()
-  const ssEthAmount = ethAmount && ssEthToEthRate ? convertETHToSsETH(ethAmount, ssEthToEthRate) : 0
+  const ssEthAmount =
+    ethAmount && ssEthToEthRate
+      ? convertETHToSsETH(new BigNumberJs(ethAmount).multipliedBy(10 ** 18).toString(), ssEthToEthRate)
+      : 0
 
   const items = useMemo<{ title: string; value: string }[]>(() => {
     return [
@@ -36,11 +40,11 @@ export function Footer({ transactionType, ethAmount }: FooterProps): JSX.Element
         value:
           ssEthToEthRate &&
           (transactionType === 'stake'
-            ? `1.00 ETH = ${TokenAmount.fromWei('ssETH', ssEthToEthRate).toDecimal(6)} ssETH`
-            : `1.00 ssETH = ${TokenAmount.fromBigNumber(
+            ? `1.00 ETH = ${TokenAmount.fromWei(
                 'ETH',
-                TokenAmount.fromDecimal('ETH', 1).toBigNumber().div(ssEthToEthRate)
-              ).toDecimal(6)} ETH`)
+                convertETHToSsETH(new BigNumberJs(1).multipliedBy(10 ** 18).toString(), ssEthToEthRate).toString()
+              ).toDecimal(6)} ssETH`
+            : `1.00 ssETH = ${TokenAmount.fromWei('ETH', ssEthToEthRate).toDecimal(6)} ETH`)
       },
       { title: 'Transaction cost', value: `$${transactionCost}` }
     ]

@@ -31,7 +31,6 @@ export function convertETHToSsETH(ethAmount: string, rate: string | null): BigNu
 
   return new BigNumberJs(ethAmount)
     .multipliedBy(10 ** 18)
-    .multipliedBy(rate)
-    .div(10 ** 18)
+    .div(rate)
     .integerValue(BigNumberJs.ROUND_FLOOR)
 }

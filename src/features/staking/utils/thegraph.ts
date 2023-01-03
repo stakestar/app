@@ -7,16 +7,16 @@ export function calculateApr(tokenRateDailies: Array<Pick<TokenRateDaily, 'id' |
   }
 
   const firstState = tokenRateDailies[1]
-  const lastState = tokenRateDailies[tokenRateDailies.length - 1]
+  const lastState = tokenRateDailies[2]
 
   const firstRate = new BigNumber(String(firstState.rate))
   const secondRate = new BigNumber(String(lastState.rate))
-  const daysBetweenStates = Number(firstState.id) - Number(lastState.id)
+  const secondsBetweenRates = Number(firstState.date) - Number(lastState.date)
 
   return firstRate
     .dividedBy(secondRate)
     .minus(1)
-    .multipliedBy(365 / daysBetweenStates)
+    .multipliedBy(365 / (secondsBetweenRates / 86400))
     .multipliedBy(100)
     .toNumber()
 }

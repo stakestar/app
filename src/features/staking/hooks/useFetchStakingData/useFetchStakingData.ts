@@ -85,7 +85,6 @@ export function useFetchStakingData(): {
                 .toString()
             )
           )
-          console.log(stakeStarTvl.toString())
           dispatch(setTotalSsEthBalance(stakeStarTvl.toString()))
           dispatch(setSsEthToEthRate(ssEthToEth.toString()))
           dispatch(setActiveValidatorsCount(countValidatorPublicKeys.toNumber()))

@@ -2,7 +2,7 @@ import { usePopup } from '@onestaree/ui-kit'
 import { Network } from '@web3-react/network'
 import { useCallback, useEffect } from 'react'
 
-import { ChainId, emitEvent, handleError, useDispatch, usePrevious } from '~/features/core'
+import { emitEvent, handleError, useDispatch, usePrevious } from '~/features/core'
 
 import {
   WALLET_EVENT_UNSUPPORTED_NETWORK_POPUP_CLOSE,
@@ -10,6 +10,7 @@ import {
 } from '../../constants'
 import { useConnector, useFetchAccountBalances, useAccount as useWalletAccount } from '../../hooks'
 import { resetState, setAccountAddress, setChainId } from '../../store'
+import { isChainIdSupported } from '../../utils'
 import { ConnectorId } from './types'
 import { getConnector } from './utils'
 
@@ -36,9 +37,8 @@ export function useSyncAccount({ connectorId }: UseSyncAccountProps): void {
     (props: { address: string; chainId: number }) => {
       dispatch(setChainId(props.chainId))
       dispatch(setAccountAddress(props.address))
-      fetchAccountBalances(props.address)
     },
-    [dispatch, fetchAccountBalances]
+    [dispatch]
   )
 
   const logout = useCallback(async () => {
@@ -101,11 +101,16 @@ export function useSyncAccount({ connectorId }: UseSyncAccountProps): void {
   useEffect(() => {
     if (chainId) {
       emitEvent(
-        // Object.values(ChainId).includes(chainId)
-        chainId === ChainId.Goerli
+        isChainIdSupported(chainId)
           ? WALLET_EVENT_UNSUPPORTED_NETWORK_POPUP_CLOSE
           : WALLET_EVENT_UNSUPPORTED_NETWORK_POPUP_OPEN
       )
     }
   }, [chainId, popup])
+
+  useEffect(() => {
+    if (address && isChainIdSupported(chainId)) {
+      void fetchAccountBalances(address)
+    }
+  }, [address, chainId, fetchAccountBalances])
 }

@@ -13,7 +13,7 @@ interface TvlProps {
 
 type TvlItem = {
   title: string
-  value: string
+  value: number
 }
 
 export function TVL({ dailyTvls }: TvlProps): JSX.Element {
@@ -25,7 +25,7 @@ export function TVL({ dailyTvls }: TvlProps): JSX.Element {
     const tvlForChart = dailyTvls.map((tvl) => {
       return {
         title: formatThegraphIdToDate(Number(tvl.id)),
-        value: toDecimal(tvl.totalETH.toString(), 18).toFormat(2)
+        value: Number(toDecimal(tvl.totalETH.toString(), 18).toFormat(2))
       }
     })
     setTvls(tvlForChart)
@@ -33,7 +33,7 @@ export function TVL({ dailyTvls }: TvlProps): JSX.Element {
 
   return (
     <div className={styles.TVL}>
-      <ResponsiveContainer width="100%" height={200}>
+      <ResponsiveContainer width="100%" height={300}>
         <AreaChart data={tvls}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="title" />

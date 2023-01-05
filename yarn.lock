@@ -3394,10 +3394,10 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
-"@rromanovsky/web3-react-metamask@0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@rromanovsky/web3-react-metamask/-/web3-react-metamask-0.1.4.tgz#baaa5918e1d07dd670e00357a267e9bfceb9f5a6"
-  integrity sha512-ybO6uDJlZmdTg5ykA9FagPHl6/prpdoTBbtZZDNmS2G7Q1ABBJRPXgdeJeVkz43fCJ8aRL1jcF0m6XANQ9d4eQ==
+"@rromanovsky/web3-react-metamask@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@rromanovsky/web3-react-metamask/-/web3-react-metamask-0.2.0.tgz#968185b2800c869160f4e83f28e31c9219817fd1"
+  integrity sha512-6ChcCKVuDv65KOO4yzg9/JCtbo7AxByYiRHKUwp+zttJTEEFk6fieJjSKcuU7OaJypDfwkp3fR82DvGbdE13vA==
   dependencies:
     "@metamask/detect-provider" "^1.2.0"
     "@web3-react/types" "^8.0.20-beta.0"

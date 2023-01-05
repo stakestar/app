@@ -3394,6 +3394,14 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
+"@rromanovsky/web3-react-metamask@0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@rromanovsky/web3-react-metamask/-/web3-react-metamask-0.1.4.tgz#baaa5918e1d07dd670e00357a267e9bfceb9f5a6"
+  integrity sha512-ybO6uDJlZmdTg5ykA9FagPHl6/prpdoTBbtZZDNmS2G7Q1ABBJRPXgdeJeVkz43fCJ8aRL1jcF0m6XANQ9d4eQ==
+  dependencies:
+    "@metamask/detect-provider" "^1.2.0"
+    "@web3-react/types" "^8.0.20-beta.0"
+
 "@rushstack/eslint-patch@^1.1.0":
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.1.4.tgz#0c8b74c50f29ee44f423f7416829c0bf8bb5eb27"
@@ -4733,14 +4741,6 @@
   resolved "https://registry.yarnpkg.com/@web3-react/empty/-/empty-8.0.20-beta.0.tgz#f8e2a6414ba49c7da3937776c213eb4c8ff6e2c7"
   integrity sha512-hde1Wq7w03cal6hD0E+seVg6ZFMWKcaSZ0S5UwJi5CDxhF79oL8QuzpvTBslohRkWqzqlvl52wCSVaY+l2+F8Q==
   dependencies:
-    "@web3-react/types" "^8.0.20-beta.0"
-
-"@web3-react/metamask@8.0.28-beta.0":
-  version "8.0.28-beta.0"
-  resolved "https://registry.yarnpkg.com/@web3-react/metamask/-/metamask-8.0.28-beta.0.tgz#f7e9e0de446727a961745cbec75c8cbf6c961388"
-  integrity sha512-IXuVyj6vhRAhfGQ/sN4qgET8EEdqX844pB4kCDG9kjPD3LLm5kq47ykBosgTr9YCUtdHAXN0UaUimD0TbLMRFg==
-  dependencies:
-    "@metamask/detect-provider" "^1.2.0"
     "@web3-react/types" "^8.0.20-beta.0"
 
 "@web3-react/network@8.0.27-beta.0":

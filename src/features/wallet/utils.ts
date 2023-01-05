@@ -1,5 +1,5 @@
+import { MetaMask } from '@rromanovsky/web3-react-metamask'
 import { CoinbaseWallet } from '@web3-react/coinbase-wallet'
-import { MetaMask } from '@web3-react/metamask'
 import type { Connector } from '@web3-react/types'
 import { WalletConnect } from '@web3-react/walletconnect'
 

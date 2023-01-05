@@ -20,7 +20,8 @@ interface UseSyncAccountProps {
 export function useSyncAccount({ connectorId }: UseSyncAccountProps): void {
   const {
     connector: { hooks },
-    connectors
+    connectors,
+    disconnect
   } = useConnector()
 
   const [account, isActive] = [hooks.useAccount(), hooks.useIsActive()]
@@ -30,26 +31,6 @@ export function useSyncAccount({ connectorId }: UseSyncAccountProps): void {
   const { address } = useWalletAccount()
   const prevConnectorId = usePrevious(connectorId)
   const fetchAccountBalances = useFetchAccountBalances()
-
-  const connect = useCallback(
-    (props: { connectorId: ConnectorId; isInitialConnect: boolean }) => {
-      const { connector } = getConnector(connectors, props.connectorId)
-
-      if (props.isInitialConnect && !(connector instanceof Network)) {
-        connector.connectEagerly().catch(() => null)
-
-        return
-      }
-
-      connector.activate(chainId).catch((error: Error): void => {
-        handleError(error, {
-          message: error?.message,
-          displayGenericMessage: true
-        })
-      })
-    },
-    [chainId, connectors]
-  )
 
   const login = useCallback(
     (props: { address: string; chainId: number }) => {
@@ -70,7 +51,28 @@ export function useSyncAccount({ connectorId }: UseSyncAccountProps): void {
     }
 
     dispatch(resetState())
-  }, [connectors, dispatch, prevConnectorId])
+    disconnect()
+  }, [connectors, disconnect, dispatch, prevConnectorId])
+
+  const connect = useCallback(
+    (props: { connectorId: ConnectorId; isInitialConnect: boolean }) => {
+      const { connector } = getConnector(connectors, props.connectorId)
+
+      if (props.isInitialConnect && !(connector instanceof Network)) {
+        connector.connectEagerly().catch(() => logout())
+
+        return
+      }
+
+      connector.activate(chainId).catch((error: Error): void => {
+        handleError(error, {
+          message: error?.message,
+          displayGenericMessage: true
+        })
+      })
+    },
+    [chainId, connectors, logout]
+  )
 
   useEffect(() => {
     if (connectorId !== prevConnectorId) {

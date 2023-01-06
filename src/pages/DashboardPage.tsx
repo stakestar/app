@@ -37,7 +37,7 @@ export function DashboardPage(): JSX.Element {
   const convertSsEthToUsd = useConvertSsEthToUsd()
 
   const operatorsIds = OPERATOR_IDS[Network.GOERLI]
-  const { activeValidatorsCount, totalSsEthBalance, dailyTvls } = useFetchStakingData()
+  const { activeValidatorsCount, apr, totalSsEthBalance, dailyTvls } = useFetchStakingData()
   const ssEthToEthRate = useSsEthToEthRate()
   const totalTvlInUsd = convertSsEthToUsd(totalSsEthBalance.toWei()).toFormat(2)
 
@@ -78,6 +78,7 @@ export function DashboardPage(): JSX.Element {
   return (
     <Page className={styles.DashboardPage} title="Dashboard">
       <div className={styles.Info}>
+        <InfoCard className={styles.InfoCard} title="APR" info={`${apr.toFixed(4)}%`} variant="large" />
         <InfoCard
           className={styles.InfoCard}
           title="Total TVL"
@@ -88,12 +89,6 @@ export function DashboardPage(): JSX.Element {
           className={styles.InfoCard}
           title="Active validators"
           info={`${activeValidatorsCount}`}
-          variant="large"
-        />
-        <InfoCard
-          className={styles.InfoCard}
-          title="Operators in the Pool"
-          info={`${operatorsIds.length}`}
           variant="large"
         />
       </div>

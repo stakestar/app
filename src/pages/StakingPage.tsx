@@ -1,4 +1,5 @@
 import { InfoCard, Tab } from '@onestaree/ui-kit'
+import { Network, OPERATOR_IDS } from '@stakestar/contracts'
 import BigNumberJs from 'bignumber.js'
 import classNames from 'classnames'
 import { useMemo, useState } from 'react'
@@ -27,8 +28,9 @@ export function StakingPage(): JSX.Element {
   const accauntSsEthBalance = useAccountSsEthBalance()
   const ssEthToEthRate = useSsEthToEthRate()
   const stakerRateDiff = useSelector(selectStakerRateDiff)
-  const { activeValidatorsCount, totalSsEthBalance, apr } = useFetchStakingData()
+  const { activeValidatorsCount, totalSsEthBalance } = useFetchStakingData()
   const totalTvlInUsd = convertSsEthToUsd(totalSsEthBalance.toWei()).toFormat(2)
+  const operatorsIds = OPERATOR_IDS[Network.GOERLI]
 
   const totalTvlInEth = useMemo(
     () =>
@@ -56,7 +58,6 @@ export function StakingPage(): JSX.Element {
     <Page className={styles.StakingPage} title="Staking">
       <div>
         <div className={styles.Info}>
-          <InfoCard className={styles.InfoCard} title="APR" info={`${apr.toFixed(4)}%`} variant="large" />
           <InfoCard
             className={styles.InfoCard}
             title="Total TVL"
@@ -67,6 +68,12 @@ export function StakingPage(): JSX.Element {
             className={styles.InfoCard}
             title="Active validators"
             info={activeValidatorsCount}
+            variant="large"
+          />
+          <InfoCard
+            className={styles.InfoCard}
+            title="Operators in the Pool"
+            info={`${operatorsIds.length}`}
             variant="large"
           />
         </div>

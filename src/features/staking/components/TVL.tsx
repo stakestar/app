@@ -38,7 +38,7 @@ export function TVL({ dailyTvls }: TvlProps): JSX.Element {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="title" />
           <YAxis orientation="right" />
-          <Tooltip />
+          <Tooltip formatter={(value): [string, string] => [value as string, 'TVL']} />
           <Area type="linear" dataKey="value" stroke={theme.primaryAccent} fill={theme.primaryAccent} />
         </AreaChart>
       </ResponsiveContainer>

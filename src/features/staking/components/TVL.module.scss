@@ -1,9 +1,10 @@
 .TVL {
   display: flex;
-  flex-direction: column;
 
-  .Title {
-    margin-bottom: 1rem;
+  .FixResize {
+    // See for more info: https://github.com/recharts/recharts/issues/172
+    flex: 1;
+    width: 0;
   }
 }
 

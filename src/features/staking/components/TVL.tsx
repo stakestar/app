@@ -33,15 +33,17 @@ export function TVL({ dailyTvls }: TvlProps): JSX.Element {
 
   return (
     <div className={styles.TVL}>
-      <ResponsiveContainer width="100%" height={300}>
-        <AreaChart data={tvls}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="title" />
-          <YAxis orientation="right" />
-          <Tooltip formatter={(value): [string, string] => [value as string, 'TVL']} />
-          <Area type="linear" dataKey="value" stroke={theme.primaryAccent} fill={theme.primaryAccent} />
-        </AreaChart>
-      </ResponsiveContainer>
+      <div className={styles.FixResize}>
+        <ResponsiveContainer width="100%" height={300}>
+          <AreaChart data={tvls}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="title" />
+            <YAxis orientation="right" />
+            <Tooltip formatter={(value): [string, string] => [value as string, 'TVL']} />
+            <Area type="linear" dataKey="value" stroke={theme.primaryAccent} fill={theme.primaryAccent} />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   )
 }

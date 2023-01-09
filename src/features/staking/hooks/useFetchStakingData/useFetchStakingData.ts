@@ -88,7 +88,7 @@ export function useFetchStakingData(): {
           dispatch(setTotalSsEthBalance(stakeStarTvl.toString()))
           dispatch(setSsEthToEthRate(ssEthToEth.toString()))
           dispatch(setActiveValidatorsCount(countValidatorPublicKeys.toNumber()))
-          dispatch(setDailyTvls(dailyTvlsData))
+          dispatch(setDailyTvls(dailyTvlsData.reverse()))
           // eslint-disable-next-line no-console
           console.log(`[DEBUG] Rate = ${rate.toString()}`)
           // eslint-disable-next-line no-console

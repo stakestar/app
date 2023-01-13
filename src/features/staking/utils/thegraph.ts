@@ -6,8 +6,8 @@ export function calculateApr(tokenRateDailies: Array<Pick<TokenRateDaily, 'id' |
     return 0
   }
 
-  const firstState = tokenRateDailies[1]
-  const lastState = tokenRateDailies[2]
+  const firstState = tokenRateDailies[0]
+  const lastState = tokenRateDailies[3]
 
   const firstRate = new BigNumber(String(firstState.rate))
   const secondRate = new BigNumber(String(lastState.rate))

@@ -1,25 +1,39 @@
 name: Deploy to Firebase Hosting on PR
+
 on: pull_request
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  WORKLOAD_IDENTITY_PROVIDER: 'projects/196690008143/locations/global/workloadIdentityPools/main/providers/github'
+  SERVICE_ACCOUNT: 'github@stakestar.iam.gserviceaccount.com'
 
 jobs:
   build_and_preview:
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           registry-url: 'https://npm.pkg.github.com'
           node-version: 18
-          cache: 'yarn'
+          cache: yarn
+      - uses: google-github-actions/auth@v1
+        id: auth
+        with:
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+          create_credentials_file: true
+      - run: |
+          echo "SERVICE_ACCOUNT_KEY=$(cat "${{ steps.auth.outputs.credentials_file_path }}" | tr -d '\n')" >> $GITHUB_ENV
       - run: yarn
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GPR_TOKEN }}
       - run: yarn build
-        env:
-          INFURA_KEY: ${{ secrets.INFURA_KEY }}
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_STAKESTAR }}'
+          firebaseServiceAccount: '${{ secrets.SERVICE_ACCOUNT_KEY }}'
           projectId: stakestar
+

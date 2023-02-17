@@ -30,7 +30,11 @@ jobs:
       - run: |
           echo "SERVICE_ACCOUNT_KEY=$(cat "${{ steps.auth.outputs.credentials_file_path }}" | tr -d '\n')" >> $GITHUB_ENV
       - run: yarn
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GPR_TOKEN }}
       - run: yarn build
+        env:
+          INFURA_KEY: ${{ secrets.INFURA_KEY }}
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'

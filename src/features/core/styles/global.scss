@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Finlandica:wght@400;500&family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@500&display=swap');
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
@@ -87,5 +87,39 @@ strong {
 :global(.Toastify__toast) {
   a {
     color: var(--primaryAccentColor);
+  }
+}
+
+body {
+  [class*='Input_module_Input'] {
+    [class*='Input_module_InputWrapper'] {
+      border-radius: 0.75rem;
+    }
+  }
+
+  [class*='Button_module_Button'] {
+    background: #f14d1d;
+
+    &:hover {
+      background-color: #d8481e;
+      --buttonColor1: #d8481e;
+      --buttonColor2: #d8481e;
+    }
+
+    &:disabled {
+      background-color: rgba(#f14d1d, 0.3);
+    }
+
+    [class*='Button_module_large'] {
+      border-radius: 0.75rem;
+    }
+  }
+
+  [class*='Typography_module_Typography'] {
+    &[class*='Typography_module_h2Numbers'] {
+      font-family: 'Kanit', sans-serif;
+      font-size: 24px;
+      line-height: 28px;
+    }
   }
 }

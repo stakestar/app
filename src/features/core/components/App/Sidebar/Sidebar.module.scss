@@ -21,7 +21,6 @@
       width: 168px;
       height: 44px;
       margin-right: 0.5rem;
-      background: url(./logo.svg) no-repeat center/cover;
       z-index: 1;
     }
   }
@@ -106,6 +105,26 @@
             margin-right: 0;
           }
         }
+      }
+    }
+  }
+}
+
+:global(._theme._light) {
+  .Sidebar {
+    .LogoContainer {
+      .Logo {
+        background: url(./logo-light.svg) no-repeat center/cover;
+      }
+    }
+  }
+}
+
+:global(._theme._dark) {
+  .Sidebar {
+    .LogoContainer {
+      .Logo {
+        background: url(./logo-dark.svg) no-repeat center/cover;
       }
     }
   }

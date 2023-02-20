@@ -1,4 +1,3 @@
-import { useTheme } from '@onestaree/ui-kit'
 import { useEffect, useState } from 'react'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
@@ -17,8 +16,6 @@ type TvlItem = {
 }
 
 export function TVL({ dailyTvls }: TvlProps): JSX.Element {
-  const { theme } = useTheme()
-
   const [tvls, setTvls] = useState<TvlItem[]>([])
 
   useEffect(() => {
@@ -40,7 +37,7 @@ export function TVL({ dailyTvls }: TvlProps): JSX.Element {
             <XAxis dataKey="title" />
             <YAxis orientation="right" />
             <Tooltip formatter={(value): [string, string] => [value as string, 'TVL']} />
-            <Area type="linear" dataKey="value" stroke={theme.primaryAccent} fill={theme.primaryAccent} />
+            <Area type="linear" dataKey="value" stroke="#f14d1d" strokeWidth={3} fill="transparent" />
           </AreaChart>
         </ResponsiveContainer>
       </div>

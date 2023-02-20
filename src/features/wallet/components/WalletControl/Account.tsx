@@ -1,5 +1,3 @@
-import './Account.css'
-
 import { usePopup } from '@onestaree/ui-kit'
 import classNames from 'classnames'
 import { useCallback } from 'react'

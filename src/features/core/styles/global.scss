@@ -93,9 +93,34 @@ strong {
 body {
   --primaryAccentColor: #f14d1d !important;
 
+  ._Link:hover {
+    --linkColor1: #d8481e;
+    --linkColor2: #d8481e;
+  }
+
+  ._withHover:hover > div,
+  ._withHover._hover > div {
+    --withHoverColor1: #d8481e !important;
+    --withHoverColor2: #d8481e !important;
+  }
+
+  ._Tab._active {
+    --tabColor1: #f14d1d;
+    --tabColor2: #f14d1d;
+
+    &:after {
+      --tabBorderColor1: #f14d1d;
+      --tabBorderColor2: #f14d1d;
+    }
+  }
+
   [class*='Input_module_Input'] {
     [class*='Input_module_InputWrapper'] {
       border-radius: 0.75rem;
+
+      [class*='Button_module_Button'] {
+        border-radius: 0.5rem !important;
+      }
     }
   }
 
@@ -123,5 +148,26 @@ body {
       font-size: 24px;
       line-height: 28px;
     }
+
+    &[class*='Typography_module_h3'] {
+      font-family: 'Kanit', sans-serif;
+    }
   }
+
+  [class*='Collapse_Title'] {
+    [class*='Icon_module_IconContainer'] {
+      height: 23px;
+      width: auto;
+
+      [class*='Icon_module_Icon'] {
+        width: 23px;
+      }
+    }
+  }
+
+  //[class*='Switch_module_Switch'] {
+  //  [class*='Icon_module_Icon'] {
+  //    background-image: url("../../../../public/light.svg");
+  //  }
+  //}
 }

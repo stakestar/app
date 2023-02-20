@@ -1,4 +1,4 @@
-import { Button, Container, Input, Link, toast } from '@onestaree/ui-kit'
+import { Button, Container, Input, Link, Typography, toast } from '@onestaree/ui-kit'
 import { useEffect, useState } from 'react'
 
 import { TokenAmount, getExplorerUrl, handleError, useContracts, useDispatch } from '~/features/core'
@@ -86,8 +86,10 @@ export function Stake(): JSX.Element {
 
   return (
     <Container size="large">
+      <Typography className="_mb-1" variant="h2">
+        Stake ETH
+      </Typography>
       <Input
-        title="Stake ETH"
         label={`Balance: ${balance.toDecimal(4)}`}
         icon1="tokenEth"
         iconLabel="ETH"
@@ -107,6 +109,7 @@ export function Stake(): JSX.Element {
         }
       />
       <Button
+        className={styles.Button}
         title="Stake"
         onClick={stake}
         disabled={!value || isStakeEthValueLessMin || isStakeEthValueMoreBalance || isLoading}

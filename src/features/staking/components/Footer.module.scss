@@ -1,13 +1,15 @@
 .Footer {
-  margin: 1rem 1rem 0;
+  margin: 1.5rem 1rem 0;
 
   .Row {
     display: flex;
-    justify-content: space-between;
-    cursor: text;
 
-    &:hover {
-      .Text {
+    span {
+      &:first-child {
+        min-width: 164px;
+      }
+
+      &:last-child {
         color: var(--textColor);
       }
     }

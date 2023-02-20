@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;500&display=swap');
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
@@ -115,7 +115,13 @@ body {
   }
 
   [class*='Input_module_Input'] {
+    [class*='Input_module_Label'] {
+      font-family: 'Kanit', sans-serif;
+      font-weight: 300;
+    }
+
     [class*='Input_module_InputWrapper'] {
+      margin-top: 4px;
       border-radius: 0.75rem;
 
       [class*='Button_module_Button'] {
@@ -165,9 +171,25 @@ body {
     }
   }
 
-  //[class*='Switch_module_Switch'] {
-  //  [class*='Icon_module_Icon'] {
-  //    background-image: url("../../../../public/light.svg");
-  //  }
-  //}
+  &._theme {
+    &._light {
+      [class*='Switch_module_Switch'] {
+        [class*='Icon_module_IconContainer'] {
+          [class*='Icon_module_Icon'] {
+            background-image: url('../../../../public/light.svg') !important;
+          }
+        }
+      }
+    }
+
+    &._dark {
+      [class*='Switch_module_Switch'] {
+        [class*='Icon_module_IconContainer'] {
+          [class*='Icon_module_Icon'] {
+            background-image: url('../../../../public/dark.svg') !important;
+          }
+        }
+      }
+    }
+  }
 }

@@ -57,44 +57,26 @@ export function useFetchStakingData(): {
     Promise.all([
       loadEthPriceUsd(),
       stakeStarEthContract.totalSupply(),
-      stakeStarContract.currentApproximateRate(),
-      stakeStarEthContract.rate(),
+      stakeStarContract.functions['rate()'](),
       sdk.getTokenRateDailies({ first: 7 }).then(({ tokenRateDailies }) => tokenRateDailies),
-      stakeStarContract.currentApproximateRate(),
       stakeStarRegistryContract.countValidatorPublicKeys(ValidatorStatus.ACTIVE),
       sdk.getStakeStarTvls({ first: 10 }).then(({ stakeStarTvls }) => stakeStarTvls)
     ])
-      .then(
-        ([
-          ethPriceUsd,
-          stakeStarTvl,
-          currentApproximateRate,
-          rate,
-          tokenRateDailies,
-          ssEthToEth,
-          countValidatorPublicKeys,
-          dailyTvlsData
-        ]) => {
-          dispatch(setApr(calculateApr(tokenRateDailies)))
-          dispatch(setEthPriceUSD(ethPriceUsd))
-          dispatch(
-            setSsEthPriceUSD(
-              new BigNumberJs(ssEthToEth.toString())
-                .shiftedBy(-18)
-                .multipliedBy(new BigNumberJs(ethPriceUsd))
-                .toString()
-            )
+      .then(([ethPriceUsd, stakeStarTvl, rate, tokenRateDailies, countValidatorPublicKeys, dailyTvlsData]) => {
+        dispatch(setApr(calculateApr(tokenRateDailies)))
+        dispatch(setEthPriceUSD(ethPriceUsd))
+        dispatch(
+          setSsEthPriceUSD(
+            new BigNumberJs(rate.toString()).shiftedBy(-18).multipliedBy(new BigNumberJs(ethPriceUsd)).toString()
           )
-          dispatch(setTotalSsEthBalance(stakeStarTvl.toString()))
-          dispatch(setSsEthToEthRate(ssEthToEth.toString()))
-          dispatch(setActiveValidatorsCount(countValidatorPublicKeys.toNumber()))
-          dispatch(setDailyTvls(dailyTvlsData.reverse()))
-          // eslint-disable-next-line no-console
-          console.log(`[DEBUG] Rate = ${rate.toString()}`)
-          // eslint-disable-next-line no-console
-          console.log(`[DEBUG] Current Approximate Rate = ${currentApproximateRate.toString()}`)
-        }
-      )
+        )
+        dispatch(setTotalSsEthBalance(stakeStarTvl.toString()))
+        dispatch(setSsEthToEthRate(rate.toString()))
+        dispatch(setActiveValidatorsCount(countValidatorPublicKeys.toNumber()))
+        dispatch(setDailyTvls(dailyTvlsData.reverse()))
+        // eslint-disable-next-line no-console
+        console.log(`[DEBUG] Rate = ${rate.toString()}`)
+      })
       .catch(handleError)
   }, [dispatch, stakeStarContract, stakeStarEthContract, stakeStarRegistryContract])
 
@@ -104,13 +86,13 @@ export function useFetchStakingData(): {
         sdk
           .getStakerAtMomentRate({ stakerId: address.toLowerCase() })
           .then(({ stakerAtMomentRate }) => stakerAtMomentRate),
-        stakeStarContract.currentApproximateRate(),
+        stakeStarContract.functions['rate()'](),
         // TODO: Refactor stakeStarEthContract.balanceOf to useFetchAccountSsEthBalance
         stakeStarEthContract.balanceOf(address)
       ])
-        .then(([stakerAtMomentRate, currentRate, ssEthBalance]) => {
+        .then(([stakerAtMomentRate, [rate], ssEthBalance]) => {
           if (stakerAtMomentRate?.atMomentRate) {
-            const rateDiff = currentRate.sub(stakerAtMomentRate?.atMomentRate)
+            const rateDiff = rate.sub(stakerAtMomentRate?.atMomentRate)
             dispatch(setStakerRateDiff(rateDiff.toString()))
           }
           dispatch(setAccountSsEthBalance(TokenAmount.fromWei('ssETH', ssEthBalance.toString()).toEncoded()))

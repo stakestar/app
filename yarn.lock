@@ -3667,10 +3667,10 @@
     "@stablelib/random" "^1.0.2"
     "@stablelib/wipe" "^1.0.1"
 
-"@stakestar/contracts@0.10.0":
-  version "0.10.0"
-  resolved "https://npm.pkg.github.com/download/@stakestar/contracts/0.10.0/cd3ee91876fbbdeef118f7cb8b4a91c48e039870#cd3ee91876fbbdeef118f7cb8b4a91c48e039870"
-  integrity sha512-dRJDLee789D53+FK0RA/Mk1324p76fnyFHJVpYJVMckCQemT850jX5dXm09wRRoE7vgNCPGQBdj6xB1NoX05Cg==
+"@stakestar/contracts@0.15.0":
+  version "0.15.0"
+  resolved "https://npm.pkg.github.com/download/@stakestar/contracts/0.15.0/a3114703222d18d09804ca635ff80a73175c1826#a3114703222d18d09804ca635ff80a73175c1826"
+  integrity sha512-16aUuME03P79Ve17gnZoMP6ZCstj0ZUC9BasAN2PuBZbmn8ozKAZcFi5S3vVkwgqmwjYB/eHOlI3NjplZXs1AQ==
   dependencies:
     ethers "^5.7.2"
 

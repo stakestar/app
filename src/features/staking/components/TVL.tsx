@@ -15,17 +15,41 @@ type TvlItem = {
   value: number
 }
 
+const prepareDatumForChart = (tvlDatum: { id: string; totalETH: bigint }): TvlItem => {
+  return {
+    title: formatThegraphIdToDate(Number(tvlDatum.id)),
+    value: Number(toDecimal(tvlDatum.totalETH.toString(), 18).toFormat(2))
+  }
+}
+
 export function TVL({ dailyTvls }: TvlProps): JSX.Element {
   const [tvls, setTvls] = useState<TvlItem[]>([])
 
   useEffect(() => {
-    const tvlForChart = dailyTvls.map((tvl) => {
-      return {
-        title: formatThegraphIdToDate(Number(tvl.id)),
-        value: Number(toDecimal(tvl.totalETH.toString(), 18).toFormat(2))
+    const result: TvlItem[] = []
+    let lastId = 0
+
+    for (const tvl of dailyTvls) {
+      const id = Number(tvl.id)
+
+      if (lastId === 0) {
+        lastId = id
       }
-    })
-    setTvls(tvlForChart)
+
+      while (lastId < id - 1) {
+        result.push(
+          prepareDatumForChart({
+            id: (++lastId).toString(),
+            totalETH: tvl.totalETH
+          })
+        )
+      }
+
+      result.push(prepareDatumForChart(tvl))
+      lastId = id
+    }
+
+    setTvls(result)
   }, [dailyTvls])
 
   return (

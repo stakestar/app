@@ -26,6 +26,18 @@
       height: 1px;
       background-color: var(--dividerColor);
     }
+
+    :global(._Tab) {
+      &:hover {
+        --tabColor1: #f14d1d;
+        --tabColor2: #f14d1d;
+      }
+    }
+
+    :global(._Tab._active) {
+      --tabColor1: #f14d1d !important;
+      --tabColor2: #f14d1d !important;
+    }
   }
 
   .StakingContainer {

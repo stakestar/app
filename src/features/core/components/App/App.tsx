@@ -3,7 +3,7 @@ import { useListenEvents } from './useListenEvents'
 
 console.info(
   '%c App version hash ',
-  'border-radius:3px; font-weight:bold; color:white; background: linear-gradient(93.28deg, #E61F59 -3%, #FA4845 99.13%)',
+  'border-radius:3px; font-weight:bold; color:white; background:#f14d1d',
   process.env.GIT_LAST_COMMIT_HASH
 )
 

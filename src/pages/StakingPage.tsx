@@ -30,7 +30,6 @@ export function StakingPage(): JSX.Element {
   const stakerRateDiff = useSelector(selectStakerRateDiff)
   const { activeValidatorsCount, totalSsEthBalance, apr } = useFetchStakingData()
   const totalTvlInUsd = convertSsEthToUsd(totalSsEthBalance.toWei()).toFormat(2)
-  const operatorsIds = OPERATOR_IDS[Network.GOERLI]
 
   const totalTvlInEth = useMemo(
     () =>
@@ -74,7 +73,7 @@ export function StakingPage(): JSX.Element {
         </div>
         <div className={styles.Tabs}>
           <Tab title="Stake" index={0} activeIndex={activeIndex} onClick={setActiveIndex} />
-          <Tab title="Unstake" disabled={true} index={1} activeIndex={activeIndex} />
+          <Tab title="Unstake" index={1} activeIndex={activeIndex} onClick={setActiveIndex} />
         </div>
         <div className={styles.StakingContainer}>
           <div className={classNames(styles.TabsContent, styles.StakingColumn, { [styles.active]: activeIndex === 0 })}>

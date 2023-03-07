@@ -26,7 +26,7 @@ export const getSetValueByMultiplier =
     }
   }
 
-export function getGasRequired({
+export function getStakeGasRequired({
   address,
   stakeStarContract,
   value
@@ -44,7 +44,25 @@ export function getGasRequired({
     .then((response) =>
       response
         .mul(10 ** 9) // Equivalent to "Low" in MetaMask
-        .mul(2) // Equivalent to "Aggressive" in MetaMask
+        .mul(2) // Make it equivalent to "Aggressive" in MetaMask
         .toString()
     )
+}
+
+export function getUnstakeGasRequired({
+  stakeStarContract,
+  value
+}: {
+  stakeStarContract: StakeStar
+  value: BigNumber
+}): Promise<string> {
+  // Subtract 1 wei to prevent error for "value = max" estimation
+  const unstakeValue = value.sub(1).toString()
+
+  return stakeStarContract.estimateGas.unstake(unstakeValue).then((response) =>
+    response
+      .mul(10 ** 9) // Equivalent to "Low" in MetaMask
+      .mul(2) // Make it equivalent to "Aggressive" in MetaMask
+      .toString()
+  )
 }

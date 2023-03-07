@@ -9,30 +9,30 @@ import { minStakeEthValue } from './constants'
 import { Footer } from './Footer'
 import styles from './Stake.module.scss'
 import {
-  getGasRequired,
   getIsStakeEthValueLessMin,
   getIsStakeEthValueMoreBalance,
-  getSetValueByMultiplier
+  getSetValueByMultiplier,
+  getStakeGasRequired
 } from './utils'
 
 export function Stake(): JSX.Element {
+  const [value, setValue] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const dispatch = useDispatch()
   const { address } = useAccount()
   const balance = useAccountBalance('ETH')
-  const [value, setValue] = useState('')
   const setValueByMultiplier = getSetValueByMultiplier(setValue, balance)
   const isStakeEthValueLessMin = getIsStakeEthValueLessMin(value)
   const isStakeEthValueMoreBalance = getIsStakeEthValueMoreBalance(value, balance)
-  const [isLoading, setIsLoading] = useState(false)
   const { stakeStarContract, stakeStarEthContract } = useContracts()
   const fetchAccountBalances = useFetchAccountBalances()
 
-  const stake = async (): Promise<void> => {
+  const onClickStake = async (): Promise<void> => {
     setIsLoading(true)
 
     try {
       const valueBigNumber = TokenAmount.fromDecimal('ETH', value.substring(0, 20)).toBigNumber()
-      const gasRequired = await getGasRequired({ address, stakeStarContract, value: valueBigNumber })
+      const gasRequired = await getStakeGasRequired({ address, stakeStarContract, value: valueBigNumber })
       const valuePlusGas = TokenAmount.fromBigNumber('ETH', valueBigNumber.add(gasRequired)).toWei()
       const valueMinusGas = TokenAmount.fromBigNumber('ETH', valueBigNumber.sub(gasRequired)).toWei()
       const valueToStake = balance.toBigNumber().lt(valuePlusGas) ? valueMinusGas : valueBigNumber.toString()
@@ -90,7 +90,7 @@ export function Stake(): JSX.Element {
         Stake ETH
       </Typography>
       <Input
-        label={`Balance: ${balance.toDecimal(4)}`}
+        label={`Balance: ${parseFloat(balance.toDecimal(4))}`}
         icon1="tokenEth"
         iconLabel="ETH"
         placeholder="0.0000"
@@ -111,7 +111,7 @@ export function Stake(): JSX.Element {
       <Button
         className={styles.Button}
         title="Stake"
-        onClick={stake}
+        onClick={onClickStake}
         disabled={!value || isStakeEthValueLessMin || isStakeEthValueMoreBalance || isLoading}
         loading={isLoading}
       />

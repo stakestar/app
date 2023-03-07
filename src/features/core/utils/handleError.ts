@@ -12,7 +12,12 @@ export function handleError(error: unknown, props: HandleErrorProps = {}): void 
   const { errorLevel = 'exception', message, displayGenericMessage } = props
 
   if (message) {
-    toast.show(filterMessage(message), 'error', { autoclose: false })
+    const data = {
+      message: message.includes('user rejected transaction') ? 'User rejected transaction' : message,
+      options: { autoclose: false }
+    }
+
+    toast.show(data.message, 'error', data.options)
   } else if (displayGenericMessage) {
     toast.show('Something went wrong...', 'error', { autoclose: false })
   }
@@ -27,14 +32,4 @@ export function handleError(error: unknown, props: HandleErrorProps = {}): void 
   } else {
     console.warn('%c Caught Error ', 'border-radius:3px; color:#222; background:#ffdc00', { props }, error)
   }
-}
-
-function filterMessage(messageRaw: string): string {
-  let message = messageRaw
-
-  if (message.includes('user rejected transaction')) {
-    message = 'User rejected transaction'
-  }
-
-  return message
 }

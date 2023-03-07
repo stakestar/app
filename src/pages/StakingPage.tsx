@@ -1,5 +1,4 @@
 import { InfoCard, Tab } from '@onestaree/ui-kit'
-import { Network, OPERATOR_IDS } from '@stakestar/contracts'
 import BigNumberJs from 'bignumber.js'
 import classNames from 'classnames'
 import { useMemo, useState } from 'react'

@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js'
 import { useEffect, useState } from 'react'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
@@ -8,6 +9,7 @@ import styles from './TVL.module.scss'
 
 interface TvlProps {
   dailyTvls: DailyTvls
+  totalTvl: BigNumber
 }
 
 type TvlItem = {
@@ -22,14 +24,30 @@ const prepareDatumForChart = (tvlDatum: { id: string; totalETH: bigint }): TvlIt
   }
 }
 
-export function TVL({ dailyTvls }: TvlProps): JSX.Element {
+export function TVL({ dailyTvls, totalTvl }: TvlProps): JSX.Element {
   const [tvls, setTvls] = useState<TvlItem[]>([])
 
   useEffect(() => {
-    const result: TvlItem[] = []
+    let result: TvlItem[] = []
     let lastId = 0
 
-    for (const tvl of dailyTvls) {
+    const dayNumber = Math.floor(Date.now() / 86400000)
+    let dailyTvlsForChart: DailyTvls = []
+
+    if (dailyTvls.length && Number(dailyTvls[dailyTvls.length - 1].id) <= dayNumber) {
+      if (Number(dailyTvls[dailyTvls.length - 1].id) === dayNumber) {
+        dailyTvlsForChart = dailyTvls.slice(0, -1)
+      } else {
+        dailyTvlsForChart = dailyTvls
+      }
+
+      dailyTvlsForChart.push({
+        id: dayNumber.toString(),
+        totalETH: BigInt(totalTvl.toString())
+      })
+    }
+
+    for (const tvl of dailyTvlsForChart) {
       const id = Number(tvl.id)
 
       if (lastId === 0) {
@@ -49,8 +67,10 @@ export function TVL({ dailyTvls }: TvlProps): JSX.Element {
       lastId = id
     }
 
+    result = result.slice(0, 10)
+
     setTvls(result)
-  }, [dailyTvls])
+  }, [dailyTvls, totalTvl])
 
   return (
     <div className={styles.TVL}>

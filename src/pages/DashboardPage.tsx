@@ -5,7 +5,13 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { Page, TokenAmount } from '~/features/core'
 import { handleError, ssvClient } from '~/features/core'
-import { TVL, useConvertSsEthToUsd, useFetchStakingData, useSsEthToEthRate } from '~/features/staking'
+import {
+  TVL,
+  convertSsETHToETH,
+  useConvertSsEthToUsd,
+  useFetchStakingData,
+  useSsEthToEthRate
+} from '~/features/staking'
 
 import styles from './DashboardPage.module.scss'
 
@@ -42,14 +48,10 @@ export function DashboardPage(): JSX.Element {
   const totalTvlInUsd = convertSsEthToUsd(totalSsEthBalance.toWei()).toFormat(2)
 
   const totalTvlInEth = useMemo(
-    () =>
-      ssEthToEthRate
-        ? new BigNumber(totalSsEthBalance.toString())
-            .multipliedBy(TokenAmount.fromWei('ETH', ssEthToEthRate).toString())
-            .toFormat(2)
-        : 0,
+    () => (ssEthToEthRate ? convertSsETHToETH(totalSsEthBalance.toWei(), ssEthToEthRate) : new BigNumber('0')),
     [ssEthToEthRate, totalSsEthBalance]
   )
+
   const [rows, setRows] = useState<Operator[]>([])
 
   useEffect(() => {
@@ -82,7 +84,7 @@ export function DashboardPage(): JSX.Element {
         <InfoCard
           className={styles.InfoCard}
           title="Total TVL"
-          info={`${totalTvlInEth} ETH / $${totalTvlInUsd}`}
+          info={`${TokenAmount.fromWei('ETH', totalTvlInEth.toString()).toDecimal(2)} ETH / $${totalTvlInUsd}`}
           variant="large"
         />{' '}
         <InfoCard
@@ -96,7 +98,7 @@ export function DashboardPage(): JSX.Element {
         Total Eth Staked
       </Typography>
       <div className={styles.Tvl}>
-        <TVL dailyTvls={dailyTvls} />
+        <TVL dailyTvls={dailyTvls} totalTvl={new BigNumber(3 * 10 ** 18)} />
       </div>
       <Typography className={styles.Title} variant="h2">
         Node operators

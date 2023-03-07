@@ -1,4 +1,4 @@
-import { Button, Container, Input, Link, toast } from '@onestaree/ui-kit'
+import { Button, Container, Input, Link, Typography, toast } from '@onestaree/ui-kit'
 import { useState } from 'react'
 
 import { TokenAmount, getExplorerUrl, handleError, useContracts, useDispatch } from '~/features/core'
@@ -79,8 +79,10 @@ export function Unstake(): JSX.Element {
 
   return (
     <Container size="large">
+      <Typography className="_mb-1" variant="h2">
+        Unstake ssETH
+      </Typography>
       <Input
-        title="Unstake ssETH"
         label={`Balance: ${parseFloat(accountSsEthBalance.toDecimal(4))}`}
         icon1="tokenEth"
         iconLabel="ssETH"

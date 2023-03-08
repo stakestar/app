@@ -41,10 +41,7 @@ export function TVL({ dailyTvls, totalTvl }: TvlProps): JSX.Element {
         dailyTvlsForChart = dailyTvls
       }
 
-      dailyTvlsForChart.push({
-        id: dayNumber.toString(),
-        totalETH: BigInt(totalTvl.toString())
-      })
+      dailyTvlsForChart = [...dailyTvlsForChart, { id: dayNumber.toString(), totalETH: BigInt(totalTvl.toString()) }]
     }
 
     for (const tvl of dailyTvlsForChart) {

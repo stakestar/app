@@ -1,10 +1,10 @@
 // TODO: Uncomment this after @stakestar/contracts update
 import { ValidatorStatus } from '@stakestar/contracts'
-import { getBuiltGraphSDK } from '@stakestar/subgraph-client'
 import BigNumberJs from 'bignumber.js'
 import { useEffect } from 'react'
 
 import { DailyTvls, TokenAmount, handleError, useContracts, useDispatch, useSelector } from '~/features/core'
+import { getGraphQLClientSdk } from '~/features/core/utils/graphQLClient'
 import { useAccount } from '~/features/wallet'
 
 import {
@@ -28,7 +28,7 @@ import { calculateApr } from '../../utils'
 import { useAccountSsEthBalance } from '../useAccountSsEthBalance'
 import { loadEthPriceUsd } from './loadEthPriceUsd'
 
-const sdk = getBuiltGraphSDK() // TODO: move it to provider?
+const sdk = getGraphQLClientSdk('https://api.thegraph.com/subgraphs/name/arsoba/stakestar-test') // TODO: move it to provider?
 
 export function useFetchStakingData(): {
   activeValidatorsCount: number
@@ -58,9 +58,9 @@ export function useFetchStakingData(): {
       loadEthPriceUsd(),
       stakeStarEthContract.totalSupply(),
       stakeStarContract.functions['rate()'](),
-      sdk.getTokenRateDailies({ first: 7 }).then(({ tokenRateDailies }) => tokenRateDailies),
+      sdk.getTokenRateDailies({ first: 7 }).then(({ data }) => data.tokenRateDailies),
       stakeStarRegistryContract.countValidatorPublicKeys(ValidatorStatus.ACTIVE),
-      sdk.getStakeStarTvls({ first: 10 }).then(({ stakeStarTvls }) => stakeStarTvls)
+      sdk.getStakeStarTvls({ first: 10 }).then(({ data }) => data.stakeStarTvls)
     ])
       .then(([ethPriceUsd, stakeStarTvl, rate, tokenRateDailies, countValidatorPublicKeys, dailyTvlsData]) => {
         dispatch(setApr(calculateApr(tokenRateDailies)))
@@ -83,9 +83,7 @@ export function useFetchStakingData(): {
   useEffect(() => {
     if (address) {
       Promise.all([
-        sdk
-          .getStakerAtMomentRate({ stakerId: address.toLowerCase() })
-          .then(({ stakerAtMomentRate }) => stakerAtMomentRate),
+        sdk.getStakerAtMomentRate({ stakerId: address.toLowerCase() }).then(({ data }) => data.stakerAtMomentRate),
         stakeStarContract.functions['rate()'](),
         // TODO: Refactor stakeStarEthContract.balanceOf to useFetchAccountSsEthBalance
         stakeStarEthContract.balanceOf(address)

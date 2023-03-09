@@ -2960,10 +2960,10 @@
   dependencies:
     ethers "^5.7.2"
 
-"@stakestar/subgraph-client@0.8.1":
-  version "0.8.1"
-  resolved "https://npm.pkg.github.com/download/@stakestar/subgraph-client/0.8.1/13a41edeafc992d199536933715e53af4290b571#13a41edeafc992d199536933715e53af4290b571"
-  integrity sha512-b0gXAi465P620InB0uH/v723hpjgZeEJ8GMOf5dbU57wrlQKhWgmDMLip7VcU9gZgnOyFKnMIBOi/r7vK3Fscg==
+"@stakestar/subgraph-client@1.0.4":
+  version "1.0.4"
+  resolved "https://npm.pkg.github.com/download/@stakestar/subgraph-client/1.0.4/1a8a7aa36ca403df2f2c02711a20da0c091aa8f7#1a8a7aa36ca403df2f2c02711a20da0c091aa8f7"
+  integrity sha512-CLeV7S/VO84tIBLdMYMOh8r8IioZ1A1Alh1NOxe/xvWWog2n8mKyON3qbZWT2AsKcDPVM8VTxOFp/k0l0mGVcQ==
   dependencies:
     "@graphql-mesh/cache-localforage" "^0.6.40"
     "@graphql-mesh/cross-helpers" "^0.2.6"
@@ -2976,6 +2976,7 @@
     "@graphql-mesh/utils" "^0.41.10"
     "@whatwg-node/fetch" "^0.4.3"
     graphql "^16.6.0"
+    graphql-tag "^2.12.6"
 
 "@surma/rollup-plugin-off-main-thread@^2.2.3":
   version "2.2.3"
@@ -7861,6 +7862,13 @@ graphql-request@^5.2.0:
     cross-fetch "^3.1.5"
     extract-files "^9.0.0"
     form-data "^3.0.0"
+
+graphql-tag@^2.12.6:
+  version "2.12.6"
+  resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.12.6.tgz#d441a569c1d2537ef10ca3d1633b48725329b5f1"
+  integrity sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==
+  dependencies:
+    tslib "^2.1.0"
 
 graphql-ws@^5.4.1:
   version "5.10.2"

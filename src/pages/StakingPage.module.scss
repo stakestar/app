@@ -29,8 +29,8 @@
 
     :global(._Tab) {
       &:hover {
-        --tabColor1: #f14d1d;
-        --tabColor2: #f14d1d;
+        --tabColor1: #f14d1d !important;
+        --tabColor2: #f14d1d !important;
       }
     }
 
@@ -70,6 +70,28 @@
         &.active {
           display: block;
         }
+      }
+    }
+  }
+}
+
+:global(._theme._dark) {
+  .StakingPage {
+    .Tabs {
+      :global(._Tab) {
+        --tabColor1: #ffffff;
+        --tabColor2: #ffffff;
+      }
+    }
+  }
+}
+
+:global(._theme._light) {
+  .StakingPage {
+    .Tabs {
+      :global(._Tab) {
+        --tabColor1: #101010;
+        --tabColor2: #101010;
       }
     }
   }

@@ -105,6 +105,30 @@
             margin-right: 0;
           }
         }
+
+        .Icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 32px;
+          width: 32px;
+          border-radius: 50%;
+          fill: var(--textInvertedColor);
+          background-color: var(--textColor);
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+
+          path {
+            fill: none;
+            stroke: var(--textInvertedColor);
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          }
+
+          &:hover {
+            background-color: #d8481e;
+          }
+        }
       }
     }
   }

@@ -16,7 +16,7 @@ export function Sidebar(): JSX.Element {
         <div className={styles.Logo} />
       </div>
       <ul className={styles.Menu}>
-        {menu.map(({ title, path, soon }) => (
+        {menu.map(({ title, path, url, soon }) => (
           <li
             key={path}
             className={classNames(styles.MenuItem, {
@@ -26,7 +26,11 @@ export function Sidebar(): JSX.Element {
             })}
             onClick={(): void => {
               if (!soon) {
-                navigate(path)
+                if (path) {
+                  navigate(path)
+                } else if (url) {
+                  window.open(url, '_blank', 'noopener noreferrer')
+                }
               }
             }}
           >

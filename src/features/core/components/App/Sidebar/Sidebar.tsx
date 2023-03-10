@@ -42,10 +42,10 @@ export function Sidebar(): JSX.Element {
       <div className={styles.Footer}>
         <ul className={styles.Links}>
           <li className={styles.LinksRow}>
-            <Link href="#" target="_self">
+            <Link href="https://stakestar.io/terms" target="_blank">
               <Typography variant="text2">T&Cs</Typography>
             </Link>
-            <Link href="#" target="_self">
+            <Link href="https://stakestar.io/privacy" target="_blank">
               <Typography variant="text2">Privacy Policy</Typography>
             </Link>
           </li>

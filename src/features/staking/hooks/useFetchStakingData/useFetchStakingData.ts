@@ -51,9 +51,6 @@ export function useFetchStakingData(): {
   const dailyTvls = useSelector(selectDailyTvls)
 
   useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log('StakeStar address', stakeStarContract.address)
-
     Promise.all([
       loadEthPriceUsd(),
       stakeStarEthContract.totalSupply(),

@@ -18,7 +18,7 @@ export function Sidebar(): JSX.Element {
       <ul className={styles.Menu}>
         {menu.map(({ title, path, url, soon }) => (
           <li
-            key={path}
+            key={title}
             className={classNames(styles.MenuItem, {
               _active: path === pathname || (path === '/' && pathname === '/iframe.html'), // iframe.html for Storybook,
               _MenuItem: !soon,

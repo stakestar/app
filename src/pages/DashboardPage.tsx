@@ -1,9 +1,8 @@
 import { InfoCard, Table, TableProps, Typography } from '@onestaree/ui-kit'
-import { Network, OPERATOR_IDS } from '@stakestar/contracts'
 import BigNumber from 'bignumber.js'
 import { useEffect, useMemo, useState } from 'react'
 
-import { Page, TokenAmount } from '~/features/core'
+import { Page, TokenAmount, getOperatorsIds } from '~/features/core'
 import { handleError, ssvClient } from '~/features/core'
 import {
   TVL,
@@ -41,8 +40,7 @@ const tableProps: TableProps<Operator> = {
 
 export function DashboardPage(): JSX.Element {
   const convertSsEthToUsd = useConvertSsEthToUsd()
-
-  const operatorsIds = OPERATOR_IDS[Network.GOERLI]
+  const operatorsIds = getOperatorsIds()
   const { activeValidatorsCount, apr, totalSsEthBalance, dailyTvls } = useFetchStakingData()
   const ssEthToEthRate = useSsEthToEthRate()
   const totalTvlInUsd = convertSsEthToUsd(totalSsEthBalance.toWei()).toFormat(2)

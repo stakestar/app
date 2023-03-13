@@ -1,6 +1,4 @@
 import {
-  ADDRESSES,
-  Network,
   StakeStar,
   StakeStarETH,
   StakeStarETH__factory,
@@ -11,7 +9,7 @@ import {
 import { PropsWithChildren, createContext, useMemo } from 'react'
 
 import { CORE_EVENT_CONTRACTS_READY } from '../../constants'
-import { emitEvent, handleError } from '../../utils'
+import { emitEvent, getContractsAddresses, handleError } from '../../utils'
 import { useSignerOrProvider } from './useSignerOrProvider'
 
 export type ContractsProviderValue = {
@@ -33,7 +31,7 @@ export function ContractsProvider({ children }: PropsWithChildren): JSX.Element 
     }
 
     try {
-      const { stakeStar, stakeStarETH, stakeStarRegistry } = ADDRESSES[Network.GOERLI]
+      const { stakeStar, stakeStarETH, stakeStarRegistry } = getContractsAddresses()
 
       return {
         stakeStarContract: StakeStar__factory.connect(stakeStar, signerOrProvider),

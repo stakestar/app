@@ -1,5 +1,5 @@
 import { IconName } from '@onestaree/ui-kit'
-import { StakeStarTvl } from '@stakestar/subgraph-client/dist/types.d.ts'
+import { StakeStarTvl } from '@stakestar/subgraph-client'
 
 export enum ChainId {
   Mainnet = 1,

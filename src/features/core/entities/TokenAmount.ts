@@ -2,8 +2,8 @@ import { formatFixed } from '@ethersproject/bignumber'
 import { BigNumber, utils } from 'ethers'
 
 import { chainConfigs, chainIdLocalSorageKey, defaultChainId } from '../config'
-import { getLocalStorageItem } from '../hooks'
 import type { Token, TokenId } from '../types'
+import { getLocalStorageItem } from '../utils'
 
 const _constructorGuard = Symbol()
 

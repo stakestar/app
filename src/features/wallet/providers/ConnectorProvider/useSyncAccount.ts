@@ -1,15 +1,16 @@
 import { usePopup } from '@onestaree/ui-kit'
 import { Network } from '@web3-react/network'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
 import { emitEvent, handleError, useDispatch, usePrevious } from '~/features/core'
+import { resetState as resetStakingState } from '~/features/staking'
 
 import {
   WALLET_EVENT_UNSUPPORTED_NETWORK_POPUP_CLOSE,
   WALLET_EVENT_UNSUPPORTED_NETWORK_POPUP_OPEN
 } from '../../constants'
 import { useConnector, useFetchAccountBalances, useAccount as useWalletAccount } from '../../hooks'
-import { resetState, setAccountAddress, setChainId } from '../../store'
+import { resetState as resetWalletState, setAccountAddress, setChainId } from '../../store'
 import { isChainIdSupported } from '../../utils'
 import { ConnectorId } from './types'
 import { getConnector } from './utils'
@@ -27,6 +28,7 @@ export function useSyncAccount({ connectorId }: UseSyncAccountProps): void {
 
   const [account, isActive] = [hooks.useAccount(), hooks.useIsActive()]
   const chainId = hooks.useChainId()
+  const prevChainId = useRef<number>()
   const dispatch = useDispatch()
   const popup = usePopup()
   const { address } = useWalletAccount()
@@ -41,6 +43,11 @@ export function useSyncAccount({ connectorId }: UseSyncAccountProps): void {
     [dispatch]
   )
 
+  const resetState = useCallback(() => {
+    dispatch(resetWalletState())
+    dispatch(resetStakingState())
+  }, [dispatch])
+
   const logout = useCallback(async () => {
     const { connector } = getConnector(connectors, prevConnectorId)
 
@@ -50,9 +57,9 @@ export function useSyncAccount({ connectorId }: UseSyncAccountProps): void {
       await connector.resetState()
     }
 
-    dispatch(resetState())
+    resetState()
     disconnect()
-  }, [connectors, disconnect, dispatch, prevConnectorId])
+  }, [connectors, disconnect, prevConnectorId, resetState])
 
   const connect = useCallback(
     (props: { connectorId: ConnectorId; isInitialConnect: boolean }) => {
@@ -105,8 +112,17 @@ export function useSyncAccount({ connectorId }: UseSyncAccountProps): void {
           ? WALLET_EVENT_UNSUPPORTED_NETWORK_POPUP_CLOSE
           : WALLET_EVENT_UNSUPPORTED_NETWORK_POPUP_OPEN
       )
+
+      if (prevChainId.current) {
+        if (prevChainId.current !== chainId) {
+          prevChainId.current = chainId
+          resetState()
+        }
+      } else {
+        prevChainId.current = chainId
+      }
     }
-  }, [chainId, popup])
+  }, [chainId, dispatch, popup, resetState])
 
   useEffect(() => {
     if (address && isChainIdSupported(chainId)) {

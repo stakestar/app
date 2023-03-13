@@ -1,6 +1,5 @@
-import { chainIdLocalSorageKey, defaultChainId, getLocalStorageItem } from '~/features/core'
-
-import { chainConfigs } from '../config'
+import { chainConfigs, chainIdLocalSorageKey, defaultChainId } from '../config'
+import { getLocalStorageItem } from '../utils'
 
 export function getExplorerUrl(path: 'address' | 'tx', hash: string): string {
   const chainId = getLocalStorageItem(chainIdLocalSorageKey, defaultChainId)

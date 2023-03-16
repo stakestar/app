@@ -9,10 +9,10 @@ import { minStakeEthValue } from './constants'
 import { Footer } from './Footer'
 import styles from './Stake.module.scss'
 import {
+  getDepositAndStakeGasRequired,
   getIsStakeEthValueLessMin,
   getIsStakeEthValueMoreBalance,
-  getSetValueByMultiplier,
-  getStakeGasRequired
+  getSetValueByMultiplier
 } from './utils'
 
 export function Stake(): JSX.Element {
@@ -32,14 +32,14 @@ export function Stake(): JSX.Element {
 
     try {
       const valueBigNumber = TokenAmount.fromDecimal('ETH', value.substring(0, 20)).toBigNumber()
-      const gasRequired = await getStakeGasRequired({ address, stakeStarContract, value: valueBigNumber })
+      const gasRequired = await getDepositAndStakeGasRequired({ address, stakeStarContract, value: valueBigNumber })
       const valuePlusGas = TokenAmount.fromBigNumber('ETH', valueBigNumber.add(gasRequired)).toWei()
       const valueMinusGas = TokenAmount.fromBigNumber('ETH', valueBigNumber.sub(gasRequired)).toWei()
       const valueToStake = balance.toBigNumber().lt(valuePlusGas) ? valueMinusGas : valueBigNumber.toString()
 
       if (Number(valueToStake) > 0) {
         const { transactionHash } = await stakeStarContract
-          .stake({
+          .depositAndStake({
             from: address,
             value: valueToStake
           })

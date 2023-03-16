@@ -1,10 +1,10 @@
 import {
   StakeStar,
-  StakeStarETH,
-  StakeStarETH__factory,
   StakeStarRegistry,
   StakeStarRegistry__factory,
-  StakeStar__factory
+  StakeStar__factory,
+  StarETH,
+  StarETH__factory
 } from '@stakestar/contracts'
 import { PropsWithChildren, createContext, useMemo } from 'react'
 
@@ -14,7 +14,7 @@ import { useSignerOrProvider } from './useSignerOrProvider'
 
 export type ContractsProviderValue = {
   stakeStarContract: StakeStar
-  stakeStarEthContract: StakeStarETH
+  stakeStarEthContract: StarETH
   stakeStarRegistryContract: StakeStarRegistry
 }
 
@@ -31,11 +31,11 @@ export function ContractsProvider({ children }: PropsWithChildren): JSX.Element 
     }
 
     try {
-      const { stakeStar, stakeStarETH, stakeStarRegistry } = getContractsAddresses()
+      const { stakeStar, starETH, stakeStarRegistry } = getContractsAddresses()
 
       return {
         stakeStarContract: StakeStar__factory.connect(stakeStar, signerOrProvider),
-        stakeStarEthContract: StakeStarETH__factory.connect(stakeStarETH, signerOrProvider),
+        stakeStarEthContract: StarETH__factory.connect(starETH, signerOrProvider),
         stakeStarRegistryContract: StakeStarRegistry__factory.connect(stakeStarRegistry, signerOrProvider)
       }
     } catch (error) {

@@ -13,7 +13,7 @@ import {
   getIsStakeEthValueLessMin,
   getIsStakeEthValueMoreBalance,
   getSetValueByMultiplier,
-  getUnstakeGasRequired
+  getUnstakeAndWithdrawGasRequired
 } from './utils'
 
 export function Unstake(): JSX.Element {
@@ -33,7 +33,7 @@ export function Unstake(): JSX.Element {
 
     try {
       const valueBigNumber = TokenAmount.fromDecimal('ETH', value.substring(0, 20)).toBigNumber()
-      const gasRequired = await getUnstakeGasRequired({ stakeStarContract, value: valueBigNumber })
+      const gasRequired = await getUnstakeAndWithdrawGasRequired({ stakeStarContract, value: valueBigNumber })
       const valuePlusGas = TokenAmount.fromBigNumber('ETH', valueBigNumber.add(gasRequired)).toWei()
       const valueMinusGas = TokenAmount.fromBigNumber('ETH', valueBigNumber.sub(gasRequired)).toWei()
       const valueToUnstake = accountSsEthBalance.toBigNumber().lt(valuePlusGas)
@@ -42,7 +42,7 @@ export function Unstake(): JSX.Element {
 
       if (Number(valueToUnstake) > 0) {
         const { transactionHash } = await stakeStarContract
-          .unstake(valueToUnstake)
+          .unstakeAndWithdraw(valueToUnstake)
           .then((transaction) => transaction.wait())
 
         await fetchAccountBalances()

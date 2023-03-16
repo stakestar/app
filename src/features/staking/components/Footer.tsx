@@ -9,7 +9,7 @@ import { useAccount } from '~/features/wallet'
 import { useConvertEthToUsd, useSsEthToEthRate } from '../hooks'
 import { convertETHToSsETH } from '../utils'
 import styles from './Footer.module.scss'
-import { getStakeGasRequired } from './utils'
+import { getDepositAndStakeGasRequired } from './utils'
 
 interface FooterProps {
   transactionType: 'stake' | 'unstake'
@@ -53,7 +53,7 @@ export function Footer({ transactionType, ethAmount }: FooterProps): JSX.Element
   useEffect(() => {
     if (address) {
       // TODO: Add withdraw gas estimation
-      getStakeGasRequired({ address, stakeStarContract, value: BigNumber.from(1000) })
+      getDepositAndStakeGasRequired({ address, stakeStarContract, value: BigNumber.from(1000) })
         .then((gasRequired) => setTransactionCost(convertEthToUsd(gasRequired).toFormat(4)))
         .catch(handleError)
     }

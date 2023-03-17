@@ -54,7 +54,7 @@ export function ClaimTab(): JSX.Element {
 
   return (
     <Container size="large">
-      <Typography className="_mb-1" variant="h2">
+      <Typography className="_mb-4" variant="h2">
         Claim ETH
       </Typography>
       {hasPendingUstake ? (
@@ -68,7 +68,13 @@ export function ClaimTab(): JSX.Element {
         in XX days and YY hours
       </Typography>
       */}
-      <Button className={styles.Button} title="Claim" onClick={onClickClaim} disabled={isLoading} loading={isLoading} />
+      <Button
+        className={styles.Button}
+        title="Claim"
+        onClick={onClickClaim}
+        disabled={isLoading || !hasPendingUstake}
+        loading={isLoading}
+      />
     </Container>
   )
 }

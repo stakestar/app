@@ -18,10 +18,7 @@ export function convertSstarEthToEth(sstarEth: string, rate: string | null): Big
     return new BigNumberJs(0)
   }
 
-  return new BigNumberJs(sstarEth)
-    .multipliedBy(rate)
-    .div(10 ** 18)
-    .integerValue(BigNumberJs.ROUND_FLOOR)
+  return new BigNumberJs(sstarEth).multipliedBy(rate).shiftedBy(-18).integerValue(BigNumberJs.ROUND_FLOOR)
 }
 
 export function convertEthToSstarEth(eth: string, rate: string | null): BigNumberJs {
@@ -29,8 +26,5 @@ export function convertEthToSstarEth(eth: string, rate: string | null): BigNumbe
     return new BigNumberJs(0)
   }
 
-  return new BigNumberJs(eth)
-    .multipliedBy(10 ** 18)
-    .div(rate)
-    .integerValue(BigNumberJs.ROUND_FLOOR)
+  return new BigNumberJs(eth).shiftedBy(18).div(rate).integerValue(BigNumberJs.ROUND_FLOOR)
 }

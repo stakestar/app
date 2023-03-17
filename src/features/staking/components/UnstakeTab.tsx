@@ -3,25 +3,27 @@ import classNames from 'classnames'
 import { useEffect, useMemo, useState } from 'react'
 
 import { TokenAmount, Tooltip, getExplorerUrl, handleError, useContracts, useDispatch } from '~/features/core'
+import { convertSstarEthToEth } from '~/features/staking'
 import { useAccount, useAccountBalance, useFetchAccountBalances } from '~/features/wallet'
 
-import { usePendingUnstake } from '../hooks'
+import { usePendingUnstake, useSstarEthToEthRate } from '../hooks'
 import { setPendingUnstake } from '../store'
 import { minStakeEthValue } from './constants'
 import { Footer } from './Footer'
 import styles from './UnstakeTab.module.scss'
-import {
-  getIsStakeEthValueLessMin,
-  getIsStakeEthValueMoreBalance,
-  getSetValueByMultiplier,
-  getUnstakeAndWithdrawGasRequired
-} from './utils'
+import { getIsStakeEthValueLessMin, getIsStakeEthValueMoreBalance, getSetValueByMultiplier } from './utils'
 
 enum CommonError {
   valueEmpty = 'sstarETH value is empty',
   valueLtMin = 'sstarETH value is incorrect',
   valueGtMax = 'sstarETH value is incorrect',
   pendingUnstake = 'You already have a pending unstake/unclaimed amount'
+}
+
+enum Loading {
+  Resolved,
+  Unstake,
+  InstantUnstake
 }
 
 enum InstantUnstakeError {}
@@ -33,7 +35,7 @@ type Errors = {
 
 export function UnstakeTab(): JSX.Element {
   const [value, setValue] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [loading, setLoading] = useState(Loading.Resolved)
   const dispatch = useDispatch()
   const { address } = useAccount()
   const balance = useAccountBalance('sstarETH')
@@ -41,6 +43,7 @@ export function UnstakeTab(): JSX.Element {
   const fetchAccountBalances = useFetchAccountBalances()
   const pendingUnstake = usePendingUnstake()
   const setValueByMultiplier = getSetValueByMultiplier(setValue, balance)
+  const sstarEthToEthRate = useSstarEthToEthRate()
 
   const errors: Errors = useMemo(() => {
     const commonErrors: CommonError[] = []
@@ -88,36 +91,32 @@ export function UnstakeTab(): JSX.Element {
     </div>
   )
 
-  const onClickUnstake = async (): Promise<void> => {
-    setIsLoading(true)
+  const onClickUnstake = async (isInstantUnstake = false): Promise<void> => {
+    setLoading(isInstantUnstake ? Loading.InstantUnstake : Loading.Unstake)
 
     try {
-      const valueBigNumber = TokenAmount.fromDecimal('ETH', value.substring(0, 20)).toBigNumber()
-      const gasRequired = await getUnstakeAndWithdrawGasRequired({ stakeStarContract, value: valueBigNumber })
-      const valuePlusGas = TokenAmount.fromBigNumber('ETH', valueBigNumber.add(gasRequired)).toWei()
-      const valueMinusGas = TokenAmount.fromBigNumber('ETH', valueBigNumber.sub(gasRequired)).toWei()
-      const valueToUnstake = balance.toBigNumber().lt(valuePlusGas) ? valueMinusGas : valueBigNumber.toString()
+      const balanceWei = balance.toWei()
 
-      if (Number(valueToUnstake) > 0) {
-        const { transactionHash } = await stakeStarContract
-          .unstakeAndWithdraw(valueToUnstake)
-          .then((transaction) => transaction.wait())
+      const { transactionHash } = await (isInstantUnstake
+        ? stakeStarContract.unstakeAndLocalPoolWithdraw
+        : stakeStarContract.unstakeAndWithdraw)(balanceWei).then((transaction) => transaction.wait())
 
-        await fetchAccountBalances()
-        setValue('')
+      await fetchAccountBalances()
+      setValue('')
 
-        toast.show(
-          <>
-            {TokenAmount.fromWei('ETH', valueToUnstake).toDecimal(4)} ETH was successfully staked.
-            <Link className={styles.Link} icon="external" href={`${getExplorerUrl('tx', transactionHash)}`}>
-              See on Etherscan
-            </Link>
-          </>,
-          'success'
-        )
-      } else {
-        toast.show('Insufficient funds', 'error', { autoclose: true })
-      }
+      const balanceInEth = parseFloat(
+        TokenAmount.fromWei('ETH', convertSstarEthToEth(balanceWei, sstarEthToEthRate).toString()).toDecimal()
+      )
+
+      toast.show(
+        <>
+          {balanceInEth} ETH was successfully withdrawn and unstaked.
+          <Link className={styles.Link} icon="external" href={`${getExplorerUrl('tx', transactionHash)}`}>
+            See on Etherscan
+          </Link>
+        </>,
+        'success'
+      )
     } catch (error) {
       handleError(error, {
         message: error instanceof Error ? error?.message : undefined,
@@ -125,7 +124,7 @@ export function UnstakeTab(): JSX.Element {
       })
     }
 
-    setIsLoading(false)
+    setLoading(Loading.Resolved)
   }
 
   useEffect(() => {
@@ -173,7 +172,7 @@ export function UnstakeTab(): JSX.Element {
         onChange={setValue}
         useMaxButton
         onClickMaxButton={setValueByMultiplier}
-        disabled={isLoading}
+        disabled={loading !== Loading.Resolved}
         error={errors.common.some((error) => [CommonError.valueLtMin, CommonError.valueGtMax].includes(error))}
         errorMessage={`Min value is ${minStakeEthValue} and your max is ${balance.toString()}`}
       />
@@ -189,18 +188,18 @@ export function UnstakeTab(): JSX.Element {
           <Tooltip
             className={styles.Tooltip}
             value={tooltipValue(false)}
-            disabled={!isUnstakeDisabled || !address || isLoading}
+            disabled={!isUnstakeDisabled || !address || loading !== Loading.Resolved}
           >
             <Button
               className={styles.Control}
-              title="Untake"
+              title="Unstake"
               onClick={onClickUnstake}
-              disabled={isUnstakeDisabled}
-              loading={isLoading}
+              disabled={isUnstakeDisabled || !address || loading !== Loading.Resolved}
+              loading={loading === Loading.Unstake}
             />
             <div
               className={classNames(styles.DescribeDisableReasonButton, {
-                [styles.disabled]: !isUnstakeDisabled || !address || isLoading
+                [styles.disabled]: !isUnstakeDisabled || !address || loading === Loading.Unstake
               })}
             >
               <div className={styles.Icon}>?</div>
@@ -211,18 +210,18 @@ export function UnstakeTab(): JSX.Element {
           <Tooltip
             className={styles.Tooltip}
             value={tooltipValue(true)}
-            disabled={!isInstantUnstakeDisabled || !address || isLoading}
+            disabled={!isInstantUnstakeDisabled || !address || loading !== Loading.Resolved}
           >
             <Button
               className={styles.Control}
-              title="Instant Untake"
-              onClick={onClickUnstake}
-              disabled={isInstantUnstakeDisabled}
-              loading={isLoading}
+              title="Instant Unstake"
+              onClick={(): Promise<void> => onClickUnstake(true)}
+              disabled={isInstantUnstakeDisabled || !address || loading !== Loading.Resolved}
+              loading={loading === Loading.InstantUnstake}
             />
             <div
               className={classNames(styles.DescribeDisableReasonButton, {
-                [styles.disabled]: !isInstantUnstakeDisabled || !address || isLoading
+                [styles.disabled]: !isInstantUnstakeDisabled || !address || loading === Loading.InstantUnstake
               })}
             >
               <div className={styles.Icon}>?</div>

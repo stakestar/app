@@ -38,8 +38,7 @@ export function getDepositAndStakeGasRequired({
   return stakeStarContract.estimateGas
     .depositAndStake({
       from: address,
-      // Subtract 1 wei to prevent error for "value = max" estimation
-      value: value.sub(1).toString()
+      value: value.toString()
     })
     .then((response) =>
       response
@@ -56,10 +55,22 @@ export function getUnstakeAndWithdrawGasRequired({
   stakeStarContract: StakeStar
   value: BigNumber
 }): Promise<string> {
-  // Subtract 1 wei to prevent error for "value = max" estimation
-  const unstakeValue = value.sub(1).toString()
+  return stakeStarContract.estimateGas.unstakeAndWithdraw(value.toString()).then((response) =>
+    response
+      .mul(10 ** 9) // Equivalent to "Low" in MetaMask
+      .mul(2) // Make it equivalent to "Aggressive" in MetaMask
+      .toString()
+  )
+}
 
-  return stakeStarContract.estimateGas.unstakeAndWithdraw(unstakeValue).then((response) =>
+export function getUnstakeAndLocalPoolWithdrawGasRequired({
+  stakeStarContract,
+  value
+}: {
+  stakeStarContract: StakeStar
+  value: BigNumber
+}): Promise<string> {
+  return stakeStarContract.estimateGas.unstakeAndLocalPoolWithdraw(value.toString()).then((response) =>
     response
       .mul(10 ** 9) // Equivalent to "Low" in MetaMask
       .mul(2) // Make it equivalent to "Aggressive" in MetaMask

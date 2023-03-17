@@ -24,7 +24,7 @@ export function Footer({ transactionType, ethAmount }: FooterProps): JSX.Element
   const sstarEthToEthRate = useSstarEthToEthRate()
   const sstarEthAmount =
     ethAmount && sstarEthToEthRate
-      ? convertEthToSstarEth(new BigNumberJs(ethAmount).multipliedBy(10 ** 18).toString(), sstarEthToEthRate)
+      ? convertEthToSstarEth(new BigNumberJs(ethAmount).shiftedBy(18).toString(), sstarEthToEthRate)
       : 0
 
   const items = useMemo<{ title: string; value: string }[]>(() => {
@@ -43,7 +43,7 @@ export function Footer({ transactionType, ethAmount }: FooterProps): JSX.Element
             ? `1.00 sstarETH = ${TokenAmount.fromWei('ETH', sstarEthToEthRate).toDecimal(6)} ETH`
             : `1.00 ETH = ${TokenAmount.fromWei(
                 'ETH',
-                convertEthToSstarEth(new BigNumberJs(1).multipliedBy(10 ** 18).toString(), sstarEthToEthRate).toString()
+                convertEthToSstarEth(new BigNumberJs(1).shiftedBy(18).toString(), sstarEthToEthRate).toString()
               ).toDecimal(6)} sstarETH`)
       },
       { title: 'Transaction cost', value: `$${transactionCost}` }
@@ -56,6 +56,11 @@ export function Footer({ transactionType, ethAmount }: FooterProps): JSX.Element
       getDepositAndStakeGasRequired({ address, stakeStarContract, value: BigNumber.from(1000) })
         .then((gasRequired) => setTransactionCost(convertEthToUsd(gasRequired).toFormat(4)))
         .catch(handleError)
+
+      // TODO: Error: cannot estimate gas; transaction may fail or may require manual gas limit [ See: https://links.ethers.org/v5-errors-UNPREDICTABLE_GAS_LIMIT ] (reason="execution reverted: one withdrawal at a time only", method="estimateGas"
+      // getUnstakeAndWithdrawGasRequired({ stakeStarContract, value: BigNumber.from(1000) })
+      //   .then((gasRequired) => setTransactionCost(convertEthToUsd(gasRequired).toFormat(4)))
+      //   .catch(handleError)
     }
   }, [address, convertEthToUsd, stakeStarContract])
 

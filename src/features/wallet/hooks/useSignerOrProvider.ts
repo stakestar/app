@@ -2,7 +2,7 @@ import { Provider } from '@ethersproject/providers'
 import { Signer } from 'ethers'
 import { useMemo, useRef } from 'react'
 
-import { useConnector } from '~/features/wallet'
+import { useConnector } from './useConnector'
 
 export function useSignerOrProvider(): Signer | Provider | undefined {
   const { connector } = useConnector()

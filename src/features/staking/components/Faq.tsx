@@ -19,11 +19,11 @@ const faq = [
     title: 'How does StakeStar work?',
     description: `
     The StakeStar application works similarly to other staking pool solutions. Users can stake their 
-    Eth through the Staking page and will get a receipt token ssETH in return. Later, after the Ethereum 
+    Eth through the Staking page and will get a receipt token sstarETH in return. Later, after the Ethereum 
     network enables withdrawals, users will be able to unstake their Eth alongside with accumulated rewards.
     <br /><br />
     It is worth noting that StakeStar doesn't aim to be a liquid staking solution. That means StakeStar 
-    doesn't maintain liquidity pools of ssETH/ETH assets on DEXes.`
+    doesn't maintain liquidity pools of sstarETH/ETH assets on DEXes.`
   }
 ]
 

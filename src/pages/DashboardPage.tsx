@@ -6,10 +6,10 @@ import { Page, TokenAmount, getOperatorsIds } from '~/features/core'
 import { handleError, ssvClient } from '~/features/core'
 import {
   TVL,
-  convertSsETHToETH,
-  useConvertSsEthToUsd,
+  convertSstarEthToEth,
+  useConvertSstarEthToUsd,
   useFetchStakingData,
-  useSsEthToEthRate
+  useSstarEthToEthRate
 } from '~/features/staking'
 
 import styles from './DashboardPage.module.scss'
@@ -39,15 +39,15 @@ const tableProps: TableProps<Operator> = {
 }
 
 export function DashboardPage(): JSX.Element {
-  const convertSsEthToUsd = useConvertSsEthToUsd()
+  const convertSstarEthToUsd = useConvertSstarEthToUsd()
   const operatorsIds = getOperatorsIds()
-  const { activeValidatorsCount, apr, totalSsEthBalance, dailyTvls } = useFetchStakingData()
-  const ssEthToEthRate = useSsEthToEthRate()
-  const totalTvlInUsd = convertSsEthToUsd(totalSsEthBalance.toWei()).toFormat(2)
+  const { activeValidatorsCount, apr, totalSstarEth, dailyTvls } = useFetchStakingData()
+  const sstarEthToEthRate = useSstarEthToEthRate()
+  const totalTvlInUsd = convertSstarEthToUsd(totalSstarEth.toWei()).toFormat(2)
 
   const totalTvlInEth = useMemo(
-    () => (ssEthToEthRate ? convertSsETHToETH(totalSsEthBalance.toWei(), ssEthToEthRate) : new BigNumber('0')),
-    [ssEthToEthRate, totalSsEthBalance]
+    () => (sstarEthToEthRate ? convertSstarEthToEth(totalSstarEth.toWei(), sstarEthToEthRate) : new BigNumber('0')),
+    [sstarEthToEthRate, totalSstarEth]
   )
 
   const [rows, setRows] = useState<Operator[]>([])

@@ -20,7 +20,6 @@ export const ConnectorProviderContext = createContext<ConnectorProviderValue>({}
 export function ConnectorProvider({ children }: PropsWithChildren): JSX.Element {
   const defaultConnectorId: ConnectorId = 'network'
   const [connectorId, setConnectorId] = useLocalStorage<ConnectorId>('connectorId', defaultConnectorId)
-  // TODO: Ability to change ChainId
   const [chainId, setChainId] = useLocalStorage<ChainId>(chainIdLocalSorageKey, defaultChainId)
   const connectors = useConnectors(chainId)
   const connector = getConnector(connectors, connectorId)
@@ -48,7 +47,7 @@ interface ListenerProps extends PropsWithChildren {
 }
 
 function Listener({ connectorId, children }: ListenerProps): JSX.Element {
-  useSyncAccount({ connectorId })
+  useSyncAccount(connectorId)
 
   return <>{children}</>
 }

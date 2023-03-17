@@ -6,7 +6,7 @@ export enum ChainId {
   Goerli = 5
 }
 
-export type TokenId = 'ETH' | 'ssETH'
+export type TokenId = 'ETH' | 'sstarETH'
 
 export type Token = {
   title: string

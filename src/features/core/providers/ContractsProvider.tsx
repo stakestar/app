@@ -8,9 +8,10 @@ import {
 } from '@stakestar/contracts'
 import { PropsWithChildren, createContext, useMemo } from 'react'
 
-import { CORE_EVENT_CONTRACTS_READY } from '../../constants'
-import { emitEvent, getContractsAddresses, handleError } from '../../utils'
-import { useSignerOrProvider } from './useSignerOrProvider'
+import { useSignerOrProvider } from '~/features/wallet'
+
+import { CORE_EVENT_CONTRACTS_READY } from '../constants'
+import { emitEvent, getContractsAddresses, handleError } from '../utils'
 
 export type ContractsProviderValue = {
   stakeStarContract: StakeStar

@@ -1,63 +1,55 @@
 import { Button, Container, Input, Link, Typography, toast } from '@onestaree/ui-kit'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { TokenAmount, getExplorerUrl, handleError, useContracts, useDispatch } from '~/features/core'
-import { setAccountSsEthBalance } from '~/features/staking/store'
-import { useAccount, useFetchAccountBalances } from '~/features/wallet'
+import { useAccount, useAccountBalance, useFetchAccountBalances } from '~/features/wallet'
 
-import { useAccountSsEthBalance } from '../hooks'
 import { minStakeEthValue } from './constants'
 import { Footer } from './Footer'
-import styles from './Stake.module.scss'
+import styles from './StakeTab.module.scss'
 import {
+  getDepositAndStakeGasRequired,
   getIsStakeEthValueLessMin,
   getIsStakeEthValueMoreBalance,
-  getSetValueByMultiplier,
-  getUnstakeAndWithdrawGasRequired
+  getSetValueByMultiplier
 } from './utils'
 
-export function Unstake(): JSX.Element {
+export function StakeTab(): JSX.Element {
   const [value, setValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const dispatch = useDispatch()
   const { address } = useAccount()
-  const accountSsEthBalance = useAccountSsEthBalance()
-  const setValueByMultiplier = getSetValueByMultiplier(setValue, accountSsEthBalance)
+  const balance = useAccountBalance('ETH')
+  const setValueByMultiplier = getSetValueByMultiplier(setValue, balance)
   const isStakeEthValueLessMin = getIsStakeEthValueLessMin(value)
-  const isStakeEthValueMoreBalance = getIsStakeEthValueMoreBalance(value, accountSsEthBalance)
+  const isStakeEthValueMoreBalance = getIsStakeEthValueMoreBalance(value, balance)
   const { stakeStarContract, stakeStarEthContract } = useContracts()
   const fetchAccountBalances = useFetchAccountBalances()
 
-  const onClickUnstake = async (): Promise<void> => {
+  const onClickStake = async (): Promise<void> => {
     setIsLoading(true)
 
     try {
       const valueBigNumber = TokenAmount.fromDecimal('ETH', value.substring(0, 20)).toBigNumber()
-      const gasRequired = await getUnstakeAndWithdrawGasRequired({ stakeStarContract, value: valueBigNumber })
+      const gasRequired = await getDepositAndStakeGasRequired({ address, stakeStarContract, value: valueBigNumber })
       const valuePlusGas = TokenAmount.fromBigNumber('ETH', valueBigNumber.add(gasRequired)).toWei()
       const valueMinusGas = TokenAmount.fromBigNumber('ETH', valueBigNumber.sub(gasRequired)).toWei()
-      const valueToUnstake = accountSsEthBalance.toBigNumber().lt(valuePlusGas)
-        ? valueMinusGas
-        : valueBigNumber.toString()
+      const valueToStake = balance.toBigNumber().lt(valuePlusGas) ? valueMinusGas : valueBigNumber.toString()
 
-      if (Number(valueToUnstake) > 0) {
+      if (Number(valueToStake) > 0) {
         const { transactionHash } = await stakeStarContract
-          .unstakeAndWithdraw(valueToUnstake)
+          .depositAndStake({
+            from: address,
+            value: valueToStake
+          })
           .then((transaction) => transaction.wait())
 
         await fetchAccountBalances()
         setValue('')
 
-        stakeStarEthContract
-          .balanceOf(address)
-          .then((ssEthBalance) =>
-            dispatch(setAccountSsEthBalance(TokenAmount.fromWei('ssETH', ssEthBalance.toString()).toEncoded()))
-          )
-          .catch(handleError)
-
         toast.show(
           <>
-            {TokenAmount.fromWei('ETH', valueToUnstake).toDecimal(4)} ETH was successfully staked.
+            {TokenAmount.fromWei('ETH', valueToStake).toDecimal(4)} ETH was successfully staked.
             <Link className={styles.Link} icon="external" href={`${getExplorerUrl('tx', transactionHash)}`}>
               See on Etherscan
             </Link>
@@ -77,31 +69,44 @@ export function Unstake(): JSX.Element {
     setIsLoading(false)
   }
 
+  useEffect(() => {
+    if (address.length === 0) {
+      setValue('')
+    }
+  }, [address])
+
   return (
     <Container size="large">
       <Typography className="_mb-1" variant="h2">
-        Unstake ssETH
+        Stake ETH
       </Typography>
       <Input
-        label={`Balance: ${parseFloat(accountSsEthBalance.toDecimal(4))}`}
+        label={`Balance: ${parseFloat(balance.toDecimal(4))}`}
         icon1="tokenEth"
-        iconLabel="ssETH"
-        placeholder="0.00"
+        iconLabel="ETH"
+        placeholder="0.0000"
         value={value}
         onChange={setValue}
         useMaxButton
         onClickMaxButton={setValueByMultiplier}
-        disabled={isLoading}
+        disabled={isLoading || address.length === 0}
         error={isStakeEthValueLessMin || isStakeEthValueMoreBalance}
-        errorMessage={`Min value is ${minStakeEthValue} and your max is ${accountSsEthBalance.toString()}`}
+        errorMessage={
+          isStakeEthValueLessMin
+            ? `Minimum stake amount is ${minStakeEthValue} ETH`
+            : isStakeEthValueMoreBalance
+            ? 'Insufficient funds'
+            : ''
+        }
       />
       <Button
-        title="Untake"
-        onClick={onClickUnstake}
+        className={styles.Button}
+        title="Stake"
+        onClick={onClickStake}
         disabled={!value || isStakeEthValueLessMin || isStakeEthValueMoreBalance || isLoading}
         loading={isLoading}
       />
-      <Footer transactionType="unstake" ethAmount={value} />
+      <Footer transactionType="stake" ethAmount={value} />
     </Container>
   )
 }

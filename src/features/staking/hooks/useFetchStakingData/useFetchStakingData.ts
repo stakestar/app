@@ -12,42 +12,38 @@ import {
   selectApr,
   selectDailyTvls,
   selectEthPriceUSD,
-  selectSsEthPriceUSD,
-  selectTotalSsEthBalance,
-  setAccountSsEthBalance,
+  selectSstarEthPriceUSD,
+  selectTotalSstarEth,
   setActiveValidatorsCount,
   setApr,
   setDailyTvls,
   setEthPriceUSD,
-  setSsEthPriceUSD,
-  setSsEthToEthRate,
+  setSstarEthPriceUSD,
+  setSstarEthToEthRate,
   setStakerRateDiff,
-  setTotalSsEthBalance
+  setTotalSstarEth
 } from '../../store'
 import { calculateApr } from '../../utils'
-import { useAccountSsEthBalance } from '../useAccountSsEthBalance'
 import { loadEthPriceUsd } from './loadEthPriceUsd'
 
 const sdk = getGraphQLClientSdk('https://api.thegraph.com/subgraphs/name/arsoba/stakestar-test') // TODO: move it to provider?
 
 export function useFetchStakingData(): {
   activeValidatorsCount: number
-  accountSsEthBalance: TokenAmount
-  totalSsEthBalance: TokenAmount
+  totalSstarEth: TokenAmount
   ethPriceUSD: string
-  ssEthPriceUSD: string
+  sstarEthPriceUSD: string
   apr: number
   dailyTvls: DailyTvls
 } {
   const dispatch = useDispatch()
   const { stakeStarContract, stakeStarEthContract, stakeStarRegistryContract } = useContracts()
   const { address } = useAccount()
-  const accountSsEthBalance = useAccountSsEthBalance()
   const activeValidatorsCount = useSelector(selectActiveValidatorsCount)
-  const totalSsEthBalance = useSelector(selectTotalSsEthBalance)
+  const totalSstarEth = useSelector(selectTotalSstarEth)
   const apr = useSelector(selectApr)
   const ethPriceUSD = useSelector(selectEthPriceUSD)
-  const ssEthPriceUSD = useSelector(selectSsEthPriceUSD)
+  const sstarEthPriceUSD = useSelector(selectSstarEthPriceUSD)
   const dailyTvls = useSelector(selectDailyTvls)
 
   useEffect(() => {
@@ -63,12 +59,12 @@ export function useFetchStakingData(): {
         dispatch(setApr(calculateApr(tokenRateDailies)))
         dispatch(setEthPriceUSD(ethPriceUsd))
         dispatch(
-          setSsEthPriceUSD(
+          setSstarEthPriceUSD(
             new BigNumberJs(rate.toString()).shiftedBy(-18).multipliedBy(new BigNumberJs(ethPriceUsd)).toString()
           )
         )
-        dispatch(setTotalSsEthBalance(stakeStarTvl.toString()))
-        dispatch(setSsEthToEthRate(rate.toString()))
+        dispatch(setTotalSstarEth(stakeStarTvl.toString()))
+        dispatch(setSstarEthToEthRate(rate.toString()))
         dispatch(setActiveValidatorsCount(countValidatorPublicKeys.toNumber()))
         dispatch(setDailyTvls(dailyTvlsData.reverse()))
         // eslint-disable-next-line no-console
@@ -81,16 +77,13 @@ export function useFetchStakingData(): {
     if (address) {
       Promise.all([
         sdk.getStakerAtMomentRate({ stakerId: address.toLowerCase() }).then(({ data }) => data.stakerAtMomentRate),
-        stakeStarContract.functions['rate()'](),
-        // TODO: Refactor stakeStarEthContract.balanceOf to useFetchAccountSsEthBalance
-        stakeStarEthContract.balanceOf(address)
+        stakeStarContract.functions['rate()']()
       ])
-        .then(([stakerAtMomentRate, [rate], ssEthBalance]) => {
+        .then(([stakerAtMomentRate, [rate]]) => {
           if (stakerAtMomentRate?.atMomentRate) {
             const rateDiff = rate.sub(stakerAtMomentRate?.atMomentRate)
             dispatch(setStakerRateDiff(rateDiff.toString()))
           }
-          dispatch(setAccountSsEthBalance(TokenAmount.fromWei('ssETH', ssEthBalance.toString()).toEncoded()))
         })
         .catch(handleError)
     }
@@ -98,10 +91,9 @@ export function useFetchStakingData(): {
 
   return {
     activeValidatorsCount,
-    accountSsEthBalance,
-    totalSsEthBalance,
+    totalSstarEth,
     ethPriceUSD,
-    ssEthPriceUSD,
+    sstarEthPriceUSD,
     apr,
     dailyTvls
   }

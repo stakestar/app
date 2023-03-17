@@ -1,4 +1,5 @@
+export * from './ClaimTab'
 export * from './Faq'
-export * from './Stake'
+export * from './StakeTab'
 export * from './TVL'
-export * from './Unstake'
+export * from './UnstakeTab'

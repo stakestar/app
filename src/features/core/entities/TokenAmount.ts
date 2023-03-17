@@ -37,7 +37,7 @@ export class TokenAmount {
   public static fromWei(tokenOrTokenId: Token | TokenId, value: string | BigNumber): TokenAmount {
     const tokenId = typeof tokenOrTokenId === 'string' ? tokenOrTokenId : tokenOrTokenId.id
 
-    return new TokenAmount(_constructorGuard, tokenId, typeof value === 'string' ? value : value.toString())
+    return new TokenAmount(_constructorGuard, tokenId, typeof value === 'string' ? value || '0' : value.toString())
   }
 
   /**

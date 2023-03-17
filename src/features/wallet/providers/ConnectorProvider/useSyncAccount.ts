@@ -15,11 +15,7 @@ import { isChainIdSupported } from '../../utils'
 import { ConnectorId } from './types'
 import { getConnector } from './utils'
 
-interface UseSyncAccountProps {
-  connectorId: ConnectorId
-}
-
-export function useSyncAccount({ connectorId }: UseSyncAccountProps): void {
+export function useSyncAccount(connectorId: ConnectorId): void {
   const {
     connector: { hooks },
     connectors,

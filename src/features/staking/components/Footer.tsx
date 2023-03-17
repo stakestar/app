@@ -6,8 +6,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { TokenAmount, handleError, useContracts } from '~/features/core'
 import { useAccount } from '~/features/wallet'
 
-import { useConvertEthToUsd, useSsEthToEthRate } from '../hooks'
-import { convertETHToSsETH } from '../utils'
+import { useConvertEthToUsd, useSstarEthToEthRate } from '../hooks'
+import { convertEthToSstarEth } from '../utils'
 import styles from './Footer.module.scss'
 import { getDepositAndStakeGasRequired } from './utils'
 
@@ -21,34 +21,34 @@ export function Footer({ transactionType, ethAmount }: FooterProps): JSX.Element
   const { address } = useAccount()
   const [transactionCost, setTransactionCost] = useState('0.00')
   const convertEthToUsd = useConvertEthToUsd()
-  const ssEthToEthRate = useSsEthToEthRate()
-  const ssEthAmount =
-    ethAmount && ssEthToEthRate
-      ? convertETHToSsETH(new BigNumberJs(ethAmount).multipliedBy(10 ** 18).toString(), ssEthToEthRate)
+  const sstarEthToEthRate = useSstarEthToEthRate()
+  const sstarEthAmount =
+    ethAmount && sstarEthToEthRate
+      ? convertEthToSstarEth(new BigNumberJs(ethAmount).multipliedBy(10 ** 18).toString(), sstarEthToEthRate)
       : 0
 
   const items = useMemo<{ title: string; value: string }[]>(() => {
     return [
       {
         title: 'You will receive',
-        value: `${TokenAmount.fromWei('ssETH', ssEthAmount.toString()).toDecimal(4)} ${
-          transactionType === 'stake' ? 'ssETH' : 'ETH'
+        value: `${TokenAmount.fromWei('sstarETH', sstarEthAmount.toString()).toDecimal(4)} ${
+          transactionType === 'stake' ? 'sstarETH' : 'ETH'
         }`
       },
       {
         title: 'Exchange rate',
         value:
-          ssEthToEthRate &&
+          sstarEthToEthRate &&
           (transactionType === 'stake'
-            ? `1.00 ssETH = ${TokenAmount.fromWei('ETH', ssEthToEthRate).toDecimal(6)} ETH`
+            ? `1.00 sstarETH = ${TokenAmount.fromWei('ETH', sstarEthToEthRate).toDecimal(6)} ETH`
             : `1.00 ETH = ${TokenAmount.fromWei(
                 'ETH',
-                convertETHToSsETH(new BigNumberJs(1).multipliedBy(10 ** 18).toString(), ssEthToEthRate).toString()
-              ).toDecimal(6)} ssETH`)
+                convertEthToSstarEth(new BigNumberJs(1).multipliedBy(10 ** 18).toString(), sstarEthToEthRate).toString()
+              ).toDecimal(6)} sstarETH`)
       },
       { title: 'Transaction cost', value: `$${transactionCost}` }
     ]
-  }, [ssEthAmount, ssEthToEthRate, transactionCost, transactionType])
+  }, [sstarEthAmount, sstarEthToEthRate, transactionCost, transactionType])
 
   useEffect(() => {
     if (address) {

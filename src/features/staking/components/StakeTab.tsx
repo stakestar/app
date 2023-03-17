@@ -1,7 +1,7 @@
 import { Button, Container, Input, Link, Typography, toast } from '@onestaree/ui-kit'
 import { useEffect, useState } from 'react'
 
-import { TokenAmount, getExplorerUrl, handleError, useContracts, useDispatch } from '~/features/core'
+import { TokenAmount, getExplorerUrl, handleError, useContracts } from '~/features/core'
 import { useAccount, useAccountBalance, useFetchAccountBalances } from '~/features/wallet'
 
 import { minStakeEthValue } from './constants'
@@ -17,13 +17,12 @@ import {
 export function StakeTab(): JSX.Element {
   const [value, setValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const dispatch = useDispatch()
   const { address } = useAccount()
   const balance = useAccountBalance('ETH')
   const setValueByMultiplier = getSetValueByMultiplier(setValue, balance)
   const isStakeEthValueLessMin = getIsStakeEthValueLessMin(value)
   const isStakeEthValueMoreBalance = getIsStakeEthValueMoreBalance(value, balance)
-  const { stakeStarContract, stakeStarEthContract } = useContracts()
+  const { stakeStarContract } = useContracts()
   const fetchAccountBalances = useFetchAccountBalances()
 
   const onClickStake = async (): Promise<void> => {

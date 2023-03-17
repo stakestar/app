@@ -26,7 +26,7 @@ import {
 import { calculateApr } from '../../utils'
 import { loadEthPriceUsd } from './loadEthPriceUsd'
 
-const sdk = getGraphQLClientSdk('https://api.thegraph.com/subgraphs/name/arsoba/stakestar-test') // TODO: move it to provider?
+const sdk = getGraphQLClientSdk('https://subgraph.stakestar.io/subgraphs/name/stakestar-testnet') // TODO: move it to provider?
 
 export function useFetchStakingData(): {
   activeValidatorsCount: number

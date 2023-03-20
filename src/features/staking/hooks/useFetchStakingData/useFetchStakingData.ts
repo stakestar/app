@@ -89,8 +89,8 @@ export function useFetchStakingData(): {
           console.log(`[DEBUG] Rate = ${sstarEthToEthRate}`)
 
           const totalTvl = sstarEthToEthRate
-            ? convertSstarEthToEth(totalSstarEth, sstarEthToEthRate)
-                .plus(convertSstarEthToEth(sstarEthTotalSupply.toString(), sstarEthToEthRate))
+            ? stakeStarTvl
+                .add(convertSstarEthToEth(sstarEthTotalSupply.toString(), sstarEthToEthRate).toString())
                 .toString()
             : ''
 
@@ -98,7 +98,7 @@ export function useFetchStakingData(): {
         }
       )
       .catch(handleError)
-  }, [dispatch, sstarEthContract, stakeStarContract, stakeStarEthContract, stakeStarRegistryContract, totalSstarEth])
+  }, [dispatch, sstarEthContract, stakeStarContract, stakeStarEthContract, stakeStarRegistryContract])
 
   useEffect(() => {
     if (address) {

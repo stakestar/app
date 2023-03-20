@@ -12,10 +12,9 @@ export type StakingState = {
   pendingUnstake: string
   apr: number
   dailyTvls: DailyTvls
-  totalSstarEth: TokenAmountEncoded
+  totalSstarEth: string
+  totalTvl: string
 }
-
-const emptySstarEth = TokenAmount.fromDecimal('sstarETH', 0).toEncoded()
 
 const initialState: StakingState = {
   activeValidatorsCount: 0,
@@ -26,7 +25,8 @@ const initialState: StakingState = {
   pendingUnstake: '',
   apr: 0,
   dailyTvls: [],
-  totalSstarEth: emptySstarEth
+  totalSstarEth: '0',
+  totalTvl: '0'
 }
 
 export const store = createSlice({
@@ -72,7 +72,11 @@ export const store = createSlice({
     },
 
     setTotalSstarEth: (state, { payload: totalSstarEth }: PayloadAction<string>): void => {
-      state.totalSstarEth = TokenAmount.fromWei('sstarETH', totalSstarEth).toEncoded()
+      state.totalSstarEth = totalSstarEth
+    },
+
+    setTotalTVL: (state, { payload: totalTvl }: PayloadAction<string>): void => {
+      state.totalTvl = totalTvl
     },
 
     setPendingUnstake: (state, { payload: pendingUnstake }: PayloadAction<string>): void => {
@@ -92,6 +96,7 @@ export const {
   setApr,
   setDailyTvls,
   setTotalSstarEth,
+  setTotalTVL,
   setPendingUnstake,
   resetState
 } = store.actions
@@ -108,5 +113,5 @@ export const selectApr = (state: RootState): StakingState['apr'] => state.stakin
 export const selectStakerRateDiff = (state: RootState): StakingState['stakerRateDiff'] => state.staking.stakerRateDiff
 export const selectPendingUnstake = (state: RootState): StakingState['pendingUnstake'] => state.staking.pendingUnstake
 export const selectDailyTvls = (state: RootState): StakingState['dailyTvls'] => state.staking.dailyTvls
-export const selectTotalSstarEth = (state: RootState): TokenAmount =>
-  TokenAmount.fromEncoded(state.staking.totalSstarEth)
+export const selectTotalSstarEth = (state: RootState): StakingState['totalSstarEth'] => state.staking.totalSstarEth
+export const selectTotalTVL = (state: RootState): StakingState['totalTvl'] => state.staking.totalTvl

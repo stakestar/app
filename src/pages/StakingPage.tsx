@@ -1,5 +1,4 @@
 import { InfoCard, Tab } from '@onestaree/ui-kit'
-import BigNumberJs from 'bignumber.js'
 import classNames from 'classnames'
 import { useMemo, useState } from 'react'
 
@@ -10,9 +9,9 @@ import {
   UnstakeTab,
   convertSstarEthToEth,
   useConvertEthToUsd,
-  useConvertSstarEthToUsd,
   useFetchStakingData,
-  useSstarEthToEthRate
+  useSstarEthToEthRate,
+  useTotalTvl
 } from '~/features/staking'
 import { selectStakerRateDiff } from '~/features/staking/store'
 import { useAccount, useAccountBalance } from '~/features/wallet'
@@ -24,26 +23,14 @@ export function StakingPage(): JSX.Element {
   const { address } = useAccount()
   const balance = useAccountBalance('sstarETH')
   const convertEthToUsd = useConvertEthToUsd()
-  const convertSstarEthToUsd = useConvertSstarEthToUsd()
   const sstarEthToEthRate = useSstarEthToEthRate()
   const stakerRateDiff = useSelector(selectStakerRateDiff)
-  const { activeValidatorsCount, totalSstarEth, apr } = useFetchStakingData()
-  const totalTvlInUsd = convertSstarEthToUsd(totalSstarEth.toWei()).toFormat(2)
-
-  const totalTvlInEth = useMemo(
-    () =>
-      sstarEthToEthRate
-        ? new BigNumberJs(totalSstarEth.toString())
-            .multipliedBy(TokenAmount.fromWei('ETH', sstarEthToEthRate).toString())
-            .toFormat(2)
-        : 0,
-    [sstarEthToEthRate, totalSstarEth]
-  )
-
+  const { activeValidatorsCount, apr } = useFetchStakingData()
+  const totalTvl = useTotalTvl()
+  const totalTvlInUsd = convertEthToUsd(totalTvl).toFormat(2)
+  const totalTvlTokenAmount = useMemo(() => TokenAmount.fromWei('ETH', totalTvl), [totalTvl])
   const reward = useMemo(() => convertSstarEthToEth(balance.toWei(), stakerRateDiff), [balance, stakerRateDiff])
-
   const staked = useMemo(() => convertSstarEthToEth(balance.toWei(), sstarEthToEthRate), [balance, sstarEthToEthRate])
-
   const stakedUsd = useMemo(() => convertEthToUsd(staked.toString()), [staked, convertEthToUsd])
 
   return (
@@ -54,7 +41,7 @@ export function StakingPage(): JSX.Element {
           <InfoCard
             className={styles.InfoCard}
             title="Total TVL"
-            info={`${totalTvlInEth} ETH / $${totalTvlInUsd}`}
+            info={`${totalTvlTokenAmount.toDecimal(2)} ETH / $${totalTvlInUsd}`}
             variant="large"
           />
           <InfoCard

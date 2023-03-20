@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js'
 import { useEffect, useState } from 'react'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
@@ -9,7 +8,7 @@ import styles from './TVL.module.scss'
 
 interface TvlProps {
   dailyTvls: DailyTvls
-  totalTvl: BigNumber
+  totalTvl: string
 }
 
 type TvlItem = {
@@ -41,7 +40,7 @@ export function TVL({ dailyTvls, totalTvl }: TvlProps): JSX.Element {
         dailyTvlsForChart = dailyTvls
       }
 
-      dailyTvlsForChart = [...dailyTvlsForChart, { id: dayNumber.toString(), totalETH: BigInt(totalTvl.toString()) }]
+      dailyTvlsForChart = [...dailyTvlsForChart, { id: dayNumber.toString(), totalETH: parseFloat(totalTvl) }]
     }
 
     for (const tvl of dailyTvlsForChart) {

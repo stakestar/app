@@ -2972,10 +2972,10 @@
   dependencies:
     ethers "^5.7.2"
 
-"@stakestar/subgraph-client@1.0.4-beta.2":
-  version "1.0.4-beta.2"
-  resolved "https://npm.pkg.github.com/download/@stakestar/subgraph-client/1.0.4-beta.2/84af5e633e051b513206214e50ded0a028e9b9ab#84af5e633e051b513206214e50ded0a028e9b9ab"
-  integrity sha512-VImK7KUQh3FRsSOGMrBOeplZQ6sLkbXnIGACLbsipYHmvlQX2phjTDrZ0e5kkNdmZGn/gBlQLEJ0MqhDm1uBOg==
+"@stakestar/subgraph-client@1.0.8":
+  version "1.0.8"
+  resolved "https://npm.pkg.github.com/download/@stakestar/subgraph-client/1.0.8/9c6f70b8cd40b8fa91ad103b65a73ced51c42ea9#9c6f70b8cd40b8fa91ad103b65a73ced51c42ea9"
+  integrity sha512-zCz7Rbnje7oHet3/bHQX05vUBM79e6SZwpcVI1UJiJHXIKYR5R0+sYWrGl25u98GUwZ881iLrX8otlF1JpyZ0A==
   dependencies:
     "@graphql-mesh/cache-localforage" "^0.6.40"
     "@graphql-mesh/cross-helpers" "^0.2.6"

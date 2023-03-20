@@ -84,7 +84,7 @@ export function DashboardPage(): JSX.Element {
         Total Eth Staked
       </Typography>
       <div className={styles.Tvl}>
-        <TVL dailyTvls={dailyTvls} totalTvl={totalTvlTokenAmount.toString()} />
+        <TVL dailyTvls={dailyTvls} totalTvl={totalTvlTokenAmount} />
       </div>
       <Typography className={styles.Title} variant="h2">
         Node operators

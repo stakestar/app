@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
-import { DailyTvls, formatThegraphIdToDate } from '~/features/core'
+import { DailyTvls, TokenAmount, formatThegraphIdToDate } from '~/features/core'
 import { toDecimal } from '~/features/core/utils/math'
 
 import styles from './TVL.module.scss'
 
 interface TvlProps {
   dailyTvls: DailyTvls
-  totalTvl: string
+  totalTvl: TokenAmount
 }
 
 type TvlItem = {
@@ -24,10 +24,8 @@ const prepareDatumForChart = (tvlDatum: { id: string; totalETH: bigint }): TvlIt
 }
 
 export function TVL({ dailyTvls, totalTvl }: TvlProps): JSX.Element {
-  const [tvls, setTvls] = useState<TvlItem[]>([])
-
-  useEffect(() => {
-    let result: TvlItem[] = []
+  const tvls = useMemo(() => {
+    const result: TvlItem[] = []
     let lastId = 0
 
     const dayNumber = Math.floor(Date.now() / 86400000)
@@ -40,7 +38,7 @@ export function TVL({ dailyTvls, totalTvl }: TvlProps): JSX.Element {
         dailyTvlsForChart = dailyTvls
       }
 
-      dailyTvlsForChart = [...dailyTvlsForChart, { id: dayNumber.toString(), totalETH: parseFloat(totalTvl) }]
+      dailyTvlsForChart = [...dailyTvlsForChart, { id: dayNumber.toString(), totalETH: totalTvl.toWei() }]
     }
 
     for (const tvl of dailyTvlsForChart) {
@@ -63,9 +61,7 @@ export function TVL({ dailyTvls, totalTvl }: TvlProps): JSX.Element {
       lastId = id
     }
 
-    result = result.slice(0, 10)
-
-    setTvls(result)
+    return result.slice(0, 10)
   }, [dailyTvls, totalTvl])
 
   return (

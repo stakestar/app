@@ -1,7 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { DailyTvls, RootState } from '~/features/core'
-import { TokenAmount, TokenAmountEncoded } from '~/features/core/entities/TokenAmount' // Because of circular dependency
 
 export type StakingState = {
   activeValidatorsCount: number

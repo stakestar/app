@@ -175,7 +175,8 @@ export function UnstakeTab(): JSX.Element {
         processed approximately in XX days and YY hours. You will have to Claim your unstaked ETH later.
         <br />
         <br />
-        <b>Instant Unstake</b> allows amounts smaller than 0.X ETH to be unstaked instantly.
+        <b>Instant Unstake</b> allows amounts smaller than{' '}
+        {parseFloat(TokenAmount.fromWei('ETH', localPool.withdrawalLimit).toDecimal(2))} ETH to be unstaked instantly.
       </Typography>
       <ul className={styles.Buttons}>
         <li className={styles.Button}>

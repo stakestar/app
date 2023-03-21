@@ -7,7 +7,7 @@ import { TokenAmount, handleError, useContracts } from '~/features/core'
 import { useAccount } from '~/features/wallet'
 
 import { useConvertEthToUsd, useSstarEthToEthRate } from '../hooks'
-import { convertEthToSstarEth } from '../utils'
+import { convertSstarEthToEth } from '../utils'
 import styles from './Footer.module.scss'
 import { getDepositAndStakeGasRequired } from './utils'
 
@@ -24,7 +24,7 @@ export function Footer({ transactionType, ethAmount }: FooterProps): JSX.Element
   const sstarEthToEthRate = useSstarEthToEthRate()
   const sstarEthAmount =
     ethAmount && sstarEthToEthRate
-      ? convertEthToSstarEth(new BigNumberJs(ethAmount).shiftedBy(18).toString(), sstarEthToEthRate)
+      ? convertSstarEthToEth(new BigNumberJs(ethAmount).shiftedBy(18).toString(), sstarEthToEthRate)
       : 0
 
   const items = useMemo<{ title: string; value: string }[]>(() => {
@@ -39,12 +39,13 @@ export function Footer({ transactionType, ethAmount }: FooterProps): JSX.Element
         title: 'Exchange rate',
         value:
           sstarEthToEthRate &&
-          (transactionType === 'stake'
-            ? `1.00 sstarETH = ${TokenAmount.fromWei('ETH', sstarEthToEthRate).toDecimal(6)} ETH`
-            : `1.00 ETH = ${TokenAmount.fromWei(
-                'ETH',
-                convertEthToSstarEth(new BigNumberJs(1).shiftedBy(18).toString(), sstarEthToEthRate).toString()
-              ).toDecimal(6)} sstarETH`)
+          // (transactionType === 'stake'
+          //   ? `1.00 sstarETH = ${TokenAmount.fromWei('ETH', sstarEthToEthRate).toDecimal(6)} ETH`
+          //   : `1.00 ETH = ${TokenAmount.fromWei(
+          //       'ETH',
+          //       convertEthToSstarEth(new BigNumberJs(1).shiftedBy(18).toString(), sstarEthToEthRate).toString()
+          //     ).toDecimal(6)} sstarETH`)
+          `1.00 sstarETH = ${TokenAmount.fromWei('ETH', sstarEthToEthRate).toDecimal(6)} ETH`
       },
       { title: 'Transaction cost', value: `$${transactionCost}` }
     ]

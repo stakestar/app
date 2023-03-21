@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { Page, TokenAmount, getOperatorsIds } from '~/features/core'
 import { handleError, ssvClient } from '~/features/core'
-import { TVL, useConvertEthToUsd, useFetchStakingData, useTotalTvl } from '~/features/staking'
+import { TVL, useConvertEthToUsd, useFetchStakingData } from '~/features/staking'
 
 import styles from './DashboardPage.module.scss'
 
@@ -34,8 +34,7 @@ const tableProps: TableProps<Operator> = {
 export function DashboardPage(): JSX.Element {
   const convertEthToUsd = useConvertEthToUsd()
   const operatorsIds = getOperatorsIds()
-  const { activeValidatorsCount, apr, dailyTvls } = useFetchStakingData()
-  const totalTvl = useTotalTvl()
+  const { activeValidatorsCount, apr, dailyTvls, totalTvl } = useFetchStakingData()
   const totalTvlInUsd = convertEthToUsd(totalTvl).toFormat(2)
   const totalTvlTokenAmount = useMemo(() => TokenAmount.fromWei('ETH', totalTvl), [totalTvl])
   const [rows, setRows] = useState<Operator[]>([])

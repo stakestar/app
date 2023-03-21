@@ -2,18 +2,15 @@ import { InfoCard, Tab } from '@onestaree/ui-kit'
 import classNames from 'classnames'
 import { useMemo, useState } from 'react'
 
-import { Page, TokenAmount, useSelector } from '~/features/core'
+import { Page, TokenAmount } from '~/features/core'
 import {
   ClaimTab,
   StakeTab,
   UnstakeTab,
   convertSstarEthToEth,
   useConvertEthToUsd,
-  useFetchStakingData,
-  useSstarEthToEthRate,
-  useTotalTvl
+  useFetchStakingData
 } from '~/features/staking'
-import { selectStakerRateDiff } from '~/features/staking/store'
 import { useAccount, useAccountBalance } from '~/features/wallet'
 
 import styles from './StakingPage.module.scss'
@@ -23,10 +20,7 @@ export function StakingPage(): JSX.Element {
   const { address } = useAccount()
   const balance = useAccountBalance('sstarETH')
   const convertEthToUsd = useConvertEthToUsd()
-  const sstarEthToEthRate = useSstarEthToEthRate()
-  const stakerRateDiff = useSelector(selectStakerRateDiff)
-  const { activeValidatorsCount, apr } = useFetchStakingData()
-  const totalTvl = useTotalTvl()
+  const { activeValidatorsCount, apr, sstarEthToEthRate, stakerRateDiff, totalTvl } = useFetchStakingData()
   const totalTvlInUsd = convertEthToUsd(totalTvl).toFormat(2)
   const totalTvlTokenAmount = useMemo(() => TokenAmount.fromWei('ETH', totalTvl), [totalTvl])
   const reward = useMemo(() => convertSstarEthToEth(balance.toWei(), stakerRateDiff), [balance, stakerRateDiff])

@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
-import { DailyTvls, TokenAmount, formatThegraphIdToDate } from '~/features/core'
+import { DailyTvls, TokenAmount, formatThegraphIdToDate, tvlChartResultsCount } from '~/features/core'
 import { toDecimal } from '~/features/core/utils/math'
 
 import styles from './TVL.module.scss'
@@ -61,7 +61,7 @@ export function TVL({ dailyTvls, totalTvl }: TvlProps): JSX.Element {
       lastId = id
     }
 
-    return result.slice(0, 10)
+    return result.slice(0, tvlChartResultsCount)
   }, [dailyTvls, totalTvl])
 
   return (

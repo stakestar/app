@@ -1,17 +1,22 @@
 import { Button, Container, Input, Link, Typography, toast } from '@onestaree/ui-kit'
 import classNames from 'classnames'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
-import { TokenAmount, Tooltip, getExplorerUrl, handleError, useContracts, useDispatch } from '~/features/core'
-import { convertSstarEthToEth } from '~/features/staking'
+import { TokenAmount, Tooltip, getExplorerUrl, handleError, useBlockNumber, useContracts } from '~/features/core'
+import { convertSstarEthToEth, useLocalPool } from '~/features/staking'
 import { useAccount, useAccountBalance, useFetchAccountBalances } from '~/features/wallet'
 
 import { usePendingUnstake, useSstarEthToEthRate } from '../hooks'
-import { setPendingUnstake } from '../store'
 import { minStakeEthValue } from './constants'
 import { Footer } from './Footer'
 import styles from './UnstakeTab.module.scss'
 import { getIsStakeEthValueLessMin, getIsStakeEthValueMoreBalance, getSetValueByMultiplier } from './utils'
+
+enum Loading {
+  Resolved,
+  Unstake,
+  InstantUnstake
+}
 
 enum CommonError {
   valueEmpty = 'sstarETH value is empty',
@@ -20,13 +25,11 @@ enum CommonError {
   pendingUnstake = 'You already have a pending unstake/unclaimed amount'
 }
 
-enum Loading {
-  Resolved,
-  Unstake,
-  InstantUnstake
+enum InstantUnstakeError {
+  Timeout = 'You have recently used it. Please wait and try again later',
+  Limit = 'sstarETH value is higher than the local pool limit',
+  Size = 'sstarETH value is higher than the current amount of local pool liquidity'
 }
-
-enum InstantUnstakeError {}
 
 type Errors = {
   common: CommonError[]
@@ -36,19 +39,21 @@ type Errors = {
 export function UnstakeTab(): JSX.Element {
   const [value, setValue] = useState('')
   const [loading, setLoading] = useState(Loading.Resolved)
-  const dispatch = useDispatch()
+  const blockNumber = useBlockNumber()
+  const { stakeStarContract } = useContracts()
   const { address } = useAccount()
   const balance = useAccountBalance('sstarETH')
-  const { stakeStarContract } = useContracts()
   const fetchAccountBalances = useFetchAccountBalances()
   const pendingUnstake = usePendingUnstake()
-  const setValueByMultiplier = getSetValueByMultiplier(setValue, balance)
+  const localPool = useLocalPool()
   const sstarEthToEthRate = useSstarEthToEthRate()
+  const setValueByMultiplier = getSetValueByMultiplier(setValue, balance)
 
   const errors: Errors = useMemo(() => {
     const commonErrors: CommonError[] = []
     const isStakeEthValueLessMin = getIsStakeEthValueLessMin(value)
     const isStakeEthValueMoreBalance = getIsStakeEthValueMoreBalance(value, balance)
+    const valueBigNumber = TokenAmount.fromDecimal('ETH', value).toBigNumber()
 
     if (!value) {
       commonErrors.push(CommonError.valueEmpty)
@@ -68,11 +73,31 @@ export function UnstakeTab(): JSX.Element {
 
     const instantUnstakeErrors: InstantUnstakeError[] = []
 
+    if (value) {
+      const isValueGtPoolLimit = valueBigNumber.gt(localPool.withdrawalLimit)
+      const isValueGtPoolSize = valueBigNumber.gt(localPool.size)
+
+      const isInstantUnstakeAvailable =
+        blockNumber &&
+        blockNumber - parseInt(localPool.withdrawalHistory) > parseInt(localPool.withdrawalFrequencyLimit) &&
+        blockNumber > parseInt(localPool.withdrawalHistory) + parseInt(localPool.withdrawalFrequencyLimit)
+
+      if (isInstantUnstakeAvailable) {
+        if (isValueGtPoolLimit) {
+          instantUnstakeErrors.push(InstantUnstakeError.Limit)
+        } else if (isValueGtPoolSize) {
+          instantUnstakeErrors.push(InstantUnstakeError.Size)
+        }
+      } else {
+        instantUnstakeErrors.push(InstantUnstakeError.Timeout)
+      }
+    }
+
     return {
       common: commonErrors,
       instantUnstake: instantUnstakeErrors
     }
-  }, [balance, pendingUnstake, value])
+  }, [balance, blockNumber, localPool, pendingUnstake, value])
 
   const isUnstakeDisabled = !!errors.common.length
   const isInstantUnstakeDisabled = !!errors.common.length || !!errors.instantUnstake.length
@@ -126,37 +151,6 @@ export function UnstakeTab(): JSX.Element {
 
     setLoading(Loading.Resolved)
   }
-
-  useEffect(() => {
-    if (address) {
-      Promise.all([
-        stakeStarContract.localPoolSize(),
-        stakeStarContract.localPoolWithdrawalLimit(),
-        stakeStarContract.localPoolWithdrawalFrequencyLimit(),
-        stakeStarContract.localPoolWithdrawalHistory(address),
-        stakeStarContract.pendingWithdrawal(address)
-      ])
-        .then(
-          ([
-            localPoolSize,
-            localPoolWithdrawalLimit,
-            localPoolWithdrawalFrequencyLimit,
-            localPoolWithdrawalHistory,
-            pendingWithdrawal
-          ]) => {
-            dispatch(setPendingUnstake(pendingWithdrawal.toString()))
-
-            const localPoolAvailableSize = localPoolWithdrawalLimit.lt(localPoolSize)
-              ? localPoolWithdrawalLimit
-              : localPoolSize
-            // eslint-disable-next-line no-console
-            console.log(localPoolWithdrawalFrequencyLimit, localPoolWithdrawalHistory, localPoolAvailableSize)
-            // console.log(localPoolWithdrawalFrequencyLimit.toString(), localPoolWithdrawalHistory.toString())
-          }
-        )
-        .catch(handleError)
-    }
-  }, [address, dispatch, pendingUnstake, stakeStarContract])
 
   return (
     <Container size="large">

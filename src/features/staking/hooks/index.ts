@@ -1,6 +1,7 @@
 export * from './useConvertEthToUsd'
 export * from './useConvertSstarEthToUsd'
 export * from './useFetchStakingData'
+export * from './useLocalPool'
 export * from './usePendingUnstake'
 export * from './useSstarEthToEthRate'
 export * from './useTotalTvl'

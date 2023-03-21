@@ -1,6 +1,6 @@
 import { gql, request } from 'graphql-request'
 
-const url = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3'
+import { uniswapThegraphUrl } from '~/features/core'
 
 const query = gql`
   {
@@ -15,5 +15,5 @@ type QueryResult = {
 }
 
 export function loadEthPriceUsd(): Promise<string> {
-  return request<QueryResult>(url, query).then(({ bundles }) => bundles[0].ethPriceUSD)
+  return request<QueryResult>(uniswapThegraphUrl, query).then(({ bundles }) => bundles[0].ethPriceUSD)
 }

@@ -13,6 +13,12 @@ export type StakingState = {
   dailyTvls: DailyTvls
   totalSstarEth: string
   totalTvl: string
+  localPool: {
+    size: string
+    withdrawalLimit: string
+    withdrawalFrequencyLimit: string
+    withdrawalHistory: string
+  }
 }
 
 const initialState: StakingState = {
@@ -24,8 +30,14 @@ const initialState: StakingState = {
   pendingUnstake: '',
   apr: 0,
   dailyTvls: [],
-  totalSstarEth: '0',
-  totalTvl: '0'
+  totalSstarEth: '',
+  totalTvl: '',
+  localPool: {
+    size: '',
+    withdrawalLimit: '',
+    withdrawalFrequencyLimit: '',
+    withdrawalHistory: ''
+  }
 }
 
 export const store = createSlice({
@@ -78,6 +90,12 @@ export const store = createSlice({
       state.totalTvl = totalTvl
     },
 
+    setLocalPool: (state, { payload: localPool }: PayloadAction<Partial<StakingState['localPool']>>): void => {
+      Object.entries(localPool).forEach(
+        ([key, value]) => (state.localPool[key as keyof StakingState['localPool']] = value)
+      )
+    },
+
     setPendingUnstake: (state, { payload: pendingUnstake }: PayloadAction<string>): void => {
       state.pendingUnstake = pendingUnstake
     },
@@ -96,6 +114,7 @@ export const {
   setDailyTvls,
   setTotalSstarEth,
   setTotalTVL,
+  setLocalPool,
   setPendingUnstake,
   resetState
 } = store.actions
@@ -114,3 +133,4 @@ export const selectPendingUnstake = (state: RootState): StakingState['pendingUns
 export const selectDailyTvls = (state: RootState): StakingState['dailyTvls'] => state.staking.dailyTvls
 export const selectTotalSstarEth = (state: RootState): StakingState['totalSstarEth'] => state.staking.totalSstarEth
 export const selectTotalTVL = (state: RootState): StakingState['totalTvl'] => state.staking.totalTvl
+export const selectLocalPool = (state: RootState): StakingState['localPool'] => state.staking.localPool

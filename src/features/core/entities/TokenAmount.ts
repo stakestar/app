@@ -52,7 +52,11 @@ export class TokenAmount {
    */
   public static fromDecimal(tokenOrTokenId: Token | TokenId, value: number | string): TokenAmount {
     const tokenId = typeof tokenOrTokenId === 'string' ? tokenOrTokenId : tokenOrTokenId.id
-    const wei = utils.parseUnits(value.toString().substring(0, getTokenById(tokenId).decimals)).toString()
+    const wei = utils
+      .parseUnits(
+        typeof value === 'string' ? value || '0' : value.toString().substring(0, getTokenById(tokenId).decimals)
+      )
+      .toString()
 
     return new TokenAmount(_constructorGuard, tokenId, wei)
   }

@@ -116,7 +116,7 @@ export function useFetchStakingData(): {
     ])
       .then(
         ([
-          blockNumber,
+          newBlockNumber,
           ethPriceUsd,
           stakeStarTvl,
           sstarEthTotalSupply,
@@ -130,7 +130,7 @@ export function useFetchStakingData(): {
         ]) => {
           const newSstarEthToEthRate = rate.toString()
 
-          dispatch(setBlockNumber(blockNumber))
+          dispatch(setBlockNumber(newBlockNumber))
           dispatch(setApr(calculateApr(tokenRateDailies)))
           dispatch(setEthPriceUSD(ethPriceUsd))
           dispatch(

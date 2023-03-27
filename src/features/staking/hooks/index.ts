@@ -1,4 +1,5 @@
 export * from './useConvertEthToUsd'
+export * from './useConvertSstarEthToEth'
 export * from './useConvertSstarEthToUsd'
 export * from './useFetchStakingData'
 export * from './useLocalPool'

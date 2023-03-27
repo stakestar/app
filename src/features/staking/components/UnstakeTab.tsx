@@ -3,10 +3,9 @@ import classNames from 'classnames'
 import { useMemo, useState } from 'react'
 
 import { TokenAmount, Tooltip, getExplorerUrl, handleError, useBlockNumber, useContracts } from '~/features/core'
-import { convertSstarEthToEth, useLocalPool } from '~/features/staking'
 import { useAccount, useAccountBalance, useFetchAccountBalances } from '~/features/wallet'
 
-import { usePendingUnstake, useSstarEthToEthRate } from '../hooks'
+import { useConvertSstarEthToEth, useLocalPool, usePendingUnstake } from '../hooks'
 import { minStakeEthValue } from './constants'
 import { Footer } from './Footer'
 import styles from './UnstakeTab.module.scss'
@@ -46,7 +45,7 @@ export function UnstakeTab(): JSX.Element {
   const fetchAccountBalances = useFetchAccountBalances()
   const pendingUnstake = usePendingUnstake()
   const localPool = useLocalPool()
-  const sstarEthToEthRate = useSstarEthToEthRate()
+  const convertSstarEthToEth = useConvertSstarEthToEth()
   const setValueByMultiplier = getSetValueByMultiplier(setValue, balance)
 
   const errors: Errors = useMemo(() => {
@@ -120,22 +119,18 @@ export function UnstakeTab(): JSX.Element {
     setLoading(isInstantUnstake ? Loading.InstantUnstake : Loading.Unstake)
 
     try {
-      const balanceWei = balance.toWei()
+      const weiToUnstake = TokenAmount.fromDecimal('ETH', value).toWei()
 
       const { transactionHash } = await (isInstantUnstake
         ? stakeStarContract.unstakeAndLocalPoolWithdraw
-        : stakeStarContract.unstakeAndWithdraw)(balanceWei).then((transaction) => transaction.wait())
+        : stakeStarContract.unstakeAndWithdraw)(weiToUnstake).then((transaction) => transaction.wait())
 
       await fetchAccountBalances()
       setValue('')
 
-      const balanceInEth = parseFloat(
-        TokenAmount.fromWei('ETH', convertSstarEthToEth(balanceWei, sstarEthToEthRate).toString()).toDecimal()
-      )
-
       toast.show(
         <>
-          {balanceInEth} ETH was successfully withdrawn and unstaked.
+          {convertSstarEthToEth(weiToUnstake).toDecimal(4)} ETH was successfully withdrawn and unstaked.
           <Link className={styles.Link} icon="external" href={`${getExplorerUrl('tx', transactionHash)}`}>
             See on Etherscan
           </Link>
@@ -158,7 +153,7 @@ export function UnstakeTab(): JSX.Element {
         Withdraw and Unstake
       </Typography>
       <Input
-        label={`Balance: ${parseFloat(balance.toDecimal(4))}`}
+        label={`Balance: ${balance.toDecimal(4)}`}
         icon1="tokenEth"
         iconLabel="sstarETH"
         placeholder="0.00"
@@ -166,9 +161,9 @@ export function UnstakeTab(): JSX.Element {
         onChange={setValue}
         useMaxButton
         onClickMaxButton={setValueByMultiplier}
-        disabled={loading !== Loading.Resolved}
+        disabled={loading !== Loading.Resolved || address.length === 0}
         error={errors.common.some((error) => [CommonError.valueLtMin, CommonError.valueGtMax].includes(error))}
-        errorMessage={`Min value is ${minStakeEthValue} and your max is ${balance.toString()}`}
+        errorMessage={`Min value is ${minStakeEthValue} and your max is ${balance.toDecimal(4)}`}
       />
       <Typography className={styles.Info} variant="text2">
         In most cases <b>Unstake</b> requires Ethereum validator to exit an active set. The current exit queue will be

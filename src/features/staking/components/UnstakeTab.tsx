@@ -57,7 +57,6 @@ export function UnstakeTab(): JSX.Element {
     const commonErrors: CommonError[] = []
     const isStakeEthValueLessMin = getIsStakeEthValueLessMin(value)
     const isStakeEthValueMoreBalance = getIsStakeEthValueMoreBalance(value, balance)
-    const valueBigNumber = TokenAmount.fromDecimal('ETH', value).toBigNumber()
     const ethAmountBigNumber = ethAmount.toBigNumber()
 
     if (!value) {
@@ -102,7 +101,7 @@ export function UnstakeTab(): JSX.Element {
       common: commonErrors,
       instantUnstake: instantUnstakeErrors
     }
-  }, [balance, blockNumber, localPool, pendingUnstake, value])
+  }, [ethAmount, balance, blockNumber, localPool, pendingUnstake, value])
 
   const isUnstakeDisabled = !!errors.common.length
   const isInstantUnstakeDisabled = !!errors.common.length || !!errors.instantUnstake.length

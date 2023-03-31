@@ -1,6 +1,6 @@
 import { ValidatorStatus } from '@stakestar/contracts'
 import BigNumberJs from 'bignumber.js'
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
 import {
   DailyTvls,
@@ -52,6 +52,7 @@ export function useFetchStakingData(): {
   sstarEthPriceUSD: string
   apr: number
   dailyTvls: DailyTvls
+  fetchData: () => void
 } {
   const dispatch = useDispatch()
   const blockNumber = useBlockNumber()
@@ -96,7 +97,7 @@ export function useFetchStakingData(): {
       .catch(handleError)
   }, [address, dispatch, sstarEthToEthRate, stakeStarContract])
 
-  useEffect(() => {
+  const fetchData = useCallback(() => {
     if (!sstarEthContract || !provider) {
       return
     }
@@ -164,6 +165,10 @@ export function useFetchStakingData(): {
       .catch(handleError)
   }, [dispatch, provider, sstarEthContract, stakeStarContract, stakeStarEthContract, stakeStarRegistryContract])
 
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
+
   return {
     activeValidatorsCount,
     blockNumber,
@@ -174,6 +179,7 @@ export function useFetchStakingData(): {
     ethPriceUSD,
     sstarEthPriceUSD,
     apr,
-    dailyTvls
+    dailyTvls,
+    fetchData
   }
 }

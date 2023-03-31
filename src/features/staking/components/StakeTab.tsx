@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { TokenAmount, getExplorerUrl, handleError, useContracts } from '~/features/core'
 import { useAccount, useAccountBalance, useFetchAccountBalances } from '~/features/wallet'
 
+import { useFetchStakingData } from '../hooks'
 import { minStakeEthValue } from './constants'
 import { Footer } from './Footer'
 import styles from './StakeTab.module.scss'
@@ -24,6 +25,7 @@ export function StakeTab(): JSX.Element {
   const isStakeEthValueMoreBalance = getIsStakeEthValueMoreBalance(value, balance)
   const { stakeStarContract } = useContracts()
   const fetchAccountBalances = useFetchAccountBalances()
+  const { fetchData } = useFetchStakingData()
 
   const onClickStake = async (): Promise<void> => {
     setIsLoading(true)
@@ -43,6 +45,7 @@ export function StakeTab(): JSX.Element {
           })
           .then((transaction) => transaction.wait())
 
+        fetchData()
         await fetchAccountBalances()
         setValue('')
 

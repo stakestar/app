@@ -11,15 +11,15 @@ interface HandleErrorProps {
 export function handleError(error: unknown, props: HandleErrorProps = {}): void {
   const { errorLevel = 'exception', message, displayGenericMessage } = props
 
-  if (message) {
+  if (displayGenericMessage) {
+    toast.show('Something went wrong...', 'error', { autoclose: false })
+  } else if (message) {
     const data = {
       message: message.includes('user rejected transaction') ? 'User rejected transaction' : message,
       options: { autoclose: false }
     }
 
     toast.show(data.message, 'error', data.options)
-  } else if (displayGenericMessage) {
-    toast.show('Something went wrong...', 'error', { autoclose: false })
   }
 
   if (errorLevel === 'exception') {

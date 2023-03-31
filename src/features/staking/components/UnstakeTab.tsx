@@ -1,4 +1,5 @@
 import { Button, Container, Input, Link, Typography, toast } from '@onestaree/ui-kit'
+import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import { useMemo, useState } from 'react'
 
@@ -48,11 +49,16 @@ export function UnstakeTab(): JSX.Element {
   const convertSstarEthToEth = useConvertSstarEthToEth()
   const setValueByMultiplier = getSetValueByMultiplier(setValue, balance)
 
+  const ethAmount = useMemo(() => {
+    return convertSstarEthToEth(new BigNumber(value || 0).shiftedBy(18).toString())
+  }, [value, convertSstarEthToEth])
+
   const errors: Errors = useMemo(() => {
     const commonErrors: CommonError[] = []
     const isStakeEthValueLessMin = getIsStakeEthValueLessMin(value)
     const isStakeEthValueMoreBalance = getIsStakeEthValueMoreBalance(value, balance)
     const valueBigNumber = TokenAmount.fromDecimal('ETH', value).toBigNumber()
+    const ethAmountBigNumber = ethAmount.toBigNumber()
 
     if (!value) {
       commonErrors.push(CommonError.valueEmpty)
@@ -73,8 +79,8 @@ export function UnstakeTab(): JSX.Element {
     const instantUnstakeErrors: InstantUnstakeError[] = []
 
     if (value) {
-      const isValueGtPoolLimit = valueBigNumber.gt(localPool.withdrawalLimit)
-      const isValueGtPoolSize = valueBigNumber.gt(localPool.size)
+      const isValueGtPoolLimit = ethAmountBigNumber.gt(localPool.withdrawalLimit)
+      const isValueGtPoolSize = ethAmountBigNumber.gt(localPool.size)
 
       const isInstantUnstakeAvailable =
         blockNumber &&

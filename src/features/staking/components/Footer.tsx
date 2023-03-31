@@ -7,7 +7,7 @@ import { TokenAmount, handleError, useContracts } from '~/features/core'
 import { useAccount } from '~/features/wallet'
 
 import { useConvertEthToUsd, useSstarEthToEthRate } from '../hooks'
-import { convertSstarEthToEth } from '../utils'
+import { convertEthToSstarEth, convertSstarEthToEth } from '../utils'
 import styles from './Footer.module.scss'
 import { getDepositAndStakeGasRequired } from './utils'
 
@@ -22,16 +22,18 @@ export function Footer({ transactionType, ethAmount }: FooterProps): JSX.Element
   const [transactionCost, setTransactionCost] = useState('0.00')
   const convertEthToUsd = useConvertEthToUsd()
   const sstarEthToEthRate = useSstarEthToEthRate()
-  const sstarEthAmount =
+  const reciveAmount =
     ethAmount && sstarEthToEthRate
-      ? convertSstarEthToEth(new BigNumberJs(ethAmount).shiftedBy(18).toString(), sstarEthToEthRate)
+      ? transactionType === 'stake'
+        ? convertEthToSstarEth(new BigNumberJs(ethAmount).shiftedBy(18).toString(), sstarEthToEthRate)
+        : convertSstarEthToEth(new BigNumberJs(ethAmount).shiftedBy(18).toString(), sstarEthToEthRate)
       : 0
 
   const items = useMemo<{ title: string; value: string }[]>(() => {
     return [
       {
         title: 'You will receive',
-        value: `${TokenAmount.fromWei('sstarETH', sstarEthAmount.toString()).toDecimal(4)} ${
+        value: `${TokenAmount.fromWei('sstarETH', reciveAmount.toString()).toDecimal(4)} ${
           transactionType === 'stake' ? 'sstarETH' : 'ETH'
         }`
       },
@@ -49,7 +51,7 @@ export function Footer({ transactionType, ethAmount }: FooterProps): JSX.Element
       },
       { title: 'Transaction cost', value: `$${transactionCost}` }
     ]
-  }, [sstarEthAmount, sstarEthToEthRate, transactionCost, transactionType])
+  }, [reciveAmount, sstarEthToEthRate, transactionCost, transactionType])
 
   useEffect(() => {
     if (address) {

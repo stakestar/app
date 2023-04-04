@@ -2,16 +2,17 @@ import { Button, Container, Link, Typography, toast } from '@onestaree/ui-kit'
 import { useState } from 'react'
 
 import { getExplorerUrl, handleError, useContracts } from '~/features/core'
-import { usePendingUnstake } from '~/features/staking'
+import { useFetchStakingData, usePendingUnstake } from '~/features/staking'
 import { useFetchAccountBalances } from '~/features/wallet'
 
 import styles from './StakeTab.module.scss'
 
 export function ClaimTab(): JSX.Element {
+  const [isLoading, setIsLoading] = useState(false)
   const { stakeStarContract } = useContracts()
   const pendingUnstake = usePendingUnstake()
   const fetchAccountBalances = useFetchAccountBalances()
-  const [isLoading, setIsLoading] = useState(false)
+  const { fetchData } = useFetchStakingData()
   const hasPendingUstake = pendingUnstake.toBigNumber().gt(0)
 
   const onClickClaim = async (): Promise<void> => {
@@ -20,6 +21,7 @@ export function ClaimTab(): JSX.Element {
     try {
       const { transactionHash } = await stakeStarContract.claim().then((transaction) => transaction.wait())
 
+      fetchData()
       await fetchAccountBalances()
 
       toast.show(

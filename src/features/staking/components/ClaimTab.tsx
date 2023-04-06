@@ -12,7 +12,7 @@ export function ClaimTab(): JSX.Element {
   const { stakeStarContract } = useContracts()
   const pendingUnstake = usePendingUnstake()
   const fetchAccountBalances = useFetchAccountBalances()
-  const { fetchData } = useFetchStakingData()
+  const { fetchStakingData } = useFetchStakingData()
   const hasPendingUstake = pendingUnstake.toBigNumber().gt(0)
 
   const onClickClaim = async (): Promise<void> => {
@@ -21,7 +21,7 @@ export function ClaimTab(): JSX.Element {
     try {
       const { transactionHash } = await stakeStarContract.claim().then((transaction) => transaction.wait())
 
-      fetchData()
+      await fetchStakingData()
       await fetchAccountBalances()
 
       toast.show(

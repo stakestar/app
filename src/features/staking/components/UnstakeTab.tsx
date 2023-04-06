@@ -6,7 +6,7 @@ import { useMemo, useState } from 'react'
 import { TokenAmount, Tooltip, getExplorerUrl, handleError, useBlockNumber, useContracts } from '~/features/core'
 import { useAccount, useAccountBalance, useFetchAccountBalances } from '~/features/wallet'
 
-import { useConvertSstarEthToEth, useLocalPool, usePendingUnstake } from '../hooks'
+import { useConvertSstarEthToEth, useFetchStakingData, useLocalPool, usePendingUnstake } from '../hooks'
 import { minStakeEthValue } from './constants'
 import { Footer } from './Footer'
 import styles from './UnstakeTab.module.scss'
@@ -44,6 +44,7 @@ export function UnstakeTab(): JSX.Element {
   const { address } = useAccount()
   const balance = useAccountBalance('sstarETH')
   const fetchAccountBalances = useFetchAccountBalances()
+  const { fetchStakingData } = useFetchStakingData()
   const pendingUnstake = usePendingUnstake()
   const localPool = useLocalPool()
   const convertSstarEthToEth = useConvertSstarEthToEth()
@@ -130,6 +131,7 @@ export function UnstakeTab(): JSX.Element {
         ? stakeStarContract.unstakeAndLocalPoolWithdraw
         : stakeStarContract.unstakeAndWithdraw)(weiToUnstake).then((transaction) => transaction.wait())
 
+      await fetchStakingData()
       await fetchAccountBalances()
       setValue('')
 

@@ -25,7 +25,7 @@ export function StakeTab(): JSX.Element {
   const isStakeEthValueMoreBalance = getIsStakeEthValueMoreBalance(value, balance)
   const { stakeStarContract } = useContracts()
   const fetchAccountBalances = useFetchAccountBalances()
-  const { fetchData } = useFetchStakingData()
+  const { fetchStakingData } = useFetchStakingData()
 
   const onClickStake = async (): Promise<void> => {
     setIsLoading(true)
@@ -45,7 +45,7 @@ export function StakeTab(): JSX.Element {
           })
           .then((transaction) => transaction.wait())
 
-        fetchData()
+        await fetchStakingData()
         await fetchAccountBalances()
         setValue('')
 

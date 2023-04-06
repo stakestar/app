@@ -52,7 +52,7 @@ export function useFetchStakingData(): {
   sstarEthPriceUSD: string
   apr: number
   dailyTvls: DailyTvls
-  fetchData: () => void
+  fetchStakingData: () => Promise<void>
 } {
   const dispatch = useDispatch()
   const blockNumber = useBlockNumber()
@@ -97,12 +97,12 @@ export function useFetchStakingData(): {
       .catch(handleError)
   }, [address, dispatch, sstarEthToEthRate, stakeStarContract])
 
-  const fetchData = useCallback(() => {
+  const fetchStakingData = useCallback(() => {
     if (!sstarEthContract || !provider) {
-      return
+      return Promise.reject()
     }
 
-    Promise.all([
+    return Promise.all([
       provider.getBlockNumber(),
       loadEthPriceUsd(),
       stakeStarEthContract.totalSupply(),
@@ -166,8 +166,8 @@ export function useFetchStakingData(): {
   }, [dispatch, provider, sstarEthContract, stakeStarContract, stakeStarEthContract, stakeStarRegistryContract])
 
   useEffect(() => {
-    fetchData()
-  }, [fetchData])
+    fetchStakingData()
+  }, [fetchStakingData])
 
   return {
     activeValidatorsCount,
@@ -180,6 +180,6 @@ export function useFetchStakingData(): {
     sstarEthPriceUSD,
     apr,
     dailyTvls,
-    fetchData
+    fetchStakingData
   }
 }

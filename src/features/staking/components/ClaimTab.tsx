@@ -43,17 +43,6 @@ export function ClaimTab(): JSX.Element {
     setIsLoading(false)
   }
 
-  // useEffect(() => {
-  //   if (address) {
-  //     Promise.all([stakeStarContract.pendingWithdrawalSum()])
-  //       .then(([pendingWithdrawalSum]) => {
-  //         // console.log('??', pendingWithdrawalSum)
-  //         // console.log('>>>', TokenAmount.fromWei('ETH', pendingWithdrawalSum.toString()).toDecimal())
-  //       })
-  //       .catch(handleError)
-  //   }
-  // }, [address, stakeStarContract])
-
   return (
     <Container size="large">
       <Typography className="_mb-4" variant="h2">

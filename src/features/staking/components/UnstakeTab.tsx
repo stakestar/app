@@ -31,11 +31,6 @@ enum InstantUnstakeError {
   Size = 'sstarETH value is higher than the current amount of local pool liquidity'
 }
 
-type Errors = {
-  common: CommonError[]
-  instantUnstake: InstantUnstakeError[]
-}
-
 export function UnstakeTab(): JSX.Element {
   const [value, setValue] = useState('')
   const [loading, setLoading] = useState(Loading.Resolved)
@@ -54,7 +49,10 @@ export function UnstakeTab(): JSX.Element {
     return convertSstarEthToEth(new BigNumber(value || 0).shiftedBy(18).toString())
   }, [value, convertSstarEthToEth])
 
-  const errors: Errors = useMemo(() => {
+  const errors: {
+    common: CommonError[]
+    instantUnstake: InstantUnstakeError[]
+  } = useMemo(() => {
     const commonErrors: CommonError[] = []
     const isStakeEthValueLessMin = getIsStakeEthValueLessMin(value)
     const isStakeEthValueMoreBalance = getIsStakeEthValueMoreBalance(value, balance)
@@ -89,7 +87,11 @@ export function UnstakeTab(): JSX.Element {
 
       if (isInstantUnstakeAvailable) {
         if (isValueGtPoolLimit) {
-          instantUnstakeErrors.push(InstantUnstakeError.Limit)
+          instantUnstakeErrors.push(
+            `${InstantUnstakeError.Limit} (${TokenAmount.fromWei('ETH', localPool.withdrawalLimit).toDecimal(
+              2
+            )} ETH)` as InstantUnstakeError.Limit
+          )
         } else if (isValueGtPoolSize) {
           instantUnstakeErrors.push(InstantUnstakeError.Size)
         }
@@ -160,7 +162,9 @@ export function UnstakeTab(): JSX.Element {
         Withdraw and Unstake
       </Typography>
       <Input
-        label={`Balance: ${balance.toDecimal(4)}`}
+        label={`Balance: ${balance.toDecimal(4)}
+          ${pendingUnstake.toBigNumber().gt(0) ? ` sstarETH (Pending Unstake: ${pendingUnstake.toDecimal(4)} ETH)` : ''}
+        `}
         icon1="tokenEth"
         iconLabel="sstarETH"
         placeholder="0.00"

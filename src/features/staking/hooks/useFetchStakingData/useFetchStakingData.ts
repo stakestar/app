@@ -21,6 +21,7 @@ import {
   selectApr,
   selectDailyTvls,
   selectEthPriceUSD,
+  selectPendingUnstakeQueueIndex,
   selectSstarEthPriceUSD,
   selectSstarEthToEthRate,
   selectStakerRateDiff,
@@ -32,6 +33,7 @@ import {
   setEthPriceUSD,
   setLocalPool,
   setPendingUnstake,
+  setPendingUnstakeQueueIndex,
   setSstarEthPriceUSD,
   setSstarEthToEthRate,
   setStakerRateDiff,
@@ -46,6 +48,7 @@ export function useFetchStakingData(): {
   blockNumber: number
   totalSstarEth: string
   totalTvl: string
+  pendingUnstakeQueueIndex: number
   sstarEthToEthRate: string
   stakerRateDiff: string
   ethPriceUSD: string
@@ -62,6 +65,7 @@ export function useFetchStakingData(): {
   const sdk = useRef(getGraphQLClientSdk(thegraphUrl))
   const activeValidatorsCount = useSelector(selectActiveValidatorsCount)
   const totalSstarEth = useSelector(selectTotalSstarEth)
+  const pendingUnstakeQueueIndex = useSelector(selectPendingUnstakeQueueIndex)
   const totalTvl = useSelector(selectTotalTVL)
   const sstarEthToEthRate = useSelector(selectSstarEthToEthRate)
   const stakerRateDiff = useSelector(selectStakerRateDiff)
@@ -82,9 +86,10 @@ export function useFetchStakingData(): {
     Promise.all([
       sdk.current.getStakerAtMomentRate({ stakerId }).then(({ data }) => data.stakerAtMomentRate),
       stakeStarContract.localPoolWithdrawalHistory(stakerId),
-      stakeStarContract.pendingWithdrawal(stakerId)
+      stakeStarContract.pendingWithdrawal(stakerId),
+      stakeStarContract.queueIndex(stakerId)
     ])
-      .then(([stakerAtMomentRate, localPoolWithdrawalHistory, pendingWithdrawal]) => {
+      .then(([stakerAtMomentRate, localPoolWithdrawalHistory, pendingWithdrawal, queueIndex]) => {
         if (stakerAtMomentRate?.atMomentRate) {
           dispatch(
             setStakerRateDiff(new BigNumberJs(sstarEthToEthRate).minus(stakerAtMomentRate.atMomentRate).toString())
@@ -92,6 +97,7 @@ export function useFetchStakingData(): {
         }
 
         dispatch(setPendingUnstake(pendingWithdrawal.toString()))
+        dispatch(setPendingUnstakeQueueIndex(queueIndex))
         dispatch(setLocalPool({ withdrawalHistory: localPoolWithdrawalHistory.toString() }))
       })
       .catch(handleError)
@@ -174,6 +180,7 @@ export function useFetchStakingData(): {
     blockNumber,
     totalSstarEth,
     totalTvl,
+    pendingUnstakeQueueIndex,
     sstarEthToEthRate,
     stakerRateDiff,
     ethPriceUSD,

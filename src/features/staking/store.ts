@@ -9,6 +9,7 @@ export type StakingState = {
   sstarEthToEthRate: string
   stakerRateDiff: string
   pendingUnstake: string
+  pendingUnstakeQueueIndex: number
   apr: number
   dailyTvls: DailyTvls
   totalSstarEth: string
@@ -28,6 +29,7 @@ const initialState: StakingState = {
   sstarEthToEthRate: '',
   stakerRateDiff: '',
   pendingUnstake: '',
+  pendingUnstakeQueueIndex: 0,
   apr: 0,
   dailyTvls: [],
   totalSstarEth: '',
@@ -100,6 +102,10 @@ export const store = createSlice({
       state.pendingUnstake = pendingUnstake
     },
 
+    setPendingUnstakeQueueIndex: (state, { payload: pendingUnstakeQueueIndex }: PayloadAction<number>): void => {
+      state.pendingUnstakeQueueIndex = pendingUnstakeQueueIndex
+    },
+
     resetState: () => initialState
   }
 })
@@ -116,6 +122,7 @@ export const {
   setTotalTVL,
   setLocalPool,
   setPendingUnstake,
+  setPendingUnstakeQueueIndex,
   resetState
 } = store.actions
 
@@ -130,6 +137,8 @@ export const selectSstarEthToEthRate = (state: RootState): StakingState['sstarEt
 export const selectApr = (state: RootState): StakingState['apr'] => state.staking.apr
 export const selectStakerRateDiff = (state: RootState): StakingState['stakerRateDiff'] => state.staking.stakerRateDiff
 export const selectPendingUnstake = (state: RootState): StakingState['pendingUnstake'] => state.staking.pendingUnstake
+export const selectPendingUnstakeQueueIndex = (state: RootState): StakingState['pendingUnstakeQueueIndex'] =>
+  state.staking.pendingUnstakeQueueIndex
 export const selectDailyTvls = (state: RootState): StakingState['dailyTvls'] => state.staking.dailyTvls
 export const selectTotalSstarEth = (state: RootState): StakingState['totalSstarEth'] => state.staking.totalSstarEth
 export const selectTotalTVL = (state: RootState): StakingState['totalTvl'] => state.staking.totalTvl

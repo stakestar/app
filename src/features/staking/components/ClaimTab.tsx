@@ -12,7 +12,7 @@ export function ClaimTab(): JSX.Element {
   const { stakeStarContract } = useContracts()
   const pendingUnstake = usePendingUnstake()
   const fetchAccountBalances = useFetchAccountBalances()
-  const { fetchStakingData } = useFetchStakingData()
+  const { fetchStakingData, pendingUnstakeQueueIndex } = useFetchStakingData()
   const hasPendingUstake = pendingUnstake.toBigNumber().gt(0)
 
   const onClickClaim = async (): Promise<void> => {
@@ -49,16 +49,16 @@ export function ClaimTab(): JSX.Element {
         Claim ETH
       </Typography>
       {hasPendingUstake ? (
-        <Typography>You can claim {parseFloat(pendingUnstake.toDecimal())} ETH</Typography>
+        <Typography>
+          {pendingUnstakeQueueIndex
+            ? `You can claim ${parseFloat(pendingUnstake.toDecimal())} ETH`
+            : `We are waiting for Ethereum chain to release ${parseFloat(
+                pendingUnstake.toDecimal()
+              )} ETH. The current exit queue will be processed approximately in XX days and YY hours`}
+        </Typography>
       ) : (
         <Typography>You have no pending unstakes</Typography>
       )}
-      {/*
-      <Typography>
-        We are waiting for Ethereum chain to release XX.XX ETH. The current exit queue will be processed approximately
-        in XX days and YY hours
-      </Typography>
-      */}
       <Button
         className={styles.Button}
         title="Claim"

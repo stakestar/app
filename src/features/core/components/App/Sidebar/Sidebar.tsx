@@ -69,10 +69,11 @@ export function Sidebar(): JSX.Element {
           checked={themeName === 'dark'}
           onClick={(): void => setTheme(themeName === 'light' ? 'dark' : 'light')}
           onIcon="moon"
-          offIcon="sun"
           onIconSize={12}
+          onColor="#34455A"
+          offIcon="sun"
           offIconSize={14}
-          offColor={theme.divider}
+          offColor="#E6EAF7"
         />
       </div>
     </div>

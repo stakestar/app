@@ -47,7 +47,7 @@
       transition: all 0.15s ease;
 
       &:hover {
-        border-color: #d8481e;
+        border-color: #0792e8;
       }
 
       &:last-child {
@@ -61,10 +61,10 @@
 
       &:global(._active) {
         color: white;
-        background-color: #f14d1d;
+        background-color: #1ba5f8;
 
         &:hover {
-          background-color: #d8481e;
+          background-color: #0792e8;
         }
       }
 
@@ -89,6 +89,7 @@
     margin: auto 1rem 1rem;
 
     .Links {
+      width: 100%;
       margin-bottom: 1rem;
       border-bottom: 1px solid var(--dividerColor);
       transition: border-bottom-color 0.2s ease;
@@ -126,7 +127,7 @@
           }
 
           &:hover {
-            background-color: #d8481e;
+            background-color: #0792e8;
           }
         }
       }

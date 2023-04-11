@@ -29,14 +29,14 @@
 
     :global(._Tab) {
       &:hover {
-        --tabColor1: #f14d1d !important;
-        --tabColor2: #f14d1d !important;
+        --tabColor1: #1ba5f8 !important;
+        --tabColor2: #1ba5f8 !important;
       }
     }
 
     :global(._Tab._active) {
-      --tabColor1: #f14d1d !important;
-      --tabColor2: #f14d1d !important;
+      --tabColor1: #1ba5f8 !important;
+      --tabColor2: #1ba5f8 !important;
     }
   }
 
@@ -90,8 +90,8 @@
   .StakingPage {
     .Tabs {
       :global(._Tab) {
-        --tabColor1: #101010;
-        --tabColor2: #101010;
+        --tabColor1: #011627;
+        --tabColor2: #011627;
       }
     }
   }

@@ -73,7 +73,7 @@ export function TVL({ dailyTvls, totalTvl }: TvlProps): JSX.Element {
             <XAxis dataKey="title" />
             <YAxis orientation="right" />
             <Tooltip formatter={(value): [string, string] => [value as string, 'TVL']} />
-            <Area type="linear" dataKey="value" stroke="#f14d1d" strokeWidth={3} fill="transparent" />
+            <Area type="linear" dataKey="value" stroke="#1BA5F8" strokeWidth={3} fill="transparent" />
           </AreaChart>
         </ResponsiveContainer>
       </div>

@@ -91,30 +91,49 @@ strong {
 }
 
 body {
-  --primaryAccentColor: #f14d1d !important;
+  --primaryAccentColor: #1ba5f8 !important;
 
   ._Link:hover {
-    --linkColor1: #d8481e;
-    --linkColor2: #d8481e;
+    --linkColor1: #0792e8;
+    --linkColor2: #0792e8;
   }
 
   ._withHover:hover > div,
   ._withHover._hover > div {
-    --withHoverColor1: #d8481e !important;
-    --withHoverColor2: #d8481e !important;
+    --withHoverColor1: #0792e8 !important;
+    --withHoverColor2: #0792e8 !important;
   }
 
   ._Tab._active {
-    --tabColor1: #f14d1d;
-    --tabColor2: #f14d1d;
+    --tabColor1: #1ba5f8;
+    --tabColor2: #1ba5f8;
 
     &:after {
-      --tabBorderColor1: #f14d1d;
-      --tabBorderColor2: #f14d1d;
+      --tabBorderColor1: #1ba5f8;
+      --tabBorderColor2: #1ba5f8;
     }
   }
 
+  ._Button {
+    transition: all 0.3s ease;
+  }
+
+  ._Table tbody tr:hover:after {
+    --rowColor1: #1ba5f8;
+    --rowColor2: #1ba5f8;
+  }
+
   [class*='Input_module_Input'] {
+    &[class*='Input_module_error'] {
+      [class*='Input_module_InputWrapper'] {
+        border-color: #ec1c26;
+      }
+
+      [class*='Input_module_IconWithLabel'] {
+        border-color: #ec1c26;
+      }
+    }
+
     [class*='Input_module_Label'] {
       font-family: 'Kanit', sans-serif;
       font-weight: 300;
@@ -124,23 +143,31 @@ body {
       margin-top: 4px;
       border-radius: 0.75rem;
 
+      [class*='Input_module_IconWithLabel'] {
+        background-color: transparent !important;
+      }
+
       [class*='Button_module_Button'] {
         border-radius: 0.5rem !important;
       }
     }
+
+    [class*='Input_module_ErrorMessage'] {
+      color: #ec1c26;
+    }
   }
 
   [class*='Button_module_Button'] {
-    background: #f14d1d;
+    background: #1ba5f8;
 
     &:hover {
-      background-color: #d8481e;
-      --buttonColor1: #d8481e;
-      --buttonColor2: #d8481e;
+      background-color: #0792e8;
+      --buttonColor1: #0792e8;
+      --buttonColor2: #0792e8;
     }
 
     &:disabled {
-      background-color: rgba(#f14d1d, 0.3);
+      background-color: rgba(#1ba5f8, 0.3);
     }
 
     [class*='Button_module_large'] {
@@ -172,8 +199,16 @@ body {
     }
   }
 
+  [class*='Spinner'] {
+    border-top: 0 solid rgba(#63768b, 0.2) !important;
+    border-right: 0 solid rgba(#63768b, 0.2) !important;
+    border-bottom: 0 solid rgba(#63768b, 0.2) !important;
+  }
+
   &._theme {
     &._light {
+      --dividerColor: #e6eaf7 !important;
+
       [class*='Switch_module_Switch'] {
         [class*='Icon_module_IconContainer'] {
           [class*='Icon_module_Icon'] {
@@ -184,6 +219,17 @@ body {
     }
 
     &._dark {
+      --dividerColor: #34455a !important;
+      --textInvertedColor: #062031 !important;
+      --surfaceLightColor: #0b2a3c !important;
+      --inputBorderColor: #34455a !important;
+      --primaryBackgroundColor: #062031 !important;
+      --inputTextColor: #97a5ba !important;
+
+      //.Button_module_Button__be182139.Button_module_outline__be182139 {
+      //  background: linear-gradient(var(--primaryBackgroundColor), var(--primaryBackgroundColor)) padding-box, linear-gradient(93.28deg, var(--buttonBorderColor) -3%, var(--buttonBorderColor) 99.13%) border-box;
+      //}
+
       [class*='Switch_module_Switch'] {
         [class*='Icon_module_IconContainer'] {
           [class*='Icon_module_Icon'] {

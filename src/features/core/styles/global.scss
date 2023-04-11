@@ -143,12 +143,14 @@ body {
       margin-top: 4px;
       border-radius: 0.75rem;
 
-      [class*='Input_module_IconWithLabel'] {
-        background-color: transparent !important;
-      }
-
       [class*='Button_module_Button'] {
         border-radius: 0.5rem !important;
+        background: transparent;
+        border-color: var(--inputBorderColor);
+
+        &:hover {
+          border-color: var(--inputTextFocusColor);
+        }
       }
     }
 
@@ -167,7 +169,9 @@ body {
     }
 
     &:disabled {
-      background-color: rgba(#1ba5f8, 0.3);
+      [class*='Button_module_Text'] {
+        opacity: initial;
+      }
     }
 
     [class*='Button_module_large'] {
@@ -208,6 +212,27 @@ body {
   &._theme {
     &._light {
       --dividerColor: #e6eaf7 !important;
+      --surfaceLightColor: #fdfefe !important;
+      --primaryBackgroundColor: #f4f7fa !important;
+      --inputBorderColor: #e6eaf7 !important;
+      --inputTextColor: #97a5ba !important;
+
+      [class*='Input_module_Input'] {
+        [class*='Input_module_InputWrapper'] {
+          background-color: #f9fbfc !important;
+
+          [class*='Input_module_IconWithLabel'] {
+            background-color: #f9fbfc !important;
+          }
+        }
+      }
+
+      [class*='Button_module_Button'] {
+        &:disabled {
+          color: #97a5ba;
+          background-color: #e6eaf7;
+        }
+      }
 
       [class*='Switch_module_Switch'] {
         [class*='Icon_module_IconContainer'] {
@@ -223,12 +248,25 @@ body {
       --textInvertedColor: #062031 !important;
       --surfaceLightColor: #0b2a3c !important;
       --inputBorderColor: #34455a !important;
-      --primaryBackgroundColor: #062031 !important;
+      --primaryBackgroundColor: #011627 !important;
       --inputTextColor: #97a5ba !important;
 
-      //.Button_module_Button__be182139.Button_module_outline__be182139 {
-      //  background: linear-gradient(var(--primaryBackgroundColor), var(--primaryBackgroundColor)) padding-box, linear-gradient(93.28deg, var(--buttonBorderColor) -3%, var(--buttonBorderColor) 99.13%) border-box;
-      //}
+      [class*='Input_module_Input'] {
+        [class*='Input_module_InputWrapper'] {
+          background-color: var(--textInvertedColor) !important;
+
+          [class*='Input_module_IconWithLabel'] {
+            background-color: var(--textInvertedColor) !important;
+          }
+        }
+      }
+
+      [class*='Button_module_Button'] {
+        &:disabled {
+          color: #97a5ba;
+          background-color: #63768b;
+        }
+      }
 
       [class*='Switch_module_Switch'] {
         [class*='Icon_module_IconContainer'] {

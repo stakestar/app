@@ -155,11 +155,16 @@ body {
 
       [class*='Button_module_Button'] {
         border-radius: 0.5rem !important;
-        background: transparent;
         border-color: var(--inputBorderColor);
+        background: transparent;
 
         &:hover {
           border-color: var(--inputTextFocusColor);
+        }
+
+        &:disabled {
+          border-color: var(--inputBorderColor);
+          background: transparent;
         }
       }
     }

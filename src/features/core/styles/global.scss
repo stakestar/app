@@ -123,6 +123,16 @@ body {
     --rowColor2: #1ba5f8;
   }
 
+  .Toastify {
+    [class*='Icon_module_IconContainer'] {
+      --fillColor: var(--textColor) !important;
+
+      &:hover {
+        --fillColor: var(--primaryAccentColor) !important;
+      }
+    }
+  }
+
   [class*='Input_module_Input'] {
     &[class*='Input_module_error'] {
       [class*='Input_module_InputWrapper'] {

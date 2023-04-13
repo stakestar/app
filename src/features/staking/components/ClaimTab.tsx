@@ -61,7 +61,7 @@ export function ClaimTab(): JSX.Element {
         className={styles.Button}
         title="Claim"
         onClick={onClickClaim}
-        disabled={isLoading || !hasPendingUstake}
+        disabled={isLoading || !hasPendingUstake || !pendingUnstakeQueueIndex}
         loading={isLoading}
       />
     </Container>

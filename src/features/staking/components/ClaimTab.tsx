@@ -51,8 +51,8 @@ export function ClaimTab(): JSX.Element {
       {hasPendingUstake ? (
         <Typography>
           {pendingUnstakeQueueIndex
-            ? `You can claim ${parseFloat(pendingUnstake.toDecimal())} ETH`
-            : `We are waiting for Ethereum chain to release ${parseFloat(pendingUnstake.toDecimal())} ETH.`}
+            ? `You can claim ${parseFloat(pendingUnstake.toDecimal(4))} ETH`
+            : `We are waiting for Ethereum chain to release ${parseFloat(pendingUnstake.toDecimal(4))} ETH.`}
         </Typography>
       ) : (
         <Typography>You have no pending unstakes</Typography>

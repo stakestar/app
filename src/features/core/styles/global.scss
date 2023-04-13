@@ -83,8 +83,23 @@ strong {
 @include generate(_pb, padding-bottom);
 @include generate(_pl, padding-left);
 
-// Toast
-:global(.Toastify__toast) {
+.Toastify__toast {
+  &.Toastify__toast--info {
+    .Toastify__toast-body {
+      [class*='Icon_module_Icon'] {
+        background-image: url('../../../../public/toast-icon-info.svg') !important;
+      }
+    }
+  }
+
+  &.Toastify__toast--error {
+    .Toastify__toast-body {
+      [class*='Icon_module_Icon'] {
+        background-image: url('../../../../public/toast-icon-error.svg') !important;
+      }
+    }
+  }
+
   a {
     color: var(--primaryAccentColor);
   }

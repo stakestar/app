@@ -14,7 +14,7 @@ export function handleError(error: Error | unknown, props: HandleErrorProps = {}
   if (message?.includes('user rejected transaction')) {
     toast.show('User rejected transaction', 'info', { autocloseTimeout: 3000 })
   } else if (displayGenericMessage) {
-    toast.show('Something went wrong...', 'error', { autoclose: false })
+    toast.show('Something went wrong...', 'error', { autocloseTimeout: 5000 })
   } else if (message) {
     toast.show(message, 'error', { autoclose: false })
   }

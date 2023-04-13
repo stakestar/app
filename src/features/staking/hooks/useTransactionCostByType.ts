@@ -1,7 +1,7 @@
 import BigNumberJs from 'bignumber.js'
 import { useEffect, useMemo, useState } from 'react'
 
-import { TokenAmount, handleError, useContracts } from '~/features/core'
+import { TokenAmount, useContracts } from '~/features/core'
 import { useAccount } from '~/features/wallet'
 
 import { useConvertEthToUsd } from './useConvertEthToUsd'
@@ -30,7 +30,7 @@ export function useTransactionCostByType(type: 'stake' | 'unstake'): string {
         break
     }
 
-    promise?.then((response) => setEstimatedGas(response.toString())).catch(handleError)
+    promise?.then((response) => setEstimatedGas(response.toString())).catch(console.info)
   }, [address, stakeStarContract, type])
 
   // TODO: Can be removed

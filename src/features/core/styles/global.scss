@@ -92,6 +92,8 @@ strong {
 
 body {
   --primaryAccentColor: #1ba5f8 !important;
+  --buttonGradient1Color: #0792e8 !important;
+  --buttonGradient2Color: #0792e8 !important;
 
   ._Link:hover {
     --linkColor1: #0792e8;
@@ -191,6 +193,15 @@ body {
 
     [class*='Button_module_large'] {
       border-radius: 0.75rem;
+    }
+
+    &[class*='Button_module_outline'] {
+      border-color: var(--primaryAccentColor);
+      background-color: transparent;
+
+      &:hover {
+        border-color: var(--buttonGradient1Color);
+      }
     }
   }
 

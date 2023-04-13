@@ -177,8 +177,8 @@ export function UnstakeTab(): JSX.Element {
         errorMessage={`Min value is ${minStakeEthValue} and your max is ${balance.toDecimal(4)}`}
       />
       <Typography className={styles.Info} variant="text2">
-        In most cases <b>Unstake</b> requires Ethereum validator to exit an active set. The current exit queue will be
-        processed approximately in XX days and YY hours. You will have to Claim your unstaked ETH later.
+        In most cases <b>Unstake</b> requires Ethereum validator to exit an active set. You will have to Claim your
+        unstaked ETH later.
         <br />
         <br />
         <b>Instant Unstake</b> allows amounts smaller than{' '}

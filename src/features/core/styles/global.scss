@@ -103,6 +103,11 @@ strong {
   a {
     color: var(--primaryAccentColor);
   }
+
+  .Toastify__progress-bar--info,
+  .Toastify__progress-bar--error {
+    background-color: var(--primaryAccentColor);
+  }
 }
 
 body {

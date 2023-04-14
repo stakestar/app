@@ -220,10 +220,11 @@ body {
 
     &[class*='Button_module_outline'] {
       border-color: var(--primaryAccentColor);
-      background-color: transparent;
+      background: none;
 
       &:hover {
         border-color: var(--buttonGradient1Color);
+        background: none;
       }
     }
   }

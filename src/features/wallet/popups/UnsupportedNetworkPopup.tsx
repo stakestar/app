@@ -1,4 +1,5 @@
 import { Button, Typography } from '@onestaree/ui-kit'
+import classNames from 'classnames'
 
 import { ChainId, handleError } from '~/features/core'
 import { useConnector } from '~/features/wallet'
@@ -20,8 +21,15 @@ export function UnsupportedNetworkPopup(): JSX.Element {
   return (
     <div className={styles.UnsupportedNetworkPopup}>
       <Typography>StakeStar pool is currently available on Goerli Testnet and Ethereum Mainnet</Typography>
-      <Button className={styles.Button} title="Switch to Ethereum Mainnet" onClick={onClick} size="small" />
-      <Button title="Switch to Goerli Testnet" onClick={(): void => onClick(false)} size="small" type="outline" />
+      <div className={styles.Buttons}>
+        <Button className={styles.Button} title="Switch to Ethereum Mainnet" onClick={onClick} />
+        <Button
+          className={classNames(styles.Button, styles.outlined)}
+          title="Switch to Goerli Testnet"
+          onClick={(): void => onClick(false)}
+          type="outline"
+        />
+      </div>
     </div>
   )
 }

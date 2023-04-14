@@ -10,13 +10,14 @@ interface HandleErrorProps {
 
 export function handleError(error: Error | unknown, props: HandleErrorProps = {}): void {
   const { errorLevel = 'exception', message, displayGenericMessage } = props
+  const options = { autocloseTimeout: 30000 }
 
   if (message?.includes('user rejected transaction')) {
-    toast.show('User rejected transaction', 'info', { autocloseTimeout: 10000 })
+    toast.show('User rejected transaction', 'info', options)
   } else if (displayGenericMessage) {
-    toast.show('Something went wrong...', 'error', { autocloseTimeout: 15000 })
+    toast.show('Something went wrong...', 'error', options)
   } else if (message) {
-    toast.show(message, 'error', { autoclose: false })
+    toast.show(message, 'error', options)
   }
 
   if (errorLevel === 'exception') {

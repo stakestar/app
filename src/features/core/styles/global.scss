@@ -100,13 +100,16 @@ strong {
     }
   }
 
-  a {
-    color: var(--primaryAccentColor);
+  .Toastify__progress-bar--info {
+    background-color: var(--primaryAccentColor);
   }
 
-  .Toastify__progress-bar--info,
   .Toastify__progress-bar--error {
-    background-color: var(--primaryAccentColor);
+    background-color: #ec1c26;
+  }
+
+  a {
+    color: var(--primaryAccentColor);
   }
 }
 

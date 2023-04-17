@@ -79,25 +79,27 @@ export function StakingPage(): JSX.Element {
                   info={`${TokenAmount.fromWei('ETH', staked.toString()).toDecimal(4)} ETH / $${stakedUsd.toFormat(2)}`}
                   variant="small"
                 />
-                <InfoCard
-                  className={styles.InfoCard}
-                  title={pendingUnstakeQueueIndex ? 'Ready to Claim' : 'Pending Unstake'}
-                  info={
-                    <div className={styles.PendingUnstake}>
-                      {`${pendingUnstake.toDecimal(4)} ETH`}
-                      {!!pendingUnstakeQueueIndex && (
-                        <Button
-                          className={styles.ClaimButton}
-                          onClick={onClickClaim}
-                          title="Claim"
-                          type="outline"
-                          size="small"
-                        />
-                      )}
-                    </div>
-                  }
-                  variant="small"
-                />
+                {(pendingUnstake.toBigNumber().gt(0) || !!pendingUnstakeQueueIndex) && (
+                  <InfoCard
+                    className={styles.InfoCard}
+                    title={pendingUnstakeQueueIndex ? 'Ready to Claim' : 'Pending Unstake'}
+                    info={
+                      <div className={styles.PendingUnstake}>
+                        {`${pendingUnstake.toDecimal(4)} ETH`}
+                        {!!pendingUnstakeQueueIndex && (
+                          <Button
+                            className={styles.ClaimButton}
+                            onClick={onClickClaim}
+                            title="Claim"
+                            type="outline"
+                            size="small"
+                          />
+                        )}
+                      </div>
+                    }
+                    variant="small"
+                  />
+                )}
                 <InfoCard
                   className={styles.InfoCard}
                   title="My Rewards"

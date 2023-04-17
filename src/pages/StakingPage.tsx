@@ -1,31 +1,39 @@
-import { InfoCard, Tab } from '@onestaree/ui-kit'
+import { Button, InfoCard, Tab } from '@onestaree/ui-kit'
 import classNames from 'classnames'
 import { useMemo, useState } from 'react'
 
-import { Page, TokenAmount } from '~/features/core'
+import { Page, TokenAmount, emitEvent } from '~/features/core'
 import {
   ClaimTab,
+  STAKING_EVENT_CLAIM,
   StakeTab,
   UnstakeTab,
   convertSstarEthToEth,
   useConvertEthToUsd,
-  useFetchStakingData
+  useFetchStakingData,
+  usePendingUnstake
 } from '~/features/staking'
-import { useAccount, useAccountBalance } from '~/features/wallet'
+import { AuthCheck, useAccountBalance } from '~/features/wallet'
 
 import styles from './StakingPage.module.scss'
 
 export function StakingPage(): JSX.Element {
   const [activeIndex, setActiveIndex] = useState(0)
-  const { address } = useAccount()
   const balance = useAccountBalance('sstarETH')
   const convertEthToUsd = useConvertEthToUsd()
-  const { activeValidatorsCount, apr, sstarEthToEthRate, stakerRateDiff, totalTvl } = useFetchStakingData()
+  const { activeValidatorsCount, apr, pendingUnstakeQueueIndex, sstarEthToEthRate, stakerRateDiff, totalTvl } =
+    useFetchStakingData()
   const totalTvlInUsd = convertEthToUsd(totalTvl).toFormat(2)
   const totalTvlTokenAmount = useMemo(() => TokenAmount.fromWei('ETH', totalTvl), [totalTvl])
   const reward = useMemo(() => convertSstarEthToEth(balance.toWei(), stakerRateDiff), [balance, stakerRateDiff])
   const staked = useMemo(() => convertSstarEthToEth(balance.toWei(), sstarEthToEthRate), [balance, sstarEthToEthRate])
   const stakedUsd = useMemo(() => convertEthToUsd(staked.toString()), [staked, convertEthToUsd])
+  const pendingUnstake = usePendingUnstake()
+
+  const onClickClaim = (): void => {
+    setActiveIndex(2)
+    emitEvent(STAKING_EVENT_CLAIM)
+  }
 
   return (
     <Page className={styles.StakingPage} title="Staking">
@@ -63,13 +71,32 @@ export function StakingPage(): JSX.Element {
             </div>
           </div>
           <div className={styles.StakingColumn}>
-            {address.length > 0 ? (
+            <AuthCheck>
               <div className={styles.Info}>
                 <InfoCard
                   className={styles.InfoCard}
                   title="My Stake"
                   info={`${TokenAmount.fromWei('ETH', staked.toString()).toDecimal(4)} ETH / $${stakedUsd.toFormat(2)}`}
-                  variant="large"
+                  variant="small"
+                />
+                <InfoCard
+                  className={styles.InfoCard}
+                  title={pendingUnstakeQueueIndex ? 'Ready to Claim' : 'Pending Unstake'}
+                  info={
+                    <div className={styles.PendingUnstake}>
+                      {`${pendingUnstake.toDecimal(4)} ETH`}
+                      {!!pendingUnstakeQueueIndex && (
+                        <Button
+                          className={styles.ClaimButton}
+                          onClick={onClickClaim}
+                          title="Claim"
+                          type="outline"
+                          size="small"
+                        />
+                      )}
+                    </div>
+                  }
+                  variant="small"
                 />
                 <InfoCard
                   className={styles.InfoCard}
@@ -77,10 +104,10 @@ export function StakingPage(): JSX.Element {
                   info={`${TokenAmount.fromWei('ETH', reward.toString()).toDecimal(4)} ETH / $${convertEthToUsd(
                     reward.toString()
                   ).toFixed(2)}`}
-                  variant="large"
+                  variant="small"
                 />
               </div>
-            ) : null}
+            </AuthCheck>
           </div>
         </div>
       </div>

@@ -83,7 +83,7 @@ export function StakeTab(): JSX.Element {
         Stake ETH
       </Typography>
       <Input
-        label={`Balance: ${parseFloat(balance.toDecimal(4))}`}
+        label={`Balance: ${parseFloat(balance.toDecimal(4))} ETH`}
         icon1="tokenEth"
         iconLabel="ETH"
         placeholder="0.0000"

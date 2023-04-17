@@ -162,9 +162,7 @@ export function UnstakeTab(): JSX.Element {
         Withdraw and Unstake
       </Typography>
       <Input
-        label={`Balance: ${balance.toDecimal(4)}
-          ${pendingUnstake.toBigNumber().gt(0) ? ` sstarETH (Pending Unstake: ${pendingUnstake.toDecimal(4)} ETH)` : ''}
-        `}
+        label={`Balance: ${balance.toDecimal(4)} sstarETH`}
         icon1="tokenEth"
         iconLabel="sstarETH"
         placeholder="0.00"
@@ -193,16 +191,17 @@ export function UnstakeTab(): JSX.Element {
           >
             <Button
               className={styles.Control}
-              title="Unstake"
+              title=""
               onClick={onClickUnstake}
               disabled={isUnstakeDisabled || !address || loading !== Loading.Resolved}
-              loading={loading === Loading.Unstake}
+              loading={loading !== Loading.Unstake}
             />
             <div
-              className={classNames(styles.DescribeDisableReasonButton, {
+              className={classNames(styles.ButtonContent, {
                 [styles.disabled]: !isUnstakeDisabled || !address || loading === Loading.Unstake
               })}
             >
+              Unstake
               <div className={styles.Icon}>?</div>
             </div>
           </Tooltip>
@@ -215,16 +214,17 @@ export function UnstakeTab(): JSX.Element {
           >
             <Button
               className={styles.Control}
-              title="Instant Unstake"
+              title=""
               onClick={(): Promise<void> => onClickUnstake(true)}
               disabled={isInstantUnstakeDisabled || !address || loading !== Loading.Resolved}
               loading={loading === Loading.InstantUnstake}
             />
             <div
-              className={classNames(styles.DescribeDisableReasonButton, {
+              className={classNames(styles.ButtonContent, {
                 [styles.disabled]: !isInstantUnstakeDisabled || !address || loading === Loading.InstantUnstake
               })}
             >
+              Instant Unstake
               <div className={styles.Icon}>?</div>
             </div>
           </Tooltip>

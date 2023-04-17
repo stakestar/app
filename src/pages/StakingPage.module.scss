@@ -9,6 +9,21 @@
     .InfoCard {
       box-sizing: border-box;
       width: calc(100% / 3 - 1rem);
+
+      .PendingUnstake {
+        display: flex;
+        justify-content: space-between;
+
+        .ClaimButton {
+          margin: -19px -8px 3px 0;
+          border-radius: 0.5rem !important;
+          border-color: var(--inputBorderColor);
+
+          &:hover {
+            border-color: var(--primaryAccentColor);
+          }
+        }
+      }
     }
   }
 

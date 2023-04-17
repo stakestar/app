@@ -1,10 +1,11 @@
 import { Button, Container, Link, Typography, toast } from '@onestaree/ui-kit'
 import { useState } from 'react'
 
-import { getExplorerUrl, handleError, useContracts } from '~/features/core'
-import { useFetchStakingData, usePendingUnstake } from '~/features/staking'
+import { getExplorerUrl, handleError, useContracts, useEventListener } from '~/features/core'
 import { useFetchAccountBalances } from '~/features/wallet'
 
+import { STAKING_EVENT_CLAIM } from '../constants'
+import { useFetchStakingData, usePendingUnstake } from '../hooks'
 import styles from './StakeTab.module.scss'
 
 export function ClaimTab(): JSX.Element {
@@ -14,8 +15,13 @@ export function ClaimTab(): JSX.Element {
   const fetchAccountBalances = useFetchAccountBalances()
   const { fetchStakingData, pendingUnstakeQueueIndex } = useFetchStakingData()
   const hasPendingUstake = pendingUnstake.toBigNumber().gt(0)
+  const isClaimDisabled = isLoading || !hasPendingUstake || !pendingUnstakeQueueIndex
 
   const onClickClaim = async (): Promise<void> => {
+    if (isClaimDisabled) {
+      return
+    }
+
     setIsLoading(true)
 
     try {
@@ -43,6 +49,8 @@ export function ClaimTab(): JSX.Element {
     setIsLoading(false)
   }
 
+  useEventListener(STAKING_EVENT_CLAIM, onClickClaim)
+
   return (
     <Container size="large">
       <Typography className="_mb-4" variant="h2">
@@ -61,7 +69,7 @@ export function ClaimTab(): JSX.Element {
         className={styles.Button}
         title="Claim"
         onClick={onClickClaim}
-        disabled={isLoading || !hasPendingUstake || !pendingUnstakeQueueIndex}
+        disabled={isClaimDisabled}
         loading={isLoading}
       />
     </Container>

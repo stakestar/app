@@ -158,6 +158,10 @@ body {
     }
   }
 
+  [class*='Typography_module'] {
+    font-family: 'Kanit', sans-serif !important;
+  }
+
   [class*='Input_module_Input'] {
     &[class*='Input_module_error'] {
       [class*='Input_module_InputWrapper'] {
@@ -250,6 +254,12 @@ body {
       [class*='Icon_module_Icon'] {
         width: 23px;
       }
+    }
+  }
+
+  [class*='InfoCard_module'] {
+    [class*='InfoCard_module_Title'] {
+      font-weight: 300;
     }
   }
 

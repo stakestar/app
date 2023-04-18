@@ -194,11 +194,12 @@ export function UnstakeTab(): JSX.Element {
               title=""
               onClick={onClickUnstake}
               disabled={isUnstakeDisabled || !address || loading !== Loading.Resolved}
-              loading={loading !== Loading.Unstake}
+              loading={loading === Loading.Unstake}
             />
             <div
               className={classNames(styles.ButtonContent, {
-                [styles.disabled]: !isUnstakeDisabled || !address || loading === Loading.Unstake
+                [styles.disabled]: isUnstakeDisabled || !address || loading === Loading.Unstake,
+                [styles.loading]: loading === Loading.Unstake
               })}
             >
               Unstake
@@ -221,7 +222,8 @@ export function UnstakeTab(): JSX.Element {
             />
             <div
               className={classNames(styles.ButtonContent, {
-                [styles.disabled]: !isInstantUnstakeDisabled || !address || loading === Loading.InstantUnstake
+                [styles.disabled]: isInstantUnstakeDisabled || !address || loading === Loading.InstantUnstake,
+                [styles.loading]: loading === Loading.InstantUnstake
               })}
             >
               Instant Unstake

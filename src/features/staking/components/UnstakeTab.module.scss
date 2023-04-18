@@ -46,17 +46,24 @@
       position: absolute;
       inset: 0;
       border-radius: 1rem;
-      color: #97a5ba;
-      cursor: not-allowed;
+      pointer-events: none;
 
       &.disabled {
+        color: #97a5ba;
+
+        .Icon {
+          display: flex;
+        }
+      }
+
+      &.loading {
         .Icon {
           display: none;
         }
       }
 
       .Icon {
-        display: flex;
+        display: none;
         align-items: center;
         justify-content: center;
         height: 1rem;

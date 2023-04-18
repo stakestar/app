@@ -56,10 +56,11 @@ export function StakeTab(): JSX.Element {
               See on Etherscan
             </Link>
           </>,
-          'success'
+          'success',
+          { autocloseTimeout: 30000 }
         )
       } else {
-        toast.show('Insufficient funds', 'error', { autoclose: true })
+        toast.show('Insufficient funds', 'error', { autocloseTimeout: 30000 })
       }
     } catch (error) {
       handleError(error, {

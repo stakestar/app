@@ -37,7 +37,8 @@ export function ClaimTab(): JSX.Element {
             See on Etherscan
           </Link>
         </>,
-        'success'
+        'success',
+        { autocloseTimeout: 30000 }
       )
     } catch (error) {
       handleError(error, {

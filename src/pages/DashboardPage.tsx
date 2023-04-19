@@ -88,7 +88,12 @@ export function DashboardPage(): JSX.Element {
       <Typography className={styles.Title} variant="h2">
         Node operators
       </Typography>
-      <Table className={styles.Table} columns={tableProps.columns} rows={rows} onRowClick={tableProps.onRowClick} />
+      <Table<Operator>
+        className={styles.Table}
+        columns={tableProps.columns}
+        rows={rows}
+        onRowClick={tableProps.onRowClick}
+      />
     </Page>
   )
 }

@@ -32,6 +32,7 @@
     position: relative;
     display: flex;
     flex: 1;
+    height: 56px;
 
     .Tooltip,
     .Control {
@@ -39,17 +40,15 @@
       flex: 1;
     }
 
-    .ButtonContent {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .Tooltip {
       position: absolute;
       inset: 0;
-      border-radius: 1rem;
-      pointer-events: none;
+    }
 
+    .Control {
       &.disabled {
         color: #97a5ba;
+        pointer-events: none;
 
         .Icon {
           display: flex;

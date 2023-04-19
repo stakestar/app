@@ -2656,10 +2656,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@onestaree/ui-kit@0.15.1":
-  version "0.15.1"
-  resolved "https://npm.pkg.github.com/download/@onestaree/ui-kit/0.15.1/1aca603fd8c8fb90e8e34fe6c39b490a61fea302#1aca603fd8c8fb90e8e34fe6c39b490a61fea302"
-  integrity sha512-PLZkOsvn7RA3TesA10Wh/RQiPQLbC/KfKjkU1dDL/tgdKnYuRcXjyOJtEYsZiFIX9bD9eKp8mkhRW4GrI35t3w==
+"@onestaree/ui-kit@0.17.0":
+  version "0.17.0"
+  resolved "https://npm.pkg.github.com/download/@onestaree/ui-kit/0.17.0/9f1f768385fd167039828a083c4dfe4bfc9e8c90#9f1f768385fd167039828a083c4dfe4bfc9e8c90"
+  integrity sha512-Oe4cFISENxU2Sr/opcmZg5UxNC+zz2fu/KJUmUB2aRh1MPZlMVVZwS8NEJjr7EvjqxNMeeovn8m3A/DFfcM94w==
   dependencies:
     react-modal "^3.15.1"
     react-switch "^7.0.0"

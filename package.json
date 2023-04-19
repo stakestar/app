@@ -18,7 +18,7 @@
   "dependencies": {
     "@coinbase/wallet-sdk": "^3.6.4",
     "@davatar/react": "^1.11.1",
-    "@onestaree/ui-kit": "0.15.1",
+    "@onestaree/ui-kit": "0.17.0",
     "@reduxjs/toolkit": "^1.9.3",
     "@rromanovsky/web3-react-metamask": "0.2.0",
     "@stakestar/contracts": "0.17.2",

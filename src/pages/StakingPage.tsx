@@ -1,8 +1,8 @@
 import { Button, InfoCard, Tab } from '@onestaree/ui-kit'
 import classNames from 'classnames'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
-import { Page, TokenAmount, emitEvent } from '~/features/core'
+import { Page, TokenAmount, capitalizeText, emitEvent, getLocationHash, setLocationHash } from '~/features/core'
 import {
   ClaimTab,
   STAKING_EVENT_CLAIM,
@@ -17,6 +17,8 @@ import { AuthCheck, useAccountBalance } from '~/features/wallet'
 
 import styles from './StakingPage.module.scss'
 
+const tabs = ['stake', 'unstake', 'claim']
+
 export function StakingPage(): JSX.Element {
   const [activeIndex, setActiveIndex] = useState(0)
   const balance = useAccountBalance('sstarETH')
@@ -30,10 +32,24 @@ export function StakingPage(): JSX.Element {
   const stakedUsd = useMemo(() => convertEthToUsd(staked.toString()), [staked, convertEthToUsd])
   const pendingUnstake = usePendingUnstake()
 
+  const onClickTab = (index: number): void => {
+    setActiveIndex(index)
+    setLocationHash(tabs[index])
+  }
+
   const onClickClaim = (): void => {
     setActiveIndex(2)
     emitEvent(STAKING_EVENT_CLAIM)
   }
+
+  useEffect(() => {
+    const hash = getLocationHash()
+    const index = tabs.indexOf(hash)
+
+    if (index) {
+      setActiveIndex(index)
+    }
+  }, [])
 
   return (
     <Page className={styles.StakingPage} title="Staking">
@@ -54,9 +70,15 @@ export function StakingPage(): JSX.Element {
           />
         </div>
         <div className={styles.Tabs}>
-          <Tab title="Stake" index={0} activeIndex={activeIndex} onClick={setActiveIndex} />
-          <Tab title="Unstake" index={1} activeIndex={activeIndex} onClick={setActiveIndex} />
-          <Tab title="Claim" index={2} activeIndex={activeIndex} onClick={setActiveIndex} />
+          {tabs.map((title, index) => (
+            <Tab
+              key={index}
+              title={capitalizeText(title)}
+              index={index}
+              activeIndex={activeIndex}
+              onClick={onClickTab}
+            />
+          ))}
         </div>
         <div className={styles.StakingContainer}>
           <div className={classNames(styles.TabsContent, styles.StakingColumn, { [styles.active]: activeIndex === 0 })}>

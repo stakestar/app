@@ -191,21 +191,18 @@ export function UnstakeTab(): JSX.Element {
             disabled={!isUnstakeDisabled || !address || loading !== Loading.Resolved}
           >
             <Button
-              className={styles.Control}
-              title=""
-              onClick={onClickUnstake}
-              disabled={isUnstakeDisabled || !address || loading !== Loading.Resolved}
-              loading={loading === Loading.Unstake}
-            />
-            <div
-              className={classNames(styles.ButtonContent, {
+              className={classNames(styles.Control, {
                 [styles.disabled]: isUnstakeDisabled || !address || loading === Loading.Unstake,
                 [styles.loading]: loading === Loading.Unstake
               })}
+              onClick={onClickUnstake}
+              disabled={isUnstakeDisabled || !address || loading !== Loading.Resolved}
+              loading={loading === Loading.Unstake}
+              isIconCentered
             >
               Unstake
               <div className={styles.Icon}>?</div>
-            </div>
+            </Button>
           </Tooltip>
         </li>
         <li className={styles.Button}>
@@ -215,21 +212,18 @@ export function UnstakeTab(): JSX.Element {
             disabled={!isInstantUnstakeDisabled || !address || loading !== Loading.Resolved}
           >
             <Button
-              className={styles.Control}
-              title=""
-              onClick={(): Promise<void> => onClickUnstake(true)}
-              disabled={isInstantUnstakeDisabled || !address || loading !== Loading.Resolved}
-              loading={loading === Loading.InstantUnstake}
-            />
-            <div
-              className={classNames(styles.ButtonContent, {
+              className={classNames(styles.Control, {
                 [styles.disabled]: isInstantUnstakeDisabled || !address || loading === Loading.InstantUnstake,
                 [styles.loading]: loading === Loading.InstantUnstake
               })}
+              onClick={(): Promise<void> => onClickUnstake(true)}
+              disabled={isInstantUnstakeDisabled || !address || loading !== Loading.Resolved}
+              loading={loading === Loading.InstantUnstake}
+              isIconCentered
             >
               Instant Unstake
               <div className={styles.Icon}>?</div>
-            </div>
+            </Button>
           </Tooltip>
         </li>
       </ul>

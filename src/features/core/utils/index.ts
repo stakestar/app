@@ -1,5 +1,6 @@
 export * from './capitalizeText'
 export * from './copyToClipboard'
+export * from './dayjs'
 export * from './emitEvent'
 export * from './formatDate'
 export * from './formatNumber'

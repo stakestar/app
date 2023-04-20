@@ -6,8 +6,41 @@
     flex: 1;
     width: 0;
   }
+
+  .Tooltip {
+    padding: 0.75rem;
+    border-radius: 4px;
+
+    .Date {
+      font-size: 0.75rem;
+      font-weight: 300;
+      line-height: 1rem;
+      color: var(--textInvertedColor);
+    }
+
+    .TVL {
+      line-height: 1.5rem;
+      color: var(--primaryAccentColor);
+    }
+  }
 }
 
-:global(.recharts-tooltip-label) {
-  color: black;
+:global(.recharts-tooltip-wrapper) {
+  outline: none;
+}
+
+:global(._theme._dark) {
+  .TVL {
+    .Tooltip {
+      background: #f9fbfc;
+    }
+  }
+}
+
+:global(._theme._light) {
+  .TVL {
+    .Tooltip {
+      background: #062031;
+    }
+  }
 }

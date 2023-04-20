@@ -1,8 +1,7 @@
 import { useMemo } from 'react'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
-import { DailyTvls, TokenAmount, formatThegraphIdToDate, tvlChartResultsCount } from '~/features/core'
-import { toDecimal } from '~/features/core/utils/math'
+import { DailyTvls, TokenAmount, dayjs, formatThegraphIdToDate, toDecimal, tvlChartResultsCount } from '~/features/core'
 
 import styles from './TVL.module.scss'
 
@@ -14,13 +13,6 @@ interface TvlProps {
 type TvlItem = {
   title: string
   value: number
-}
-
-const prepareDatumForChart = (tvlDatum: { id: string; totalETH: bigint }): TvlItem => {
-  return {
-    title: formatThegraphIdToDate(Number(tvlDatum.id)),
-    value: Number(toDecimal(tvlDatum.totalETH.toString(), 18).toFormat(2))
-  }
 }
 
 export function TVL({ dailyTvls, totalTvl }: TvlProps): JSX.Element {
@@ -72,11 +64,35 @@ export function TVL({ dailyTvls, totalTvl }: TvlProps): JSX.Element {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="title" />
             <YAxis orientation="right" />
-            <Tooltip formatter={(value): [string, string] => [value as string, 'TVL']} />
+            <Tooltip
+              content={({ active, payload, label }): JSX.Element =>
+                active && payload && payload.length ? (
+                  <div className={styles.Tooltip}>
+                    <div className={styles.Date}>{formatDate(label)}</div>
+                    <div className={styles.TVL}>TVL – {payload[0].value}</div>
+                  </div>
+                ) : (
+                  <></>
+                )
+              }
+            />
             <Area type="linear" dataKey="value" stroke="#1BA5F8" strokeWidth={3} fill="transparent" />
           </AreaChart>
         </ResponsiveContainer>
       </div>
     </div>
   )
+}
+
+function prepareDatumForChart(tvlDatum: { id: string; totalETH: bigint }): TvlItem {
+  return {
+    title: formatThegraphIdToDate(Number(tvlDatum.id)),
+    value: Number(toDecimal(tvlDatum.totalETH.toString(), 18).toFormat(2))
+  }
+}
+
+function formatDate(rawDate: string): string {
+  const [date, month] = rawDate.split('/')
+
+  return dayjs(`${month}/${date}/${new Date().getFullYear()}`).format('Do MMMM, YYYY')
 }

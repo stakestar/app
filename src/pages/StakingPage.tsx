@@ -46,9 +46,7 @@ export function StakingPage(): JSX.Element {
     const hash = getLocationHash()
     const index = tabs.indexOf(hash)
 
-    if (index) {
-      setActiveIndex(index)
-    }
+    setActiveIndex(index > 0 ? index : 0)
   }, [])
 
   return (

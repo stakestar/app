@@ -29,17 +29,21 @@ jobs:
           workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ env.SERVICE_ACCOUNT }}
           create_credentials_file: true
+      - id: secrets
+        uses: google-github-actions/get-secretmanager-secrets@v1
+        with:
+          secrets: |-
+            github-token:stakestar/github_token
       - run: |
           echo "SERVICE_ACCOUNT_KEY=$(cat "${{ steps.auth.outputs.credentials_file_path }}" | tr -d '\n')" >> $GITHUB_ENV
       - run: yarn
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GPR_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ steps.secrets.outputs.github-token }}
       - run: yarn build
         env:
           INFURA_KEY: ${{ secrets.INFURA_KEY }}
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ env.SERVICE_ACCOUNT_KEY }}'
-          channelId: live
+          firebaseServiceAccount: '${{ secrets.SERVICE_ACCOUNT_KEY }}'
           projectId: stakestar

@@ -26,7 +26,7 @@ export const getSetValueByMultiplier =
     }
   }
 
-export function getGasRequired({
+export function getDepositAndStakeGasRequired({
   address,
   stakeStarContract,
   value
@@ -36,15 +36,44 @@ export function getGasRequired({
   value: BigNumber
 }): Promise<string> {
   return stakeStarContract.estimateGas
-    .stake({
+    .depositAndStake({
       from: address,
-      // Subtract 1 wei to prevent error for "value = max" estimation
-      value: value.sub(1).toString()
+      value: value.toString()
     })
     .then((response) =>
       response
         .mul(10 ** 9) // Equivalent to "Low" in MetaMask
-        .mul(2) // Equivalent to "Aggressive" in MetaMask
+        .mul(2) // Make it equivalent to "Aggressive" in MetaMask
         .toString()
     )
+}
+
+export function getUnstakeAndWithdrawGasRequired({
+  stakeStarContract,
+  value
+}: {
+  stakeStarContract: StakeStar
+  value: BigNumber
+}): Promise<string> {
+  return stakeStarContract.estimateGas.unstakeAndWithdraw(value.toString()).then((response) =>
+    response
+      .mul(10 ** 9) // Equivalent to "Low" in MetaMask
+      .mul(2) // Make it equivalent to "Aggressive" in MetaMask
+      .toString()
+  )
+}
+
+export function getUnstakeAndLocalPoolWithdrawGasRequired({
+  stakeStarContract,
+  value
+}: {
+  stakeStarContract: StakeStar
+  value: BigNumber
+}): Promise<string> {
+  return stakeStarContract.estimateGas.unstakeAndLocalPoolWithdraw(value.toString()).then((response) =>
+    response
+      .mul(10 ** 9) // Equivalent to "Low" in MetaMask
+      .mul(2) // Make it equivalent to "Aggressive" in MetaMask
+      .toString()
+  )
 }

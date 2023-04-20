@@ -1,11 +1,9 @@
 import { InfoCard, Table, TableProps, Typography } from '@onestaree/ui-kit'
-import { Network, OPERATOR_IDS } from '@stakestar/contracts'
-import BigNumber from 'bignumber.js'
 import { useEffect, useMemo, useState } from 'react'
 
-import { Page, TokenAmount } from '~/features/core'
+import { Page, TokenAmount, getOperatorsIds } from '~/features/core'
 import { handleError, ssvClient } from '~/features/core'
-import { TVL, useConvertSsEthToUsd, useFetchStakingData, useSsEthToEthRate } from '~/features/staking'
+import { TVL, useConvertEthToUsd, useFetchStakingData } from '~/features/staking'
 
 import styles from './DashboardPage.module.scss'
 
@@ -34,22 +32,11 @@ const tableProps: TableProps<Operator> = {
 }
 
 export function DashboardPage(): JSX.Element {
-  const convertSsEthToUsd = useConvertSsEthToUsd()
-
-  const operatorsIds = OPERATOR_IDS[Network.GOERLI]
-  const { activeValidatorsCount, apr, totalSsEthBalance, dailyTvls } = useFetchStakingData()
-  const ssEthToEthRate = useSsEthToEthRate()
-  const totalTvlInUsd = convertSsEthToUsd(totalSsEthBalance.toWei()).toFormat(2)
-
-  const totalTvlInEth = useMemo(
-    () =>
-      ssEthToEthRate
-        ? new BigNumber(totalSsEthBalance.toString())
-            .multipliedBy(TokenAmount.fromWei('ETH', ssEthToEthRate).toString())
-            .toFormat(2)
-        : 0,
-    [ssEthToEthRate, totalSsEthBalance]
-  )
+  const convertEthToUsd = useConvertEthToUsd()
+  const operatorsIds = getOperatorsIds()
+  const { activeValidatorsCount, apr, dailyTvls, totalTvl } = useFetchStakingData()
+  const totalTvlInUsd = convertEthToUsd(totalTvl).toFormat(2)
+  const totalTvlTokenAmount = useMemo(() => TokenAmount.fromWei('ETH', totalTvl), [totalTvl])
   const [rows, setRows] = useState<Operator[]>([])
 
   useEffect(() => {
@@ -82,7 +69,7 @@ export function DashboardPage(): JSX.Element {
         <InfoCard
           className={styles.InfoCard}
           title="Total TVL"
-          info={`${totalTvlInEth} ETH / $${totalTvlInUsd}`}
+          info={`${totalTvlTokenAmount.toDecimal(2)} ETH / $${totalTvlInUsd}`}
           variant="large"
         />{' '}
         <InfoCard
@@ -96,12 +83,17 @@ export function DashboardPage(): JSX.Element {
         Total Eth Staked
       </Typography>
       <div className={styles.Tvl}>
-        <TVL dailyTvls={dailyTvls} />
+        <TVL dailyTvls={dailyTvls} totalTvl={totalTvlTokenAmount} />
       </div>
       <Typography className={styles.Title} variant="h2">
         Node operators
       </Typography>
-      <Table className={styles.Table} columns={tableProps.columns} rows={rows} onRowClick={tableProps.onRowClick} />
+      <Table<Operator>
+        className={styles.Table}
+        columns={tableProps.columns}
+        rows={rows}
+        onRowClick={tableProps.onRowClick}
+      />
     </Page>
   )
 }

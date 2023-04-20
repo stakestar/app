@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Finlandica:wght@400;500&family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;500&display=swap');
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
@@ -83,9 +83,258 @@ strong {
 @include generate(_pb, padding-bottom);
 @include generate(_pl, padding-left);
 
-// Toast
-:global(.Toastify__toast) {
+.Toastify__toast {
+  &.Toastify__toast--info {
+    .Toastify__toast-body {
+      [class*='Icon_module_Icon'] {
+        background-image: url('../../../../public/toast-icon-info.svg') !important;
+      }
+    }
+  }
+
+  &.Toastify__toast--error {
+    .Toastify__toast-body {
+      [class*='Icon_module_Icon'] {
+        background-image: url('../../../../public/toast-icon-error.svg') !important;
+      }
+    }
+  }
+
+  .Toastify__progress-bar--info {
+    background-color: var(--primaryAccentColor);
+  }
+
+  .Toastify__progress-bar--error {
+    background-color: #ec1c26;
+  }
+
   a {
     color: var(--primaryAccentColor);
+  }
+}
+
+body {
+  --primaryAccentColor: #1ba5f8 !important;
+  --buttonGradient1Color: #0792e8 !important;
+  --buttonGradient2Color: #0792e8 !important;
+
+  ._Link:hover {
+    --linkColor1: #0792e8;
+    --linkColor2: #0792e8;
+  }
+
+  ._withHover:hover > div,
+  ._withHover._hover > div {
+    --withHoverColor1: #0792e8 !important;
+    --withHoverColor2: #0792e8 !important;
+  }
+
+  ._Tab._active {
+    --tabColor1: #1ba5f8;
+    --tabColor2: #1ba5f8;
+
+    &:after {
+      --tabBorderColor1: #1ba5f8;
+      --tabBorderColor2: #1ba5f8;
+    }
+  }
+
+  ._Button {
+    transition: all 0.3s ease;
+  }
+
+  ._Table tbody tr:hover:after {
+    --rowColor1: #1ba5f8;
+    --rowColor2: #1ba5f8;
+  }
+
+  .Toastify {
+    [class*='Icon_module_IconContainer'] {
+      --fillColor: var(--textColor) !important;
+
+      &:hover {
+        --fillColor: var(--primaryAccentColor) !important;
+      }
+    }
+  }
+
+  [class*='Typography_module'] {
+    font-family: 'Kanit', sans-serif !important;
+  }
+
+  [class*='Input_module_Input'] {
+    &[class*='Input_module_error'] {
+      [class*='Input_module_InputWrapper'] {
+        border-color: #ec1c26;
+      }
+
+      [class*='Input_module_IconWithLabel'] {
+        border-color: #ec1c26;
+      }
+    }
+
+    [class*='Input_module_Label'] {
+      font-family: 'Kanit', sans-serif;
+      font-weight: 300;
+    }
+
+    [class*='Input_module_InputWrapper'] {
+      margin-top: 4px;
+      border-radius: 0.75rem;
+
+      [class*='Button_module_Button'] {
+        border-radius: 0.5rem !important;
+        border-color: var(--inputBorderColor);
+        background: transparent;
+
+        &:hover {
+          border-color: var(--inputTextFocusColor);
+        }
+
+        &:disabled {
+          border-color: var(--inputBorderColor);
+          background: transparent;
+        }
+      }
+    }
+
+    [class*='Input_module_ErrorMessage'] {
+      color: #ec1c26;
+    }
+  }
+
+  [class*='Button_module_Button'] {
+    background: #1ba5f8;
+
+    &:hover {
+      background-color: #0792e8;
+      --buttonColor1: #0792e8;
+      --buttonColor2: #0792e8;
+    }
+
+    &:disabled {
+      [class*='Button_module_Text'] {
+        opacity: initial;
+      }
+    }
+
+    [class*='Button_module_large'] {
+      border-radius: 0.75rem;
+    }
+
+    &[class*='Button_module_outline'] {
+      border-color: var(--primaryAccentColor);
+      background: none;
+
+      &:hover {
+        border-color: var(--buttonGradient1Color);
+        background: none;
+      }
+    }
+  }
+
+  [class*='Typography_module_Typography'] {
+    &[class*='Typography_module_h1'],
+    &[class*='Typography_module_h2'],
+    &[class*='Typography_module_h3'] {
+      font-family: 'Kanit', sans-serif;
+    }
+
+    &[class*='Typography_module_h2'] {
+      font-size: 24px;
+      line-height: 28px;
+    }
+  }
+
+  [class*='Collapse_Title'] {
+    [class*='Icon_module_IconContainer'] {
+      height: 23px;
+      width: auto;
+
+      [class*='Icon_module_Icon'] {
+        width: 23px;
+      }
+    }
+  }
+
+  [class*='InfoCard_module'] {
+    [class*='InfoCard_module_Title'] {
+      font-weight: 300;
+    }
+  }
+
+  [class*='Spinner'] {
+    border-top: 0 solid rgba(#63768b, 0.2) !important;
+    border-right: 0 solid rgba(#63768b, 0.2) !important;
+    border-bottom: 0 solid rgba(#63768b, 0.2) !important;
+  }
+
+  &._theme {
+    &._light {
+      --dividerColor: #e6eaf7 !important;
+      --surfaceLightColor: #fdfefe !important;
+      --primaryBackgroundColor: #f4f7fa !important;
+      --inputBorderColor: #e6eaf7 !important;
+      --inputTextColor: #97a5ba !important;
+
+      [class*='Input_module_Input'] {
+        [class*='Input_module_InputWrapper'] {
+          background-color: #f9fbfc !important;
+
+          [class*='Input_module_IconWithLabel'] {
+            background-color: #f9fbfc !important;
+          }
+        }
+      }
+
+      [class*='Button_module_Button'] {
+        &:disabled {
+          color: #97a5ba;
+          background-color: #e6eaf7;
+        }
+      }
+
+      [class*='Switch_module_Switch'] {
+        [class*='Icon_module_IconContainer'] {
+          [class*='Icon_module_Icon'] {
+            background-image: url('../../../../public/light.svg') !important;
+          }
+        }
+      }
+    }
+
+    &._dark {
+      --dividerColor: #34455a !important;
+      --textInvertedColor: #062031 !important;
+      --surfaceLightColor: #0b2a3c !important;
+      --inputBorderColor: #34455a !important;
+      --primaryBackgroundColor: #011627 !important;
+      --inputTextColor: #97a5ba !important;
+
+      [class*='Input_module_Input'] {
+        [class*='Input_module_InputWrapper'] {
+          background-color: var(--textInvertedColor) !important;
+
+          [class*='Input_module_IconWithLabel'] {
+            background-color: var(--textInvertedColor) !important;
+          }
+        }
+      }
+
+      [class*='Button_module_Button'] {
+        &:disabled {
+          color: #97a5ba;
+          background-color: #63768b;
+        }
+      }
+
+      [class*='Switch_module_Switch'] {
+        [class*='Icon_module_IconContainer'] {
+          [class*='Icon_module_Icon'] {
+            background-image: url('../../../../public/dark.svg') !important;
+          }
+        }
+      }
+    }
   }
 }

@@ -13,24 +13,18 @@ export function convertEthToUsd(ethWei: string, priceUsd: string | null): BigNum
   return ethBigNumber.multipliedBy(priceUsdBigNumber)
 }
 
-export function convertSsETHToETH(ssEthAmount: string, rate: string | null): BigNumberJs {
-  if (ssEthAmount === '0' || !rate) {
+export function convertSstarEthToEth(sstarEth: string, rate: string | null): BigNumberJs {
+  if (sstarEth === '0' || !rate) {
     return new BigNumberJs(0)
   }
 
-  return new BigNumberJs(ssEthAmount)
-    .multipliedBy(rate)
-    .div(10 ** 18)
-    .integerValue(BigNumberJs.ROUND_FLOOR)
+  return new BigNumberJs(sstarEth).multipliedBy(rate).shiftedBy(-18).integerValue(BigNumberJs.ROUND_FLOOR)
 }
 
-export function convertETHToSsETH(ethAmount: string, rate: string | null): BigNumberJs {
-  if (ethAmount === '0' || !rate) {
+export function convertEthToSstarEth(eth: string, rate: string | null): BigNumberJs {
+  if (eth === '0' || !rate) {
     return new BigNumberJs(0)
   }
 
-  return new BigNumberJs(ethAmount)
-    .multipliedBy(10 ** 18)
-    .div(rate)
-    .integerValue(BigNumberJs.ROUND_FLOOR)
+  return new BigNumberJs(eth).shiftedBy(18).div(rate).integerValue(BigNumberJs.ROUND_FLOOR)
 }

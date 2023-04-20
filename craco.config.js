@@ -37,7 +37,7 @@ module.exports = {
       webpackConfig.ignoreWarnings = [{ module: /node_modules*/, }]
 
       webpackConfig.resolve.fallback = {
-        crypto: false,
+        crypto: require.resolve('crypto-browserify'),
         fs: false,
         os: false,
         stream: false

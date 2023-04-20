@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import { handleError } from '../utils'
+import { getLocalStorageItem, handleError } from '../utils'
 
 export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
   const value = useMemo<T>(() => getLocalStorageItem<T>(key, initialValue), [initialValue, key])
@@ -19,20 +19,4 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T)
   useEffect(() => setStoredValue(value), [value])
 
   return [storedValue || initialValue, setValue]
-}
-
-export function getLocalStorageItem<T>(key: string, initialValue: T): T {
-  let result
-
-  try {
-    const localStorageItem = window.localStorage.getItem(key)
-
-    if (localStorageItem) {
-      result = JSON.parse(localStorageItem)
-    }
-  } catch (error) {
-    handleError(error)
-  }
-
-  return result || initialValue
 }

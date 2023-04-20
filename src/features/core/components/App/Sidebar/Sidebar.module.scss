@@ -18,10 +18,9 @@
     user-select: none;
 
     .Logo {
-      width: 2.5rem;
-      height: 2.5rem;
+      width: 168px;
+      height: 44px;
       margin-right: 0.5rem;
-      background: url(./logo.svg) no-repeat center/cover;
       z-index: 1;
     }
   }
@@ -35,8 +34,9 @@
       min-height: 56px;
       margin-bottom: 6px;
       padding: 0 1.5rem;
-      border-radius: 1rem;
-      font-family: 'Finlandica', sans-serif;
+      border: 1px solid transparent;
+      border-radius: 0.75rem;
+      font-family: 'Kanit', sans-serif;
       font-style: normal;
       font-weight: 500;
       font-size: 18px;
@@ -44,18 +44,28 @@
       color: var(--textColor);
       cursor: pointer;
       user-select: none;
+      transition: all 0.15s ease;
+
+      &:hover {
+        border-color: #0792e8;
+      }
 
       &:last-child {
         margin-bottom: 0;
       }
 
-      &:global(._active) {
-        color: white;
-      }
-
       &.soon {
         cursor: not-allowed;
         color: var(--inputTextColor);
+      }
+
+      &:global(._active) {
+        color: white;
+        background-color: #1ba5f8;
+
+        &:hover {
+          background-color: #0792e8;
+        }
       }
 
       .Badge {
@@ -79,6 +89,7 @@
     margin: auto 1rem 1rem;
 
     .Links {
+      width: 100%;
       margin-bottom: 1rem;
       border-bottom: 1px solid var(--dividerColor);
       transition: border-bottom-color 0.2s ease;
@@ -95,6 +106,50 @@
             margin-right: 0;
           }
         }
+
+        .Icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 32px;
+          width: 32px;
+          border-radius: 50%;
+          fill: var(--textInvertedColor);
+          background-color: var(--textColor);
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+
+          path {
+            fill: none;
+            stroke: var(--textInvertedColor);
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          }
+
+          &:hover {
+            background-color: #0792e8;
+          }
+        }
+      }
+    }
+  }
+}
+
+:global(._theme._light) {
+  .Sidebar {
+    .LogoContainer {
+      .Logo {
+        background: url(./logo-light.svg) no-repeat center/cover;
+      }
+    }
+  }
+}
+
+:global(._theme._dark) {
+  .Sidebar {
+    .LogoContainer {
+      .Logo {
+        background: url(./logo-dark.svg) no-repeat center/cover;
       }
     }
   }

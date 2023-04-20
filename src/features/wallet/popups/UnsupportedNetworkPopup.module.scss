@@ -2,14 +2,30 @@
   display: flex;
   flex-direction: column;
   max-width: 26rem;
-  font-family: 'Finlandica', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 1rem;
   line-height: 1.5rem;
   color: #f5f5f5;
 
-  .Button {
+  .Buttons {
+    display: flex;
+    flex-direction: column;
     margin-top: 1.5rem;
+    row-gap: 1rem;
+
+    .Button {
+      flex: 1;
+      min-height: 2.5rem;
+      border-radius: 0.75rem;
+
+      &.outlined {
+        border-color: #34455a;
+
+        &:hover {
+          border-color: var(--primaryAccentColor);
+        }
+      }
+    }
   }
 }

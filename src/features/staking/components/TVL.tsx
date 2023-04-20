@@ -1,14 +1,14 @@
-import { useTheme } from '@onestaree/ui-kit'
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
-import { DailyTvls, formatThegraphIdToDate } from '~/features/core'
+import { DailyTvls, TokenAmount, formatThegraphIdToDate, tvlChartResultsCount } from '~/features/core'
 import { toDecimal } from '~/features/core/utils/math'
 
 import styles from './TVL.module.scss'
 
 interface TvlProps {
   dailyTvls: DailyTvls
+  totalTvl: TokenAmount
 }
 
 type TvlItem = {
@@ -16,20 +16,53 @@ type TvlItem = {
   value: number
 }
 
-export function TVL({ dailyTvls }: TvlProps): JSX.Element {
-  const { theme } = useTheme()
+const prepareDatumForChart = (tvlDatum: { id: string; totalETH: bigint }): TvlItem => {
+  return {
+    title: formatThegraphIdToDate(Number(tvlDatum.id)),
+    value: Number(toDecimal(tvlDatum.totalETH.toString(), 18).toFormat(2))
+  }
+}
 
-  const [tvls, setTvls] = useState<TvlItem[]>([])
+export function TVL({ dailyTvls, totalTvl }: TvlProps): JSX.Element {
+  const tvls = useMemo(() => {
+    const result: TvlItem[] = []
+    let lastId = 0
 
-  useEffect(() => {
-    const tvlForChart = dailyTvls.map((tvl) => {
-      return {
-        title: formatThegraphIdToDate(Number(tvl.id)),
-        value: Number(toDecimal(tvl.totalETH.toString(), 18).toFormat(2))
+    const dayNumber = Math.floor(Date.now() / 86400000)
+    let dailyTvlsForChart: DailyTvls = []
+
+    if (dailyTvls.length && Number(dailyTvls[dailyTvls.length - 1].id) <= dayNumber) {
+      if (Number(dailyTvls[dailyTvls.length - 1].id) === dayNumber) {
+        dailyTvlsForChart = dailyTvls.slice(0, -1)
+      } else {
+        dailyTvlsForChart = dailyTvls
       }
-    })
-    setTvls(tvlForChart)
-  }, [dailyTvls])
+
+      dailyTvlsForChart = [...dailyTvlsForChart, { id: dayNumber.toString(), totalETH: totalTvl.toWei() }]
+    }
+
+    for (const tvl of dailyTvlsForChart) {
+      const id = Number(tvl.id)
+
+      if (lastId === 0) {
+        lastId = id
+      }
+
+      while (lastId < id - 1) {
+        result.push(
+          prepareDatumForChart({
+            id: (++lastId).toString(),
+            totalETH: tvl.totalETH
+          })
+        )
+      }
+
+      result.push(prepareDatumForChart(tvl))
+      lastId = id
+    }
+
+    return result.slice(0, tvlChartResultsCount)
+  }, [dailyTvls, totalTvl])
 
   return (
     <div className={styles.TVL}>
@@ -40,7 +73,7 @@ export function TVL({ dailyTvls }: TvlProps): JSX.Element {
             <XAxis dataKey="title" />
             <YAxis orientation="right" />
             <Tooltip formatter={(value): [string, string] => [value as string, 'TVL']} />
-            <Area type="linear" dataKey="value" stroke={theme.primaryAccent} fill={theme.primaryAccent} />
+            <Area type="linear" dataKey="value" stroke="#1BA5F8" strokeWidth={3} fill="transparent" />
           </AreaChart>
         </ResponsiveContainer>
       </div>

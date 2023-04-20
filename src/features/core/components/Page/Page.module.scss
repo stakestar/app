@@ -2,6 +2,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
+  max-width: 1350px;
   margin: 3rem;
 
   &.isVerticalCenter {
@@ -12,5 +13,6 @@
 
   .Title {
     margin-bottom: 2.5rem;
+    font-family: 'Kanit', sans-serif;
   }
 }

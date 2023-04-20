@@ -3,39 +3,20 @@
   display: flex;
   align-items: center;
 
-  // It hides the glitch on the right of gradiental border
-  &:after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: -0.5px;
-    bottom: 0;
-    width: 3rem;
-    border-radius: 1rem;
-    background-color: var(--surfaceLightColor);
-    z-index: 1;
-  }
-
   .Content {
     position: relative;
     display: flex;
     padding: 0.5rem 1rem;
+    border: 1px solid transparent;
     border-radius: 1rem;
     box-shadow: 0 3px 6px rgba(16, 16, 16, 0.08);
+    background-color: var(--surfaceLightColor);
     cursor: pointer;
     overflow: hidden;
+    transition: border-color 0.2s ease;
 
-    &:after {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      border-radius: 1rem;
-      border: 1px solid transparent;
-      background: linear-gradient(var(--surfaceLightColor), var(--surfaceLightColor)) padding-box,
-        linear-gradient(90deg, transparent -30%, var(--surfaceLightColor) 75%) border-box;
+    &:hover {
+      border-color: #1ba5f8;
     }
 
     .Balance {

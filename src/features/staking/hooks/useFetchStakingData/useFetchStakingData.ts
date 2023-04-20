@@ -1,131 +1,192 @@
-// TODO: Uncomment this after @stakestar/contracts update
 import { ValidatorStatus } from '@stakestar/contracts'
-import { getBuiltGraphSDK } from '@stakestar/subgraph-client'
 import BigNumberJs from 'bignumber.js'
-import { useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
-import { DailyTvls, TokenAmount, handleError, useContracts, useDispatch, useSelector } from '~/features/core'
-import { useAccount } from '~/features/wallet'
+import {
+  DailyTvls,
+  handleError,
+  setBlockNumber,
+  thegraphUrl,
+  tvlChartResultsCount,
+  useBlockNumber,
+  useContracts,
+  useDispatch,
+  useSelector
+} from '~/features/core'
+import { getGraphQLClientSdk } from '~/features/core/utils/graphQLClient'
+import { useAccount, useConnector, useSstarEthContract } from '~/features/wallet'
 
 import {
   selectActiveValidatorsCount,
   selectApr,
   selectDailyTvls,
   selectEthPriceUSD,
-  selectSsEthPriceUSD,
-  selectTotalSsEthBalance,
-  setAccountSsEthBalance,
+  selectPendingUnstakeQueueIndex,
+  selectSstarEthPriceUSD,
+  selectSstarEthToEthRate,
+  selectStakerRateDiff,
+  selectTotalSstarEth,
+  selectTotalTVL,
   setActiveValidatorsCount,
   setApr,
   setDailyTvls,
   setEthPriceUSD,
-  setSsEthPriceUSD,
-  setSsEthToEthRate,
+  setLocalPool,
+  setPendingUnstake,
+  setPendingUnstakeQueueIndex,
+  setSstarEthPriceUSD,
+  setSstarEthToEthRate,
   setStakerRateDiff,
-  setTotalSsEthBalance
+  setTotalSstarEth,
+  setTotalTVL
 } from '../../store'
-import { calculateApr } from '../../utils'
-import { useAccountSsEthBalance } from '../useAccountSsEthBalance'
+import { calculateApr, convertSstarEthToEth } from '../../utils'
 import { loadEthPriceUsd } from './loadEthPriceUsd'
-
-const sdk = getBuiltGraphSDK() // TODO: move it to provider?
 
 export function useFetchStakingData(): {
   activeValidatorsCount: number
-  accountSsEthBalance: TokenAmount
-  totalSsEthBalance: TokenAmount
+  blockNumber: number
+  totalSstarEth: string
+  totalTvl: string
+  pendingUnstakeQueueIndex: number
+  sstarEthToEthRate: string
+  stakerRateDiff: string
   ethPriceUSD: string
-  ssEthPriceUSD: string
+  sstarEthPriceUSD: string
   apr: number
   dailyTvls: DailyTvls
+  fetchStakingData: () => Promise<void>
 } {
   const dispatch = useDispatch()
+  const blockNumber = useBlockNumber()
   const { stakeStarContract, stakeStarEthContract, stakeStarRegistryContract } = useContracts()
+  const sstarEthContract = useSstarEthContract()
   const { address } = useAccount()
-  const accountSsEthBalance = useAccountSsEthBalance()
+  const sdk = useRef(getGraphQLClientSdk(thegraphUrl))
   const activeValidatorsCount = useSelector(selectActiveValidatorsCount)
-  const totalSsEthBalance = useSelector(selectTotalSsEthBalance)
+  const totalSstarEth = useSelector(selectTotalSstarEth)
+  const pendingUnstakeQueueIndex = useSelector(selectPendingUnstakeQueueIndex)
+  const totalTvl = useSelector(selectTotalTVL)
+  const sstarEthToEthRate = useSelector(selectSstarEthToEthRate)
+  const stakerRateDiff = useSelector(selectStakerRateDiff)
   const apr = useSelector(selectApr)
   const ethPriceUSD = useSelector(selectEthPriceUSD)
-  const ssEthPriceUSD = useSelector(selectSsEthPriceUSD)
+  const sstarEthPriceUSD = useSelector(selectSstarEthPriceUSD)
   const dailyTvls = useSelector(selectDailyTvls)
+  const { connector } = useConnector()
+  const provider = connector.hooks.useProvider()
 
   useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log('StakeStar address', stakeStarContract.address)
+    if (!address || !sstarEthToEthRate) {
+      return
+    }
+
+    const stakerId = address.toLowerCase()
 
     Promise.all([
+      sdk.current.getStakerAtMomentRate({ stakerId }).then(({ data }) => data.stakerAtMomentRate),
+      stakeStarContract.localPoolWithdrawalHistory(stakerId),
+      stakeStarContract.pendingWithdrawal(stakerId),
+      stakeStarContract.queueIndex(stakerId)
+    ])
+      .then(([stakerAtMomentRate, localPoolWithdrawalHistory, pendingWithdrawal, queueIndex]) => {
+        if (stakerAtMomentRate?.atMomentRate) {
+          dispatch(
+            setStakerRateDiff(new BigNumberJs(sstarEthToEthRate).minus(stakerAtMomentRate.atMomentRate).toString())
+          )
+        }
+
+        dispatch(setPendingUnstake(pendingWithdrawal.toString()))
+        dispatch(setPendingUnstakeQueueIndex(queueIndex))
+        dispatch(setLocalPool({ withdrawalHistory: localPoolWithdrawalHistory.toString() }))
+      })
+      .catch(handleError)
+  }, [address, dispatch, sstarEthToEthRate, stakeStarContract])
+
+  const fetchStakingData = useCallback(() => {
+    if (!sstarEthContract || !provider) {
+      return Promise.reject()
+    }
+
+    return Promise.all([
+      provider.getBlockNumber(),
       loadEthPriceUsd(),
       stakeStarEthContract.totalSupply(),
-      stakeStarContract.currentApproximateRate(),
-      stakeStarEthContract.rate(),
-      sdk.getTokenRateDailies({ first: 7 }).then(({ tokenRateDailies }) => tokenRateDailies),
-      stakeStarContract.currentApproximateRate(),
+      sstarEthContract.totalSupply(),
+      stakeStarContract.localPoolSize(),
+      stakeStarContract.localPoolWithdrawalLimit(),
+      stakeStarContract.localPoolWithdrawalFrequencyLimit(),
+      stakeStarContract.functions['rate()'](),
+      sdk.current.getTokenRateDailies({ first: 7 }).then(({ data }) => data.tokenRateDailies),
       stakeStarRegistryContract.countValidatorPublicKeys(ValidatorStatus.ACTIVE),
-      sdk.getStakeStarTvls({ first: 10 }).then(({ stakeStarTvls }) => stakeStarTvls)
+      sdk.current.getStakeStarTvls({ first: tvlChartResultsCount }).then(({ data }) => data.stakeStarTvls)
     ])
       .then(
         ([
+          newBlockNumber,
           ethPriceUsd,
           stakeStarTvl,
-          currentApproximateRate,
+          sstarEthTotalSupply,
+          localPoolSize,
+          localPoolWithdrawalLimit,
+          localPoolWithdrawalFrequencyLimit,
           rate,
           tokenRateDailies,
-          ssEthToEth,
           countValidatorPublicKeys,
           dailyTvlsData
         ]) => {
+          const newSstarEthToEthRate = rate.toString()
+
+          dispatch(setBlockNumber(newBlockNumber))
           dispatch(setApr(calculateApr(tokenRateDailies)))
           dispatch(setEthPriceUSD(ethPriceUsd))
           dispatch(
-            setSsEthPriceUSD(
-              new BigNumberJs(ssEthToEth.toString())
-                .shiftedBy(-18)
-                .multipliedBy(new BigNumberJs(ethPriceUsd))
-                .toString()
+            setSstarEthPriceUSD(
+              new BigNumberJs(newSstarEthToEthRate).shiftedBy(-18).multipliedBy(new BigNumberJs(ethPriceUsd)).toString()
             )
           )
-          dispatch(setTotalSsEthBalance(stakeStarTvl.toString()))
-          dispatch(setSsEthToEthRate(ssEthToEth.toString()))
+          dispatch(setTotalSstarEth(stakeStarTvl.toString()))
           dispatch(setActiveValidatorsCount(countValidatorPublicKeys.toNumber()))
           dispatch(setDailyTvls(dailyTvlsData.reverse()))
-          // eslint-disable-next-line no-console
-          console.log(`[DEBUG] Rate = ${rate.toString()}`)
-          // eslint-disable-next-line no-console
-          console.log(`[DEBUG] Current Approximate Rate = ${currentApproximateRate.toString()}`)
+          dispatch(setSstarEthToEthRate(newSstarEthToEthRate))
+          console.info(`[DEBUG] Rate = ${newSstarEthToEthRate}`)
+
+          const newTotalTvl = newSstarEthToEthRate
+            ? stakeStarTvl
+                .add(convertSstarEthToEth(sstarEthTotalSupply.toString(), newSstarEthToEthRate).toString())
+                .toString()
+            : ''
+
+          dispatch(setTotalTVL(newTotalTvl))
+
+          dispatch(
+            setLocalPool({
+              size: localPoolSize.toString(),
+              withdrawalLimit: localPoolWithdrawalLimit.toString(),
+              withdrawalFrequencyLimit: localPoolWithdrawalFrequencyLimit.toString()
+            })
+          )
         }
       )
       .catch(handleError)
-  }, [dispatch, stakeStarContract, stakeStarEthContract, stakeStarRegistryContract])
+  }, [dispatch, provider, sstarEthContract, stakeStarContract, stakeStarEthContract, stakeStarRegistryContract])
 
   useEffect(() => {
-    if (address) {
-      Promise.all([
-        sdk
-          .getStakerAtMomentRate({ stakerId: address.toLowerCase() })
-          .then(({ stakerAtMomentRate }) => stakerAtMomentRate),
-        stakeStarContract.currentApproximateRate(),
-        // TODO: Refactor stakeStarEthContract.balanceOf to useFetchAccountSsEthBalance
-        stakeStarEthContract.balanceOf(address)
-      ])
-        .then(([stakerAtMomentRate, currentRate, ssEthBalance]) => {
-          if (stakerAtMomentRate?.atMomentRate) {
-            const rateDiff = currentRate.sub(stakerAtMomentRate?.atMomentRate)
-            dispatch(setStakerRateDiff(rateDiff.toString()))
-          }
-          dispatch(setAccountSsEthBalance(TokenAmount.fromWei('ssETH', ssEthBalance.toString()).toEncoded()))
-        })
-        .catch(handleError)
-    }
-  }, [address, dispatch, stakeStarContract, stakeStarEthContract])
+    fetchStakingData()
+  }, [fetchStakingData])
 
   return {
     activeValidatorsCount,
-    accountSsEthBalance,
-    totalSsEthBalance,
+    blockNumber,
+    totalSstarEth,
+    totalTvl,
+    pendingUnstakeQueueIndex,
+    sstarEthToEthRate,
+    stakerRateDiff,
     ethPriceUSD,
-    ssEthPriceUSD,
+    sstarEthPriceUSD,
     apr,
-    dailyTvls
+    dailyTvls,
+    fetchStakingData
   }
 }

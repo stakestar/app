@@ -45,4 +45,3 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.SERVICE_ACCOUNT_KEY }}'
           projectId: stakestar
-

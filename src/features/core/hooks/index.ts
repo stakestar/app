@@ -1,3 +1,4 @@
+export * from './useBlockNumber'
 export * from './useContracts'
 export * from './useDispatch'
 export * from './useEventListener'

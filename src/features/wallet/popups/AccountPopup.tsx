@@ -40,13 +40,7 @@ export function AccountPopup(): JSX.Element {
         </Link>
       </div>
       <div className={styles.Footer}>
-        <Button
-          className={styles.Disconnect}
-          title="Disconnect"
-          size="small"
-          type="outline"
-          onClick={onClickDisconnect}
-        />
+        <Button className={styles.Disconnect} title="Disconnect" type="outline" onClick={onClickDisconnect} />
       </div>
     </div>
   )

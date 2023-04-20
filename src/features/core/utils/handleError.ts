@@ -8,13 +8,16 @@ interface HandleErrorProps {
   displayGenericMessage?: boolean
 }
 
-export function handleError(error: unknown, props: HandleErrorProps = {}): void {
+export function handleError(error: Error | unknown, props: HandleErrorProps = {}): void {
   const { errorLevel = 'exception', message, displayGenericMessage } = props
+  const options = { autocloseTimeout: 30000 }
 
-  if (message) {
-    toast.show(filterMessage(message), 'error', { autoclose: false })
+  if (message?.includes('user rejected transaction')) {
+    toast.show('User rejected transaction', 'info', options)
   } else if (displayGenericMessage) {
-    toast.show('Something went wrong...', 'error', { autoclose: false })
+    toast.show('Something went wrong...', 'error', options)
+  } else if (message) {
+    toast.show(message, 'error', options)
   }
 
   if (errorLevel === 'exception') {
@@ -27,14 +30,4 @@ export function handleError(error: unknown, props: HandleErrorProps = {}): void 
   } else {
     console.warn('%c Caught Error ', 'border-radius:3px; color:#222; background:#ffdc00', { props }, error)
   }
-}
-
-function filterMessage(messageRaw: string): string {
-  let message = messageRaw
-
-  if (message.includes('user rejected transaction')) {
-    message = 'User rejected transaction'
-  }
-
-  return message
 }

@@ -2,8 +2,8 @@ import { formatFixed } from '@ethersproject/bignumber'
 import { BigNumber, utils } from 'ethers'
 
 import { chainConfigs, chainIdLocalSorageKey, defaultChainId } from '../config'
-import { getLocalStorageItem } from '../hooks'
 import type { Token, TokenId } from '../types'
+import { getLocalStorageItem } from '../utils'
 
 const _constructorGuard = Symbol()
 
@@ -37,7 +37,7 @@ export class TokenAmount {
   public static fromWei(tokenOrTokenId: Token | TokenId, value: string | BigNumber): TokenAmount {
     const tokenId = typeof tokenOrTokenId === 'string' ? tokenOrTokenId : tokenOrTokenId.id
 
-    return new TokenAmount(_constructorGuard, tokenId, typeof value === 'string' ? value : value.toString())
+    return new TokenAmount(_constructorGuard, tokenId, typeof value === 'string' ? value || '0' : value.toString())
   }
 
   /**
@@ -52,7 +52,11 @@ export class TokenAmount {
    */
   public static fromDecimal(tokenOrTokenId: Token | TokenId, value: number | string): TokenAmount {
     const tokenId = typeof tokenOrTokenId === 'string' ? tokenOrTokenId : tokenOrTokenId.id
-    const wei = utils.parseUnits(value.toString().substring(0, getTokenById(tokenId).decimals)).toString()
+    const wei = utils
+      .parseUnits(
+        typeof value === 'string' ? value || '0' : value.toString().substring(0, getTokenById(tokenId).decimals)
+      )
+      .toString()
 
     return new TokenAmount(_constructorGuard, tokenId, wei)
   }

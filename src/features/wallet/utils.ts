@@ -24,6 +24,5 @@ export function cropWalletAddress(address: string | undefined, tailsSize = 4): s
 }
 
 export function isChainIdSupported(chainId?: number): boolean {
-  // Object.values(ChainId).includes(chainId)
-  return chainId === ChainId.Goerli
+  return !!chainId && Object.values(ChainId).includes(chainId)
 }

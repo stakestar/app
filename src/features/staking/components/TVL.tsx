@@ -61,7 +61,9 @@ export function TVL({ dailyTvls, totalTvl }: TvlProps): JSX.Element {
       lastId = id
     }
 
-    return result.slice(0, tvlChartResultsCount)
+    console.log('result', result)
+
+    return result.slice(-tvlChartResultsCount)
   }, [dailyTvls, totalTvl])
 
   return (

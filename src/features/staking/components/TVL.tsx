@@ -33,18 +33,22 @@ export function TVL({ dailyTvls, totalTvl }: TvlProps): JSX.Element {
       dailyTvlsForChart = [...dailyTvlsForChart, { id: dayNumber.toString(), totalETH: totalTvl.toWei() }]
     }
 
-    for (const tvl of dailyTvlsForChart) {
+    for (let i = 0; i < dailyTvlsForChart.length; i++) {
+      const tvl = dailyTvlsForChart[i]
+
       const id = Number(tvl.id)
 
       if (lastId === 0) {
         lastId = id
       }
 
+      const previusTvl = i - 1 >= 0 ? dailyTvlsForChart[i - 1].totalETH : dailyTvlsForChart[0].totalETH
+
       while (lastId < id - 1) {
         result.push(
           prepareDatumForChart({
             id: (++lastId).toString(),
-            totalETH: tvl.totalETH
+            totalETH: previusTvl
           })
         )
       }

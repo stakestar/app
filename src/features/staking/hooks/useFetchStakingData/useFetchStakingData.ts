@@ -89,7 +89,7 @@ export function useFetchStakingData(): {
       stakeStarContract.queue(stakerId),
       stakeStarContract.queueIndex(stakerId)
     ])
-      .then(([stakerAtMomentRate, localPoolWithdrawalHistory, pendingWithdrawal, queueIndex]) => {
+      .then(([stakerAtMomentRate, localPoolWithdrawalHistory, [_, pendingWithdrawal], queueIndex]) => {
         if (stakerAtMomentRate?.atMomentRate) {
           dispatch(
             setStakerRateDiff(new BigNumberJs(sstarEthToEthRate).minus(stakerAtMomentRate.atMomentRate).toString())

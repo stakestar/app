@@ -86,7 +86,7 @@ export function useFetchStakingData(): {
     Promise.all([
       sdk.current.getStakerAtMomentRate({ stakerId }).then(({ data }) => data.stakerAtMomentRate),
       stakeStarContract.localPoolWithdrawalHistory(stakerId),
-      stakeStarContract.pendingWithdrawal(stakerId),
+      stakeStarContract.queue(stakerId),
       stakeStarContract.queueIndex(stakerId)
     ])
       .then(([stakerAtMomentRate, localPoolWithdrawalHistory, pendingWithdrawal, queueIndex]) => {
@@ -115,7 +115,7 @@ export function useFetchStakingData(): {
       sstarEthContract.totalSupply(),
       stakeStarContract.localPoolSize(),
       stakeStarContract.localPoolWithdrawalLimit(),
-      stakeStarContract.localPoolWithdrawalFrequencyLimit(),
+      stakeStarContract.localPoolWithdrawalPeriodLimit(),
       stakeStarContract.functions['rate()'](),
       sdk.current.getTokenRateDailies({ first: 7 }).then(({ data }) => data.tokenRateDailies),
       stakeStarRegistryContract.countValidatorPublicKeys(ValidatorStatus.ACTIVE),

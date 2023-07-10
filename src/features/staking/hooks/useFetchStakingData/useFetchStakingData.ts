@@ -89,6 +89,7 @@ export function useFetchStakingData(): {
       stakeStarContract.queue(stakerId),
       stakeStarContract.queueIndex(stakerId)
     ])
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .then(([stakerAtMomentRate, localPoolWithdrawalHistory, [_, pendingWithdrawal], queueIndex]) => {
         if (stakerAtMomentRate?.atMomentRate) {
           dispatch(

@@ -14,7 +14,7 @@ interface FooterProps {
 }
 
 export function Footer({ transactionType, ethAmount }: FooterProps): JSX.Element {
-  const transactionCost = useTransactionCostByType(transactionType)
+  const transactionCostByType = useTransactionCostByType(transactionType)
   const sstarEthToEthRate = useSstarEthToEthRate()
   const reciveAmount =
     ethAmount && sstarEthToEthRate
@@ -24,6 +24,12 @@ export function Footer({ transactionType, ethAmount }: FooterProps): JSX.Element
       : 0
 
   const items = useMemo<{ title: string; value: string }[]>(() => {
+    const transactionCost = transactionCostByType
+      ? transactionCostByType < 0.01
+        ? '< $0.01'
+        : `$${transactionCostByType.toFixed(2)}`
+      : '-'
+
     return [
       {
         title: 'You will receive',
@@ -43,9 +49,9 @@ export function Footer({ transactionType, ethAmount }: FooterProps): JSX.Element
           //     ).toDecimal(6)} sstarETH`)
           `1.00 sstarETH = ${TokenAmount.fromWei('ETH', sstarEthToEthRate).toDecimal(6)} ETH`
       },
-      { title: 'Transaction cost', value: parseFloat(transactionCost) ? `$${transactionCost}` : '-' }
+      { title: 'Transaction cost', value: transactionCost }
     ]
-  }, [reciveAmount, sstarEthToEthRate, transactionCost, transactionType])
+  }, [reciveAmount, sstarEthToEthRate, transactionCostByType, transactionType])
 
   return (
     <ul className={styles.Footer}>

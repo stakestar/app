@@ -1,0 +1,39 @@
+name: Deploy
+description: Deploy
+
+inputs:
+  token:
+    description: GitHub token
+    default: ${{ github.token }}
+  workload_identity_provider:
+    description: Workload Identity Provider
+    required: true
+  service_account:
+    description: Service Account
+    required: true
+  target:
+    description: Target
+    required: true
+  channel:
+    description: Channel
+    required: false
+
+runs:
+  using: composite
+  steps:
+  - uses: google-github-actions/auth@v2
+    id: auth
+    with:
+      workload_identity_provider: ${{ inputs.workload_identity_provider }}
+      service_account: ${{ inputs.service_account }}
+      create_credentials_file: true
+  - run: |
+      echo "SERVICE_ACCOUNT_KEY=$(cat "${{ steps.auth.outputs.credentials_file_path }}" | tr -d '\n')" >> $GITHUB_ENV
+    shell: bash
+  - uses: FirebaseExtended/action-hosting-deploy@v0
+    with:
+      firebaseServiceAccount: ${{ env.SERVICE_ACCOUNT_KEY }}
+      repoToken: ${{ inputs.token }}
+      target: ${{ inputs.target }}
+      channelId: ${{ inputs.channel }}
+      projectId: stakestar

@@ -1,7 +1,9 @@
 {
-  "hosting": {
-    "site": "stakestar-app",
+  "hosting": [ {
+    "target": "prod",
     "public": "build",
+    "cleanUrls": true,
+    "trailingSlash": false,
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
@@ -9,5 +11,17 @@
         "destination": "/index.html"
       }
     ]
-  }
+  }, {
+    "target": "stage",
+    "public": "build",
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  } ]
 }

@@ -1,5 +1,18 @@
 {
   "projects": {
     "default": "stakestar"
-  }
+  },
+  "targets": {
+    "stakestar": {
+      "hosting": {
+        "prod": [
+          "stakestar-app"
+        ],
+        "stage": [
+          "stakestar-app-stage"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

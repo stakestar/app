@@ -30,7 +30,7 @@
     "@web3-react/network": "8.0.27-beta.0",
     "@web3-react/walletconnect": "8.0.37-beta.0",
     "bignumber.js": "^9.1.1",
-    "classnames": "^2.3.2",
+    "classnames": "^2.3.3",
     "crypto-browserify": "^3.12.0",
     "dayjs": "^1.11.7",
     "ethers": "5.7.2",

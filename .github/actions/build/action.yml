@@ -14,6 +14,8 @@ runs:
         registry-url: 'https://npm.pkg.github.com'
         node-version: 18
         cache: yarn
+    - run: npm -g install patch-package
+      shell: bash
     - run: yarn
       env:
         NODE_AUTH_TOKEN: ${{ inputs.token }}

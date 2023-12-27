@@ -29,6 +29,7 @@
     "@web3-react/empty": "8.0.20-beta.0",
     "@web3-react/network": "8.0.27-beta.0",
     "@web3-react/walletconnect": "8.0.37-beta.0",
+    "axios": "^1.6.3",
     "bignumber.js": "^9.1.1",
     "classnames": "^2.3.2",
     "crypto-browserify": "^3.12.0",

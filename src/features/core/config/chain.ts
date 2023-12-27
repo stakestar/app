@@ -1,6 +1,6 @@
 import { ChainId, Token, TokenId } from '../types'
 
-export const defaultChainId = ChainId.Goerli
+export const defaultChainId = ChainId.Mainnet
 export const chainIdLocalSorageKey = 'chainId'
 
 type Tokens = Record<TokenId, Token>

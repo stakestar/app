@@ -4679,12 +4679,12 @@
   optionalDependencies:
     "@ethersproject/providers" "^5"
 
-"@web3-react/empty@8.0.20-beta.0":
-  version "8.0.20-beta.0"
-  resolved "https://registry.yarnpkg.com/@web3-react/empty/-/empty-8.0.20-beta.0.tgz#f8e2a6414ba49c7da3937776c213eb4c8ff6e2c7"
-  integrity sha512-hde1Wq7w03cal6hD0E+seVg6ZFMWKcaSZ0S5UwJi5CDxhF79oL8QuzpvTBslohRkWqzqlvl52wCSVaY+l2+F8Q==
+"@web3-react/empty@8.2.3":
+  version "8.2.3"
+  resolved "https://registry.yarnpkg.com/@web3-react/empty/-/empty-8.2.3.tgz#70a0b07d7918a1f10c6dc4001b9fefc2f72face8"
+  integrity sha512-Uopeac2XgyJLmK8EawNmG1kferlSvklKgWzbianygriC3C3+6yHvflUBmHzYfcpZDq5gotP4JJr2bmhGAocQ5w==
   dependencies:
-    "@web3-react/types" "^8.0.20-beta.0"
+    "@web3-react/types" "^8.2.3"
 
 "@web3-react/network@8.0.27-beta.0":
   version "8.0.27-beta.0"

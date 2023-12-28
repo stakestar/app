@@ -33,13 +33,14 @@ const tableProps: TableProps<Operator> = {
 
 export function DashboardPage(): JSX.Element {
   const convertEthToUsd = useConvertEthToUsd()
-  const operatorsIds = getOperatorsIds()
   const { activeValidatorsCount, apr, dailyTvls, totalTvl } = useFetchStakingData()
   const totalTvlInUsd = convertEthToUsd(totalTvl).toFormat(2)
   const totalTvlTokenAmount = useMemo(() => TokenAmount.fromWei('ETH', totalTvl), [totalTvl])
   const [rows, setRows] = useState<Operator[]>([])
 
   useEffect(() => {
+    const operatorsIds = getOperatorsIds()
+
     const promises = []
     for (let i = 0; i < operatorsIds.length; i++) {
       promises.push(ssvClient.get(`/operators/${operatorsIds[i]}`))
@@ -60,7 +61,7 @@ export function DashboardPage(): JSX.Element {
         )
       })
       .catch(handleError)
-  }, [operatorsIds, activeValidatorsCount])
+  }, [activeValidatorsCount])
 
   return (
     <Page className={styles.DashboardPage} title="Dashboard">

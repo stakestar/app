@@ -5,6 +5,9 @@ inputs:
   token:
     description: GitHub token
     default: ${{ github.token }}
+  infura_key:
+    description: Infura key
+    required: true
 
 runs:
   using: composite
@@ -19,4 +22,6 @@ runs:
         NODE_AUTH_TOKEN: ${{ inputs.token }}
       shell: bash
     - run: yarn build
+      env:
+        INFURA_KEY: ${{ inputs.infura_key }}
       shell: bash

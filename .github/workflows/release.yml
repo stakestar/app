@@ -19,6 +19,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: ./.github/actions/build
+      with:
+        infura_key: ${{ secrets.INFURA_KEY_MAINNET }}
     - uses: ./.github/actions/deploy
       with:
         workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}

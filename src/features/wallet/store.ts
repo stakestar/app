@@ -1,6 +1,14 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import { ChainId, RootState, TokenAmount, TokenAmountEncoded, TokenId, tokens } from '~/features/core'
+import {
+  ChainId,
+  RootState,
+  TokenAmount,
+  TokenAmountEncoded,
+  TokenId,
+  getDefaultChainId,
+  tokens
+} from '~/features/core'
 
 type AccountBalances = Record<TokenId, TokenAmountEncoded>
 
@@ -13,7 +21,7 @@ export type WalletState = {
 }
 
 const initialState: WalletState = {
-  chainId: 0,
+  chainId: getDefaultChainId(),
   account: {
     address: '',
     balances: Object.keys(tokens).reduce((result, tokenId) => {

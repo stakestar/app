@@ -1,7 +1,7 @@
 import { formatFixed } from '@ethersproject/bignumber'
 import { BigNumber, utils } from 'ethers'
 
-import { chainConfigs, chainIdLocalSorageKey, defaultChainId } from '../config'
+import { chainConfigs, chainIdLocalSorageKey, getDefaultChainId } from '../config'
 import type { Token, TokenId } from '../types'
 import { getLocalStorageItem } from '../utils'
 
@@ -137,7 +137,7 @@ function formatNumberDecimals(value: number | string, decimals: number): string 
 }
 
 function getTokenById(tokenId: TokenId): Token {
-  const chainId = getLocalStorageItem(chainIdLocalSorageKey, defaultChainId)
+  const chainId = getLocalStorageItem(chainIdLocalSorageKey, getDefaultChainId())
 
   return chainConfigs[chainId].tokens[tokenId]
 }

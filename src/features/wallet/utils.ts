@@ -3,7 +3,7 @@ import { CoinbaseWallet } from '@web3-react/coinbase-wallet'
 import type { Connector } from '@web3-react/types'
 import { WalletConnect } from '@web3-react/walletconnect'
 
-import { ChainId } from '~/features/core'
+import { getDefaultChainId } from '~/features/core'
 
 export function getWalletName(connector: Connector): string {
   return connector instanceof MetaMask
@@ -24,5 +24,5 @@ export function cropWalletAddress(address: string | undefined, tailsSize = 4): s
 }
 
 export function isChainIdSupported(chainId?: number): boolean {
-  return !!chainId && Object.values(ChainId).includes(chainId)
+  return !!chainId && chainId === getDefaultChainId()
 }

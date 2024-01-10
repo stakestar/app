@@ -2,7 +2,8 @@ import { InfoCard, Table, TableProps, Typography } from '@onestaree/ui-kit'
 import { useEffect, useMemo, useState } from 'react'
 
 import { Page, TokenAmount, getOperatorsIds } from '~/features/core'
-import { handleError, ssvClient } from '~/features/core'
+import { handleError } from '~/features/core'
+import { useSSVClient } from '~/features/core/hooks/useSSVClient'
 import { TVL, useConvertEthToUsd, useFetchStakingData } from '~/features/staking'
 
 import styles from './DashboardPage.module.scss'
@@ -37,6 +38,7 @@ export function DashboardPage(): JSX.Element {
   const totalTvlInUsd = convertEthToUsd(totalTvl).toFormat(2)
   const totalTvlTokenAmount = useMemo(() => TokenAmount.fromWei('ETH', totalTvl), [totalTvl])
   const [rows, setRows] = useState<Operator[]>([])
+  const ssvClient = useSSVClient()
 
   useEffect(() => {
     const operatorsIds = getOperatorsIds()
@@ -61,7 +63,7 @@ export function DashboardPage(): JSX.Element {
         )
       })
       .catch(handleError)
-  }, [activeValidatorsCount])
+  }, [activeValidatorsCount, ssvClient])
 
   return (
     <Page className={styles.DashboardPage} title="Dashboard">

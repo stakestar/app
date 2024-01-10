@@ -5,7 +5,7 @@ import { Network } from '@web3-react/network'
 import { WalletConnect } from '@web3-react/walletconnect'
 import { useMemo } from 'react'
 
-import { ChainId, appName, chainConfigs } from '~/features/core'
+import { ChainId, appName, chainConfigs, getDefaultChainId } from '~/features/core'
 
 import { Connector } from './types'
 
@@ -51,8 +51,7 @@ export function useConnectors(chainId: ChainId): Connector[] {
 
           return result
         }, {} as Record<ChainId, string[]>),
-        // TODO
-        defaultChainId: ChainId.Goerli
+        defaultChainId: getDefaultChainId()
       })
   )
 

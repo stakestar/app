@@ -1,14 +1,18 @@
+import { useMemo } from 'react'
+
 import {
   ChainConfig,
   ChainId,
   chainConfigs,
   chainIdLocalSorageKey,
-  defaultChainId,
+  getDefaultChainId,
   useLocalStorage
 } from '~/features/core'
 
 export function useChainConfig(): ChainConfig {
-  const [chainId] = useLocalStorage<ChainId>(chainIdLocalSorageKey, defaultChainId)
+  const [chainId] = useLocalStorage<ChainId>(chainIdLocalSorageKey, getDefaultChainId())
 
-  return chainConfigs[chainId]
+  return useMemo(() => {
+    return chainConfigs[chainId]
+  }, [chainId])
 }

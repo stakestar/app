@@ -1,6 +1,15 @@
 import { ChainId, Token, TokenId } from '../types'
 
-export const defaultChainId = ChainId.Mainnet
+export const getDefaultChainId = (): ChainId => {
+  const host = window.location.host
+
+  if (host === 'app.stakestar.io') {
+    return ChainId.Mainnet
+  } else {
+    return ChainId.Goerli
+  }
+}
+
 export const chainIdLocalSorageKey = 'chainId'
 
 type Tokens = Record<TokenId, Token>
@@ -27,6 +36,8 @@ export type ChainConfig = {
   explorer: string
   urls: string[]
   tokens: Tokens
+  gpaphQlUrl: string
+  ssvApiUrL: string
 }
 
 export const chainConfigs: Record<ChainId, ChainConfig> = {
@@ -34,12 +45,16 @@ export const chainConfigs: Record<ChainId, ChainConfig> = {
     name: 'Mainnet',
     explorer: 'https://etherscan.io',
     urls: [`https://mainnet.infura.io/v3/${process.env.INFURA_KEY}`],
-    tokens
+    tokens,
+    gpaphQlUrl: 'https://subgraph.stakestar.io/subgraphs/name/stakestar',
+    ssvApiUrL: 'https://api.ssv.network/api/v4/mainnet/'
   },
   [ChainId.Goerli]: {
     name: 'Görli',
     explorer: 'https://goerli.etherscan.io',
     urls: [`https://goerli.infura.io/v3/${process.env.INFURA_KEY}`],
-    tokens
+    tokens,
+    gpaphQlUrl: 'https://subgraph.stakestar.io/subgraphs/name/stakestar-testnet',
+    ssvApiUrL: 'https://api.ssv.network/api/v4/prater/'
   }
 }

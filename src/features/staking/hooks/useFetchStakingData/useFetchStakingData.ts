@@ -1,19 +1,18 @@
 import { ValidatorStatus } from '@stakestar/contracts'
 import BigNumberJs from 'bignumber.js'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect } from 'react'
 
 import {
   DailyTvls,
   handleError,
   setBlockNumber,
-  thegraphUrl,
   tvlChartResultsCount,
   useBlockNumber,
   useContracts,
   useDispatch,
   useSelector
 } from '~/features/core'
-import { getGraphQLClientSdk } from '~/features/core/utils/graphQLClient'
+import { useGraphQLClientSdk } from '~/features/core/hooks/useGraphQLClientSdk'
 import { useAccount, useConnector, useSstarEthContract } from '~/features/wallet'
 
 import {
@@ -62,7 +61,7 @@ export function useFetchStakingData(): {
   const { stakeStarContract, stakeStarEthContract, stakeStarRegistryContract } = useContracts()
   const sstarEthContract = useSstarEthContract()
   const { address } = useAccount()
-  const sdk = useRef(getGraphQLClientSdk(thegraphUrl))
+  const sdk = useGraphQLClientSdk()
   const activeValidatorsCount = useSelector(selectActiveValidatorsCount)
   const totalSstarEth = useSelector(selectTotalSstarEth)
   const pendingUnstakeQueueIndex = useSelector(selectPendingUnstakeQueueIndex)
@@ -84,7 +83,7 @@ export function useFetchStakingData(): {
     const stakerId = address.toLowerCase()
 
     Promise.all([
-      sdk.current.getStakerAtMomentRate({ stakerId }).then(({ data }) => data.stakerAtMomentRate),
+      sdk.getStakerAtMomentRate({ stakerId }).then(({ data }) => data.stakerAtMomentRate),
       stakeStarContract.localPoolWithdrawalHistory(stakerId),
       stakeStarContract.queue(stakerId),
       stakeStarContract.queueIndex(stakerId)
@@ -102,7 +101,7 @@ export function useFetchStakingData(): {
         dispatch(setLocalPool({ withdrawalHistory: localPoolWithdrawalHistory.toString() }))
       })
       .catch(handleError)
-  }, [address, dispatch, sstarEthToEthRate, stakeStarContract])
+  }, [address, dispatch, sstarEthToEthRate, stakeStarContract, sdk])
 
   const fetchStakingData = useCallback(() => {
     if (!sstarEthContract || !provider) {
@@ -118,9 +117,9 @@ export function useFetchStakingData(): {
       stakeStarContract.localPoolWithdrawalLimit(),
       stakeStarContract.localPoolWithdrawalPeriodLimit(),
       stakeStarContract.functions['rate()'](),
-      sdk.current.getTokenRateDailies({ first: 7 }).then(({ data }) => data.tokenRateDailies),
+      sdk.getTokenRateDailies({ first: 7 }).then(({ data }) => data.tokenRateDailies),
       stakeStarRegistryContract.countValidatorPublicKeys(ValidatorStatus.ACTIVE),
-      sdk.current.getStakeStarTvls({ first: tvlChartResultsCount }).then(({ data }) => data.stakeStarTvls)
+      sdk.getStakeStarTvls({ first: tvlChartResultsCount }).then(({ data }) => data.stakeStarTvls)
     ])
       .then(
         ([
@@ -170,7 +169,7 @@ export function useFetchStakingData(): {
         }
       )
       .catch(handleError)
-  }, [dispatch, provider, sstarEthContract, stakeStarContract, stakeStarEthContract, stakeStarRegistryContract])
+  }, [dispatch, provider, sstarEthContract, stakeStarContract, stakeStarEthContract, stakeStarRegistryContract, sdk])
 
   useEffect(() => {
     fetchStakingData()

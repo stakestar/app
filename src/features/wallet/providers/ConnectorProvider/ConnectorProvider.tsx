@@ -1,6 +1,6 @@
 import { PropsWithChildren, createContext, useMemo } from 'react'
 
-import { ChainId, chainIdLocalSorageKey, defaultChainId, useLocalStorage } from '~/features/core'
+import { ChainId, chainIdLocalSorageKey, getDefaultChainId, useLocalStorage } from '~/features/core'
 
 import { Connector, ConnectorId } from './types'
 import { useConnectors } from './useConnectors'
@@ -20,7 +20,7 @@ export const ConnectorProviderContext = createContext<ConnectorProviderValue>({}
 export function ConnectorProvider({ children }: PropsWithChildren): JSX.Element {
   const defaultConnectorId: ConnectorId = 'network'
   const [connectorId, setConnectorId] = useLocalStorage<ConnectorId>('connectorId', defaultConnectorId)
-  const [chainId, setChainId] = useLocalStorage<ChainId>(chainIdLocalSorageKey, defaultChainId)
+  const [chainId, setChainId] = useLocalStorage<ChainId>(chainIdLocalSorageKey, getDefaultChainId())
   const connectors = useConnectors(chainId)
   const connector = getConnector(connectors, connectorId)
 
